@@ -1,0 +1,46 @@
+.exercise-details-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 16px;
+  font-weight: bolder;
+}
+.html-css-editor-container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+
+  .editor-container {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    height: 100%;
+    border-right: 1px solid #333;
+  }
+
+  .preview-container {
+    width: 50%;
+    height: 100%;
+    background-color: white;
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+  }
+  .html-css-editor {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    height: 100%;
+    position: relative;
+
+  }
+  .resizer {
+    width: 100%;
+    height: 10px;
+    background-color: #ccc;
+    cursor: row-resize;
+  }
+}

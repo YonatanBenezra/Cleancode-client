@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>API Documentation of GOOLO</title>
+    <style>
+      * {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>API Documentation</h1>
+    <h2>User Create</h2>
+    <p>URL: URL/api/weights/new-user</p>
+    <p>HTTP Method: POST</p>
+    <p>Request Body:</p>
+    <pre>
+{
+    "email": "hello@gmail.com",
+    "weights": [
+      {
+        "name": "color",
+        "values": {
+          "red": 23,
+          "white": 15
+        }
+      },
+      {
+        "name": "clothingkeywords",
+        "values": {
+          "skinny": 6,
+          "tshirt": 2
+        }
+      },
+      {
+        "name": "size",
+        "values": {
+          "xl": 2,
+          "l": 3
+        }
+      },
+      {
+        "name": "brand",
+        "values": {
+          "asos": 6,
+          "puma": 2
+        }
+      },
+      {
+        "name": "categoryhierarchy",
+        "values": {
+          "cat": 2,
+          "new": 3
+        }
+      },
+      {
+        "name": "price",
+        "values": {
+          "shirts": 70,
+          "pants": 130,
+          "jackets": 300
+        }
+      }
+    ]
+  }
+</pre
+    >
+
+    <h2>Recommendation</h2>
+    <p>URL: URL/api/weights/new-recommened-products</p>
+    <p>HTTP Method: POST</p>
+    <p>Request Body:</p>
+    <pre>
+{
+    "email": "your@gmail.com",
+    "number":20 //Number of products to be recommended
+}
+</pre
+    >
+
+    <!-- Like an item API -->
+    <h2>Like an item</h2>
+    <p>URL: URL/api/weights/new-like-an-item</p>
+    <p>HTTP Method: POST</p>
+    <p>Request Body:</p>
+    <pre>
+      {
+        "email": "hello@gmail.com",
+        "product": {
+          "_id": {
+            "$oid": "639a2d14afd17c4e35a56cc8"
+          },
+          "documentnumber": 69735,
+          "retailer": "asos",
+          "lastupdated": "1603804103121",
+          "retailerproductid": "21289525",
+          "itembrandandproductid": "ASOS DESIGN21289525",
+          "categoryhierarchy": [
+            "new-in",
+            "new-in-clothing"
+          ],
+          "title": "ASOS DESIGN Tall Polo Shirt With Collar Pin In Dark Green",
+          "description": "Tall polo shirt by ASOS DESIGN, part of our responsible edit. Plain design, polo collar, pin detail, partial button placket, short sleeves, regular fit, true to size.",
+          "color": [
+            "scarab"
+          ],
+          "primarycolor": "",
+          "typeclothing": "polo shirt",
+          "clothingkeywords": [
+            "polo shirt",
+            "polo",
+            "tall"
+          ],
+          "size": [
+            "S LONG",
+            "M LONG",
+            "L LONG",
+            "XL LONG",
+            "XXL LONG"
+          ],
+          "brand": "ASOS DESIGN",
+          "gender": 0,
+          "price": 29, <span style="color: red;">//You need to change the product price field like this.</span>
+          "images": [
+            {
+              "src": "https://images.asos-media.com/products/asos-design-tall-polo-shirt-with-collar-pin-in-dark-green/21289525-1-scarab",
+              "_id": {
+                "$oid": "639a2d14afd17c4e35a56cc9"
+              }
+            },
+            {
+              "src": "https://images.asos-media.com/products/asos-design-tall-polo-shirt-with-collar-pin-in-dark-green/21289525-2",
+              "_id": {
+                "$oid": "639a2d14afd17c4e35a56cca"
+              }
+            },
+            {
+              "src": "https://images.asos-media.com/products/asos-design-tall-polo-shirt-with-collar-pin-in-dark-green/21289525-3",
+              "_id": {
+                "$oid": "639a2d14afd17c4e35a56ccb"
+              }
+            },
+            {
+              "src": "https://images.asos-media.com/products/asos-design-tall-polo-shirt-with-collar-pin-in-dark-green/21289525-4",
+              "_id": {
+                "$oid": "639a2d14afd17c4e35a56ccc"
+              }
+            }
+          ],
+          "imagesResolutions": [],
+          "url": "https://www.asos.com/prd/21289525",
+          "relatedproducts": [
+            {}
+          ],
+          "__v": 1,
+          "encompassingtype": "shirt"
+        }
+      }
+      </pre>
+  </body>
+</html>

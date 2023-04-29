@@ -1,0 +1,133 @@
+.add-exercise-header {
+  font-size: 28px;
+}
+
+.add-exercise-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 100px;
+}
+
+.add-exercise-language {
+  width: 30vw;
+  max-width: 250px;
+  max-height: 250px;
+  height: 30vw;
+  border: 1px solid;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  font-size: 28.8px;
+  justify-content: center;
+  background-color: var(--primary-color);
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+  animation: fadeUp 3s ease-in-out forwards;
+  &:hover {
+    background-color: var(--third-color);
+    color: var(--text-hover-color);
+    box-shadow: 0 0.2rem 0.2rem var(--text-color);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(6rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.add-exercise-languages {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  width: calc(60% - 20vw + 50px);
+  margin: auto;
+}
+
+.add-exercise-step {
+  width: calc(100vw - 100px);
+  text-align: center;
+}
+
+@media only screen and (max-width: 1000px) {
+  .add-exercise-languages {
+    width: 100%;
+  }
+}
+
+.add-exercise-step-two {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  font-size: 18px;
+}
+
+.add-exercise-input {
+  background: var(--secondary-color);
+  min-width: 50vw;
+  height: 15vh;
+  color: var(--text-color);
+  font-size: 18px;
+  resize: none;
+  outline: none;
+  border: 0;
+  box-shadow: 0.2px 0.2px 0.3px 0.4px var(--text-color);
+}
+.add-exercise-input:focus {
+  box-shadow: 0.2px 0.2px 0.3px 0.4px var(--primary-color);
+}
+.add-exercise-input ~ .add-exercise-input-bottom-border {
+  position: relative;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--primary-color);
+}
+.add-exercise-input:focus ~ .add-exercise-input-bottom-border {
+  width: 100%;
+  transition: 0.5s;
+}
+.add-exercise-input[type="number"] {
+  min-width: 20vw;
+  height: 5vh;
+}
+.add-exercise-select {
+  width: 20vw;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  height: 5vh;
+  font-size: 18px;
+}
+.add-exercise-form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 25px;
+}
+.add-exercise-button {
+  margin-top: 15px;
+  border: 1px solid var(--text-color);
+  height: 30px;
+  width: 60px;
+  margin: 15px;
+  cursor: pointer;
+  &:hover {
+    transition: 0.5s ease-in-out;
+    background-color: var(--text-hover-color);
+    color: var(--text-color);
+    border: 1px solid var(--text-color);
+  }
+}
+.add-exercise-error {
+  color: var(--error-color);
+}

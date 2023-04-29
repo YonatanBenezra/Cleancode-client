@@ -1,0 +1,18 @@
+.success-btn {
+    box-shadow: 0.4px 0.4px 3px 0.5px var(--success-color);
+    margin: 15px;
+    padding: 6px;
+    cursor: pointer;
+    transition: ease-in-out 0.5s;
+    &:hover {
+        background-color: var(--success-color);
+        color: var(--text-color);
+        box-shadow: 0.4px 0.4px 3px 0.5px var(--text-color);
+    }
+}
+
+.success-btns {
+    display: flex;
+    /* justify-content: space-between; */
+    flex-wrap: wrap;
+}

@@ -1,0 +1,170 @@
+
+
+/* Style the hero section */
+.hero {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 50rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.hero-heading {
+  font-size: 6rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  text-shadow: 0 0.2rem 0.2rem rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  animation: fadeIn 3s ease-in-out forwards;
+}
+
+.hero-button {
+  width: 250px;
+  height: 60px;
+  border: 1px solid;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  font-size: 28.8px;
+  justify-content: center;
+  background-color: var(--primary-color);
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+  animation: fadeUp 3s ease-in-out forwards;
+  &:hover {
+    background-color: var(--third-color);
+    color: var(--text-hover-color);
+    box-shadow: 0 0.2rem 0.2rem var(--text-color);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-2rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(6rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-heading span.top-animation {
+  display: inline-block;
+  animation: topLetterFadeIn 0.5s ease-in-out forwards;
+}
+.hero-heading .bottom-animation {
+  display: inline-block;
+  animation: bottomLetterFadeIn 0.5s ease-in-out forwards;
+}
+
+.hero-heading span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.hero-heading span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.hero-heading span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+.hero-heading span:nth-child(4) {
+  animation-delay: 0.6s;
+}
+
+.hero-heading span:nth-child(5) {
+  animation-delay: 0.8s;
+}
+
+.hero-heading span:nth-child(6) {
+  animation-delay: 1s;
+}
+
+.hero-heading span:nth-child(7) {
+  animation-delay: 1.2s;
+}
+
+.hero-heading span:nth-child(8) {
+  animation-delay: 1.4s;
+}
+
+.hero-heading span:nth-child(9) {
+  animation-delay: 1.6s;
+}
+
+.hero-heading span:nth-child(10) {
+  animation-delay: 1.8s;
+}
+
+.hero-heading span:nth-child(11) {
+  animation-delay: 2s;
+}
+
+.hero-heading span:nth-child(12) {
+  animation-delay: 2.2s;
+}
+
+.hero-heading span:nth-child(13) {
+  animation-delay: 2.4s;
+}
+
+.hero-heading span:nth-child(14) {
+  animation-delay: 2.6s;
+}
+
+.hero-heading span:nth-child(15) {
+  animation-delay: 2.8s;
+}
+
+.hero-heading span:nth-child(16) {
+  animation-delay: 3s;
+}
+
+.hero-heading span:nth-child(17) {
+  animation-delay: 3.2s;
+}
+
+@keyframes topLetterFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes bottomLetterFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+.hero-subheading {
+  font-size: 2.4rem;
+  margin-bottom: 4rem;
+}
+
