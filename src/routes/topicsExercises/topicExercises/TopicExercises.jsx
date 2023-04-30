@@ -7,9 +7,10 @@ const TopicExercises = () => {
   const { exercises } = useContext(GlobalContext);
   let topicExercises = [];
   if (exercises) {
-    topicExercises = exercises.filter((exercise) =>
-      exercise.topic.name === topic
+    topicExercises = exercises.filter(
+      (exercise) => exercise.topic.name === topic
     );
+    topicExercises.sort((a, b) => (a.position > b.position ? 1 : -1));
   }
 
   return (
@@ -23,7 +24,6 @@ const TopicExercises = () => {
           >
             {index + 1}.<span>{exercise.name}</span>
           </NavLink>
-
           <span
             className={
               window.innerWidth > 1000
@@ -33,7 +33,6 @@ const TopicExercises = () => {
           >
             {exercise.description}
           </span>
-
           {index !== topicExercises.length - 1 && (
             <div className="topic-line"></div>
           )}

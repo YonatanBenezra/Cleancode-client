@@ -5,7 +5,7 @@ import { useContext } from "react";
 
 const Topics = () => {
   const { topics } = useContext(GlobalContext);
-  const {language} = useParams();
+  const { language } = useParams();
   let sortedTopics = [];
   if (topics) {
     sortedTopics = topics.filter((topic) => topic.language.name === language);
@@ -16,7 +16,7 @@ const Topics = () => {
       {sortedTopics.map((topic, index) => (
         <span key={index} className="topics-topic">
           <NavLink to={topic.name} className="exercise" key={topic.language}>
-            {index + 1}.<span>{topic.name}</span>
+            {index + 1}. <span>{topic.name}</span>
           </NavLink>
           {index !== sortedTopics.length - 1 && <div className="line"></div>}
         </span>

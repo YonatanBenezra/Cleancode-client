@@ -169,7 +169,6 @@ const CodeEditor = ({ language, code, answers, onChange }) => {
     formatOnType: true,
     formatOnPaste: true,
   };
-
   return (
     <>
       <Editor
@@ -212,7 +211,7 @@ const CodeEditor = ({ language, code, answers, onChange }) => {
           <div className="output-window__content">
             {submittedAnswer && (
               <p>
-                Your answer was {submittedAnswer.answer}, it's score is:{" "}
+                Your answer was {submittedAnswer.code}, it's score is:{" "}
                 {submittedAnswer.score}
               </p>
             )}
