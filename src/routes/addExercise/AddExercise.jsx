@@ -30,7 +30,7 @@ const AddExercise = () => {
   const onSubmit = (data) => {
     data.language = selectedLanguage;
     axios
-      .post("http://localhost:8000/api/exercises", data)
+      .post(`${import.meta.env.VITE_API_URL}/api/exercises`, data)
       .then((res) => {
         setSubmitted(true);
         reset();

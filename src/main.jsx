@@ -12,7 +12,6 @@ import Topics from "./routes/topicsExercises/topics/Topics";
 import TopicExercises from "./routes/topicsExercises/topicExercises/TopicExercises";
 import ExerciseDetails from "./routes/topicsExercises/exerciseDetails/ExerciseDetails";
 
-
 const router = createBrowserRouter([
   {
     path: "/",
@@ -38,7 +37,7 @@ const router = createBrowserRouter([
       },
       {
         path: "add-exercise",
-        element: <AddExercise />
+        element: <AddExercise />,
       },
       {
         path: "*",
@@ -46,10 +45,6 @@ const router = createBrowserRouter([
       },
     ],
   },
-  // {
-  //   path: "/js",
-  //   element: <JavaScriptExercises />,
-  // },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

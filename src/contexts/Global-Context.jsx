@@ -12,21 +12,21 @@ export const GlobalProvider = ({ children }) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/api/topics/")
+      .get(`${import.meta.env.VITE_API_URL}/api/topics/`)
       .then((res) => {
         setTopics(res.data.data.data);
       })
       .catch((err) => console.log(err));
 
     axios
-      .get("http://localhost:8000/api/exercises/")
+      .get(`${import.meta.env.VITE_API_URL}/api/exercises/`)
       .then((res) => {
         setExercises(res.data.data.data);
       })
       .catch((err) => console.log(err));
 
     axios
-      .get("http://localhost:8000/api/languages/")
+      .get(`${import.meta.env.VITE_API_URL}/api/languages/`)
       .then((res) => {
         setLanguages(res.data.data.data);
       })
