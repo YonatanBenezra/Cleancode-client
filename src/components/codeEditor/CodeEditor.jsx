@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import Editor from "@monaco-editor/react";
 import GlobalContext from "../../contexts/Global-Context";
 import "./code-editor.scss";
+import { Link, NavLink, useParams } from "react-router-dom";
 
 const htmlSuggestions = [
   { label: "div", snippet: "<div>$1</div>" },
@@ -51,7 +52,8 @@ const cssSuggestions = [
   { label: "border-radius", snippet: "border-radius: $1;" },
   { label: "transition", snippet: "transition: $1;" },
 ];
-const CodeEditor = ({ language, code, answers, onChange }) => {
+const CodeEditor = ({ selectedLanguage, code, answers, onChange }) => {
+  const { language, topic, exerciseNum } = useParams();
   const { isDarkMode } = useContext(GlobalContext);
   const [value, setValue] = useState(code || "");
   const [submittedValue, setSubmittedValue] = useState("");
@@ -81,9 +83,9 @@ const CodeEditor = ({ language, code, answers, onChange }) => {
     editor
       .getDomNode()
       .addEventListener("wheel", (event) => handleMouseWheel(event, monaco));
-    const suggestions = language === "html" ? htmlSuggestions : cssSuggestions;
+    const suggestions = selectedLanguage === "html" ? htmlSuggestions : cssSuggestions;
 
-    monaco.languages.registerCompletionItemProvider(language, {
+    monaco.languages.registerCompletionItemProvider(selectedLanguage, {
       provideCompletionItems: () => {
         return {
           suggestions: suggestions.map((suggestion) => ({
@@ -172,16 +174,16 @@ const CodeEditor = ({ language, code, answers, onChange }) => {
   return (
     <>
       <Editor
-        height={`${language === "javascript" ? "50vh" : "100%"}`}
-        width={`${language === "javascript" ? "70%" : "100%"}`}
-        language={language}
+        height={`${selectedLanguage === "javascript" ? "50vh" : "100%"}`}
+        width={`${selectedLanguage === "javascript" ? "70%" : "100%"}`}
+        language={selectedLanguage}
         value={value}
         theme={isDarkMode ? "vs-dark" : "light"}
         onChange={handleEditorChange}
         onMount={handleEditorDidMount}
         options={options}
       />
-      {language === "javascript" && (
+      {selectedLanguage === "javascript" && (
         <div
           className={`output-window ${
             submittedAnswer.length !== 0
@@ -216,6 +218,7 @@ const CodeEditor = ({ language, code, answers, onChange }) => {
               </p>
             )}
           </div>
+          <a href={`/${selectedLanguage}/${topic}/${Number(exerciseNum)+1}`} >Next Exercise</a>
         </div>
       )}
     </>

@@ -34,6 +34,7 @@ const ExerciseDetails = () => {
     topicExercises = exercises.filter(
       (exercise) => exercise.topic.name === topic
     );
+    topicExercises.sort((a, b) => (a.position > b.position ? 1 : -1));
     exercise = topicExercises[exerciseNum];
   }
   if (exercise?.code) {
@@ -86,7 +87,7 @@ const ExerciseDetails = () => {
             <CodeEditor
               code={parsedCode}
               answers={exercise?.answers}
-              language={language}
+              selectedLanguage={language}
               onChange={(newValue) => setJs(newValue)}
             />
           )}
