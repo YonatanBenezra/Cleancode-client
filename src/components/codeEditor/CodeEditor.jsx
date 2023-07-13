@@ -3,6 +3,7 @@ import Editor from "@monaco-editor/react";
 import GlobalContext from "../../contexts/Global-Context";
 import "./code-editor.scss";
 import { Link, NavLink, useParams } from "react-router-dom";
+import axios from "axios";
 
 const htmlSuggestions = [
   { label: "div", snippet: "<div>$1</div>" },
@@ -64,8 +65,27 @@ const CodeEditor = ({ selectedLanguage, code, answers, onChange }) => {
     setValue(value);
     onChange(value);
   };
-  const handleSubmitValue = () => {
-    answers.map(
+  const handleSubmitValue = async () => {
+    try {
+      console.log({
+        message: `Validate the accuracy of the user's response and produce a response in the specified format: {isCorrect: Boolean, score: Number}, representing the level of similarity between the user's answer and the correct answer on a scale of 0 to 100. '${value}'`,
+      });
+      const response = await axios.post(
+        "https://goolo-learning-ai-server.onrender.com/chat",
+        {
+          message: `Validate the accuracy of the user's response and produce a response in the specified format: {isCorrect: Boolean, score: Number}.
+          // Goal: Declare a variable named 'myString' and assign the value
+          // 'Hello, World!' to it
+          const myString = "Hello, Woeld!";`,
+        }
+      );
+
+      console.log(response);
+      // Handle the response or any additional logic here
+    } catch (error) {
+      // Handle any errors that occurred during the request
+    }
+    /*     answers.map(
       (answer) =>
         value
           .toString()
@@ -74,7 +94,7 @@ const CodeEditor = ({ selectedLanguage, code, answers, onChange }) => {
           .indexOf(
             answer.code.toString().replace(/\n/g, "").replace(/ /g, "")
           ) > 0 && setSubmittedAnswer(answer)
-    );
+    ); */
   };
 
   const handleEditorDidMount = (editor, monaco) => {
@@ -83,7 +103,8 @@ const CodeEditor = ({ selectedLanguage, code, answers, onChange }) => {
     editor
       .getDomNode()
       .addEventListener("wheel", (event) => handleMouseWheel(event, monaco));
-    const suggestions = selectedLanguage === "html" ? htmlSuggestions : cssSuggestions;
+    const suggestions =
+      selectedLanguage === "html" ? htmlSuggestions : cssSuggestions;
 
     monaco.languages.registerCompletionItemProvider(selectedLanguage, {
       provideCompletionItems: () => {
@@ -218,7 +239,9 @@ const CodeEditor = ({ selectedLanguage, code, answers, onChange }) => {
               </p>
             )}
           </div>
-          <a href={`/${selectedLanguage}/${topic}/${Number(exerciseNum)+1}`} >Next Exercise</a>
+          <a href={`/${selectedLanguage}/${topic}/${Number(exerciseNum) + 1}`}>
+            Next Exercise
+          </a>
         </div>
       )}
     </>

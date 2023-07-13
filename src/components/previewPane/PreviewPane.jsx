@@ -1,6 +1,4 @@
-// src/components/PreviewPane.js
-
-import React, { useRef, useEffect } from "react";
+import PropTypes from "prop-types";
 
 const PreviewPane = ({ html, css }) => {
   const srcDocContent = `
@@ -21,6 +19,11 @@ const PreviewPane = ({ html, css }) => {
       style={{ width: "100%", height: "100%", border: "none" }}
     />
   );
+};
+
+PreviewPane.propTypes = {
+  html: PropTypes.string.isRequired,
+  css: PropTypes.string.isRequired,
 };
 
 export default PreviewPane;

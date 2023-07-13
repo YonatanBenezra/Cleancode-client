@@ -1,11 +1,9 @@
 import "./theme-button.scss";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import GlobalContext from "../../contexts/Global-Context";
-
 
 const ThemeButton = () => {
   const { isDarkMode, setIsDarkMode } = useContext(GlobalContext);
-
   return (
     <div className="theme-container">
       <input
@@ -14,7 +12,7 @@ const ThemeButton = () => {
         id="switch"
         name="mode"
         onChange={() => {
-          setIsDarkMode(!isDarkMode)
+          setIsDarkMode(!isDarkMode);
         }}
         checked={isDarkMode}
       />

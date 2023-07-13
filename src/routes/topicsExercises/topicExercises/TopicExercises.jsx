@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import GlobalContext from "../../../contexts/Global-Context";
 import "./topic-exercises.scss";
