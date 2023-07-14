@@ -3,6 +3,7 @@ import Editor from "@monaco-editor/react";
 import GlobalContext from "../../contexts/Global-Context";
 import "./code-editor.scss";
 import { Link, NavLink, useParams } from "react-router-dom";
+import axios from "axios";
 
 const htmlSuggestions = [
   { label: "div", snippet: "<div>$1</div>" },
@@ -64,17 +65,77 @@ const CodeEditor = ({ selectedLanguage, code, answers, onChange }) => {
     setValue(value);
     onChange(value);
   };
-  const handleSubmitValue = () => {
-    answers.map(
-      (answer) =>
-        value
-          .toString()
-          .replace(/\n/g, "")
-          .replace(/ /g, "")
-          .indexOf(
-            answer.code.toString().replace(/\n/g, "").replace(/ /g, "")
-          ) > 0 && setSubmittedAnswer(answer)
-    );
+
+  function parseInput(input) {
+    const lines = input.split("\n");
+
+    let questionLines = [];
+    let codeLines = [];
+
+    for (let line of lines) {
+      if (line.trim().startsWith("//")) {
+        // This is a line of the question
+        questionLines.push(line.replace("//", "").trim());
+      } else {
+        // This is a line of the code
+        codeLines.push(line);
+      }
+    }
+
+    // Join the lines without adding a newline at the end
+    let question = questionLines.join("\n");
+    let code = codeLines.join("\n");
+
+    return { question, code };
+  }
+  const handleSubmitValue = async () => {
+    try {
+      const response = await axios.post(
+        "https://api.openai.com/v1/chat/completions",
+        {
+          model: "gpt-3.5-turbo-16k",
+          messages: [
+            {
+              role: "user",
+              content: `Please validate the accuracy of the user's response and provide a response in the specified format: {isCorrect: Boolean, score: Number}. The score indicates the proximity of the user's answer to a range between 0 and 100.
+              Question: ${parseInput(value).question}.
+              Code: ${parseInput(value).code}.`,
+            },
+          ],
+          max_tokens: 200,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization:
+              "Bearer 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",
+          },
+        }
+      );
+
+      const ans = Function(
+        `"use strict"; return (${response.data.choices[0].message.content});`
+      )();
+      alert(
+        `Your answer is ${
+          ans.isCorrect ? "correct" : "incorrect"
+        } with a score of ${ans.score}`
+      );
+      // setSubmittedAnswer(ans);
+      /* answers.map(
+        (answer) =>
+          value
+            .toString()
+            .replace(/\n/g, "")
+            .replace(/ /g, "")
+            .indexOf(
+              answer.code.toString().replace(/\n/g, "").replace(/ /g, "")
+            ) > 0 && setSubmittedAnswer(answer)
+      ); */
+    } catch (error) {
+      console.log(error);
+      alert("Please try after 30 seconds");
+    }
   };
 
   const handleEditorDidMount = (editor, monaco) => {
@@ -83,7 +144,8 @@ const CodeEditor = ({ selectedLanguage, code, answers, onChange }) => {
     editor
       .getDomNode()
       .addEventListener("wheel", (event) => handleMouseWheel(event, monaco));
-    const suggestions = selectedLanguage === "html" ? htmlSuggestions : cssSuggestions;
+    const suggestions =
+      selectedLanguage === "html" ? htmlSuggestions : cssSuggestions;
 
     monaco.languages.registerCompletionItemProvider(selectedLanguage, {
       provideCompletionItems: () => {
@@ -218,7 +280,9 @@ const CodeEditor = ({ selectedLanguage, code, answers, onChange }) => {
               </p>
             )}
           </div>
-          <a href={`/${selectedLanguage}/${topic}/${Number(exerciseNum)+1}`} >Next Exercise</a>
+          <a href={`/${selectedLanguage}/${topic}/${Number(exerciseNum) + 1}`}>
+            Next Exercise
+          </a>
         </div>
       )}
     </>

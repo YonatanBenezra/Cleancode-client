@@ -1,23 +1,29 @@
-import { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import GlobalContext from "../../contexts/Global-Context";
 import "./add-exercise.scss";
 import axios from "axios";
 import Success from "../../components/sucess/Success";
+
 const AddExercise = () => {
   const { languages, topics } = useContext(GlobalContext);
   const [step, setStep] = useState(1);
   const [selectedLanguage, setSelectedLanguage] = useState(null);
   const [submitted, setSubmitted] = useState(false);
-  let sortedLanguages = [];
-  let sortedTopics = [];
-  if (languages && topics) {
-    sortedLanguages = languages.sort((a, b) => a.position - b.position);
-    sortedTopics = topics.filter((topic) =>
-      topic.language._id === selectedLanguage
-    );
-    sortedTopics.sort((a, b) => a.position - b.position);
-  }
+  const [errorMessage, setErrorMessage] = useState("");
+  const [sortedLanguages, setSortedLanguages] = useState([]);
+  const [sortedTopics, setSortedTopics] = useState([]);
+
+  useEffect(() => {
+    if (languages && topics) {
+      setSortedLanguages(languages.sort((a, b) => a.position - b.position));
+      setSortedTopics(
+        topics
+          .filter((topic) => topic.language._id === selectedLanguage)
+          .sort((a, b) => a.position - b.position)
+      );
+    }
+  }, [languages, topics, selectedLanguage]);
 
   const {
     register,
@@ -26,36 +32,35 @@ const AddExercise = () => {
     clearErrors,
     reset,
   } = useForm();
-
-  const onSubmit = (data) => {
-    data.language = selectedLanguage;
-    axios
-      .post(`${import.meta.env.VITE_API_URL}/api/exercises`, data)
-      .then((res) => {
-        setSubmitted(true);
-        reset();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const onSubmit = async (data) => {
+    try {
+      data.language = selectedLanguage;
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/exercises`, data);
+      setSubmitted(true);
+      reset();
+      setErrorMessage("");
+    } catch (err) {
+      setErrorMessage("An error occurred while adding the exercise.");
+      console.error(err);
+    }
   };
-
   const handleBack = () => {
-    setStep(step - 1);
+    setStep((prevStep) => prevStep - 1);
   };
 
   const handleNext = (id) => {
     clearErrors();
     setSelectedLanguage(id);
-    setStep(step + 1);
+    setStep((prevStep) => prevStep + 1);
   };
 
   return (
     <div className="add-exercise-container">
+      {errorMessage && <div className="error">{errorMessage}</div>}
       {submitted ? (
         <Success setSubmitted={setSubmitted} />
       ) : (
-        <>
+        <React.Fragment>
           <span className="add-exercise-header">Add Exercise</span>
           <form onSubmit={handleSubmit(onSubmit)}>
             {step === 1 ? (
@@ -112,18 +117,6 @@ const AddExercise = () => {
                     This field is required
                   </div>
                 )}
-
-                {/* <div className="add-exercise-form-group">
-              <label className="add-exercise-label">Question</label>
-              <textarea
-                className="add-exercise-input"
-                {...register("question", { required: true })}
-              />
-              <span className="add-exercise-input-bottom-border"></span>
-            </div>
-            {errors.question && (
-              <div className="add-exercise-error">This field is required</div>
-            )} */}
 
                 <div className="add-exercise-form-group">
                   <label className="add-exercise-label">Code</label>
@@ -204,7 +197,7 @@ const AddExercise = () => {
               </div>
             )}
           </form>
-        </>
+        </React.Fragment>
       )}
     </div>
   );

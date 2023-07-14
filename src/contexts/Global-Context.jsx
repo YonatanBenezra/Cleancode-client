@@ -1,66 +1,69 @@
-import React, { createContext, useState, useEffect, useContext } from "react";
+import { createContext, useState, useEffect } from "react";
 import axios from "axios";
+import PropTypes from "prop-types";
 
 const GlobalContext = createContext();
 
+const fetchData = async (url) => {
+  const response = await axios.get(url);
+  return response.data.data.data;
+};
+
 export const GlobalProvider = ({ children }) => {
-  const [isDarkMode, setIsDarkMode] = useState(true);
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const storedTheme = localStorage.getItem("theme");
+    return storedTheme ? JSON.parse(storedTheme) : true;
+  });
+
+  const [isCollapsed, setIsCollapsed] = useState(() => {
+    const storedCollapse = localStorage.getItem("collapse");
+    return storedCollapse ? JSON.parse(storedCollapse) : false;
+  });
   const [exercises, setExercises] = useState([]);
   const [languages, setLanguages] = useState([]);
   const [topics, setTopics] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_API_URL}/api/topics/`)
-      .then((res) => {
-        setTopics(res.data.data.data);
-      })
-      .catch((err) => console.log(err));
+    const fetchDataAndSetState = async (url, setter) => {
+      try {
+        const data = await fetchData(url);
+        setter(data);
+      } catch (error) {
+        setError(error.message);
+      }
+    };
 
-    axios
-      .get(`${import.meta.env.VITE_API_URL}/api/exercises/`)
-      .then((res) => {
-        setExercises(res.data.data.data);
-      })
-      .catch((err) => console.log(err));
+    fetchDataAndSetState(
+      `${import.meta.env.VITE_API_URL}/api/topics/`,
+      setTopics
+    );
+    fetchDataAndSetState(
+      `${import.meta.env.VITE_API_URL}/api/exercises/`,
+      setExercises
+    );
+    fetchDataAndSetState(
+      `${import.meta.env.VITE_API_URL}/api/languages/`,
+      setLanguages
+    );
 
-    axios
-      .get(`${import.meta.env.VITE_API_URL}/api/languages/`)
-      .then((res) => {
-        setLanguages(res.data.data.data);
-      })
-      .catch((err) => console.log(err));
-  }, []);
-
-  useEffect(() => {
     const storedTheme = localStorage.getItem("theme");
-    if (storedTheme) {
-      setIsDarkMode(JSON.parse(storedTheme));
-    }
+    if (storedTheme) setIsDarkMode(JSON.parse(storedTheme));
+
     const storedCollapse = localStorage.getItem("collapse");
-    if (storedCollapse) {
-      setIsCollapsed(JSON.parse(storedCollapse));
-    }
+    if (storedCollapse) setIsCollapsed(JSON.parse(storedCollapse));
   }, []);
 
   useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.setAttribute("data-theme", "dark");
-    } else {
-      document.documentElement.removeAttribute("data-theme");
-    }
-    localStorage.setItem("theme", JSON.stringify(isDarkMode));
-  }, [isDarkMode]);
+    const mode = isDarkMode ? "dark" : null;
+    const collapse = isCollapsed ? "collapsed" : null;
 
-  useEffect(() => {
-    if (isCollapsed) {
-      document.documentElement.setAttribute("data-collapse", "collapsed");
-    } else {
-      document.documentElement.removeAttribute("data-collapse");
-    }
-    localStorage.setItem("collapse", JSON.stringify(isCollapsed));
-  }, [isCollapsed]);
+    document.documentElement.setAttribute("data-theme", mode);
+    localStorage.setItem("theme", isDarkMode);
+
+    document.documentElement.setAttribute("data-collapse", collapse);
+    localStorage.setItem("collapse", isCollapsed);
+  }, [isDarkMode, isCollapsed]);
 
   return (
     <GlobalContext.Provider
@@ -75,6 +78,7 @@ export const GlobalProvider = ({ children }) => {
         setExercises,
         languages,
         setLanguages,
+        error,
       }}
     >
       {children}
@@ -82,4 +86,7 @@ export const GlobalProvider = ({ children }) => {
   );
 };
 
+GlobalProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 export default GlobalContext;

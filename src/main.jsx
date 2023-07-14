@@ -1,6 +1,6 @@
 import App from "./App";
 import ReactDOM from "react-dom/client";
-import React, { Children } from "react";
+import React from "react";
 import { GlobalProvider } from "./contexts/Global-Context";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
