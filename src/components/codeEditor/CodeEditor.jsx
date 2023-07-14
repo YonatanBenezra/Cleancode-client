@@ -65,36 +65,76 @@ const CodeEditor = ({ selectedLanguage, code, answers, onChange }) => {
     setValue(value);
     onChange(value);
   };
+
+  function parseInput(input) {
+    const lines = input.split("\n");
+
+    let questionLines = [];
+    let codeLines = [];
+
+    for (let line of lines) {
+      if (line.trim().startsWith("//")) {
+        // This is a line of the question
+        questionLines.push(line.replace("//", "").trim());
+      } else {
+        // This is a line of the code
+        codeLines.push(line);
+      }
+    }
+
+    // Join the lines without adding a newline at the end
+    let question = questionLines.join("\n");
+    let code = codeLines.join("\n");
+
+    return { question, code };
+  }
   const handleSubmitValue = async () => {
     try {
-      console.log({
-        message: `Validate the accuracy of the user's response and produce a response in the specified format: {isCorrect: Boolean, score: Number}, representing the level of similarity between the user's answer and the correct answer on a scale of 0 to 100. '${value}'`,
-      });
       const response = await axios.post(
-        "https://goolo-learning-ai-server.onrender.com/chat",
+        "https://api.openai.com/v1/chat/completions",
         {
-          message: `Validate the accuracy of the user's response and produce a response in the specified format: {isCorrect: Boolean, score: Number}.
-          // Goal: Declare a variable named 'myString' and assign the value
-          // 'Hello, World!' to it
-          const myString = "Hello, Woeld!";`,
+          model: "gpt-3.5-turbo-16k",
+          messages: [
+            {
+              role: "user",
+              content: `Please validate the accuracy of the user's response and provide a response in the specified format: {isCorrect: Boolean, score: Number}. The score indicates the proximity of the user's answer to a range between 0 and 100.
+              Question: ${parseInput(value).question}.
+              Code: ${parseInput(value).code}.`,
+            },
+          ],
+          max_tokens: 100,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization:
+              "Bearer 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",
+          },
         }
       );
 
-      console.log(response);
-      // Handle the response or any additional logic here
+      const ans = Function(
+        `"use strict"; return (${response.data.choices[0].message.content});`
+      )();
+      alert(
+        `Your answer is ${
+          ans.isCorrect ? "correct" : "incorrect"
+        } with a score of ${ans.score}`
+      );
+      // setSubmittedAnswer(ans);
+      /* answers.map(
+        (answer) =>
+          value
+            .toString()
+            .replace(/\n/g, "")
+            .replace(/ /g, "")
+            .indexOf(
+              answer.code.toString().replace(/\n/g, "").replace(/ /g, "")
+            ) > 0 && setSubmittedAnswer(answer)
+      ); */
     } catch (error) {
-      // Handle any errors that occurred during the request
+      alert("Please try after 30 seconds");
     }
-    /*     answers.map(
-      (answer) =>
-        value
-          .toString()
-          .replace(/\n/g, "")
-          .replace(/ /g, "")
-          .indexOf(
-            answer.code.toString().replace(/\n/g, "").replace(/ /g, "")
-          ) > 0 && setSubmittedAnswer(answer)
-    ); */
   };
 
   const handleEditorDidMount = (editor, monaco) => {
