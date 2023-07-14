@@ -102,13 +102,13 @@ const CodeEditor = ({ selectedLanguage, code, answers, onChange }) => {
               Code: ${parseInput(value).code}.`,
             },
           ],
-          max_tokens: 100,
+          max_tokens: 200,
         },
         {
           headers: {
             "Content-Type": "application/json",
             Authorization:
-              "Bearer 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",
+              "Bearer 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",
           },
         }
       );
@@ -133,6 +133,7 @@ const CodeEditor = ({ selectedLanguage, code, answers, onChange }) => {
             ) > 0 && setSubmittedAnswer(answer)
       ); */
     } catch (error) {
+      console.log(error);
       alert("Please try after 30 seconds");
     }
   };
