@@ -3,8 +3,8 @@ import React, {
   useEffect,
   useRef,
   useState,
-  useMemo,
   useCallback,
+  useReducer,
 } from "react";
 import { useParams } from "react-router-dom";
 import GlobalContext from "../../../contexts/Global-Context";
@@ -12,44 +12,33 @@ import "./exercise-details.scss";
 import CodeEditor from "../../../components/codeEditor/CodeEditor";
 import PreviewPane from "../../../components/previewPane/PreviewPane";
 
-const ExerciseDetails = () => {
-  const { language, topic, exerciseNum } = useParams();
-  const { exercises } = useContext(GlobalContext);
-  const [html, setHtml] = useState("");
-  const [css, setCss] = useState("");
-  const [previewCode, setPreviewCode] = useState({ html: "", css: "" });
+const useExercise = (exercises, topic, exerciseNum) => {
+  let topicExercises = [];
+  let exercise = null;
 
-  const { exercise, parsedCode } = useMemo(() => {
-    let topicExercises = [];
-    let exercise = null;
-    let parsedCode = false;
+  if (exercises) {
+    topicExercises = exercises.filter(
+      (exercise) => exercise.topic.name === topic
+    );
+    topicExercises.sort((a, b) => (a.position > b.position ? 1 : -1));
+    exercise = topicExercises[exerciseNum];
+  }
 
-    if (exercises) {
-      topicExercises = exercises.filter(
-        (exercise) => exercise.topic.name === topic
-      );
-      topicExercises.sort((a, b) => (a.position > b.position ? 1 : -1));
-      exercise = topicExercises[exerciseNum];
-    }
+  let parsedCode = exercise?.code
+    ? exercise.code
+        .split("-")
+        .map((code) => code + "\n")
+        .join("")
+    : null;
 
-    if (exercise?.code) {
-      let splittedCode = exercise.code.split("-");
-      let semiParsedCode = splittedCode.map((code) => code + "\n");
-      parsedCode = semiParsedCode.join("");
-    }
+  return { exercise, parsedCode };
+};
 
-    return { topicExercises, exercise, parsedCode };
-  }, [exercises, topic, exerciseNum]);
-
-  const containerRef = useRef(null);
-  const resizerRef = useRef(null);
+const useResizer = (containerRef, resizerRef) => {
   const [isResizing, setIsResizing] = useState(false);
 
-  const handleMouseDown = useCallback(() => setIsResizing(true), []);
-  const handleMouseUp = useCallback(
-    () => isResizing && setIsResizing(false),
-    [isResizing]
-  );
+  const handleMouseDown = () => setIsResizing(true);
+  const handleMouseUp = useCallback(() => setIsResizing(false), []);
   const handleMouseMove = useCallback(
     (e) => {
       if (!isResizing) return;
@@ -57,15 +46,8 @@ const ExerciseDetails = () => {
       const newEditorHeight = e.clientY - containerRect.top;
       resizerRef.current.style.top = newEditorHeight + "px";
     },
-    [isResizing]
+    [isResizing, containerRef, resizerRef]
   );
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setPreviewCode({ html, css });
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, [html, css]);
 
   useEffect(() => {
     document.addEventListener("mousemove", handleMouseMove);
@@ -77,48 +59,106 @@ const ExerciseDetails = () => {
     };
   }, [handleMouseMove, handleMouseUp]);
 
-  if (!exercises) {
-    return <div>Loading...</div>;
-  }
+  return handleMouseDown;
+};
 
-  if (exercises.length === 0) {
-    return <div>No exercises found</div>;
-  }
+const ExerciseDetails = () => {
+  const { language, topic, exerciseNum } = useParams();
+  const { exercises } = useContext(GlobalContext);
+  const [showImage, setShowImage] = useState(false);
+
+  const { exercise, parsedCode } = useExercise(exercises, topic, exerciseNum);
+  const containerRef = useRef(null);
+  const resizerRef = useRef(null);
+  const handleMouseDown = useResizer(containerRef, resizerRef);
+
+  const [state, setState] = useReducer(
+    (prevState, newState) => ({ ...prevState, ...newState }),
+    { html: "", css: "", js: "", previewHtml: "", previewCss: "" }
+  );
+
+  const handlePreviewUpdate = useCallback((type, value) => {
+    const timer = setTimeout(() => {
+      setState({ [`preview${type}`]: value });
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(
+    () => handlePreviewUpdate("Html", state.html),
+    [state.html, handlePreviewUpdate]
+  );
+  useEffect(
+    () => handlePreviewUpdate("Css", state.css),
+    [state.css, handlePreviewUpdate]
+  );
 
   return (
     <div className="exercise-details-container">
-      {exercise ? (
+      {exercise === null ? (
+        "loading"
+      ) : language === "javascript" ? (
         <React.Fragment>
-          <span>{exercise.topic?.description}</span>
+          <span>{exercise?.description}</span>
           <p>{exercise?.question}</p>
-          <CodeEditor
-            code={parsedCode}
-            answers={exercise?.answers}
-            selectedLanguage={language}
-            onChange={(newValue) =>
-              language === "javascript" ? setHtml(newValue) : setCss(newValue)
-            }
-          />
-          {language !== "javascript" && (
-            <div
-              className="html-css-editor-container editor-container"
-              ref={containerRef}
-            >
-              <div className="html-css-editor">
+          {parsedCode && (
+            <CodeEditor
+              code={parsedCode}
+              answers={exercise?.answers}
+              selectedLanguage={language}
+              onChange={(newValue) => setState({ js: newValue })}
+            />
+          )}
+        </React.Fragment>
+      ) : (
+        <div
+          className="html-css-editor-container editor-container"
+          ref={containerRef}
+        >
+          <div className="html-css-editor">
+            <div style={{ textAlign: "center" }}>
+              <h3>{exercise?.description}</h3>
+              <p>{parsedCode}</p>
+              <button
+                onClick={() => setShowImage((prev) => !prev)}
+                className="next-link"
+              >
+                {showImage ? "Show Code" : "Show Image"}
+              </button>
+            </div>
+            {showImage ? (
+              <div className="app-container">
+                <img src="https://i.ibb.co/9crLtc0/Screenshot-3.png" alt="code" />
+              </div>
+            ) : (
+              <>
+                <CodeEditor
+                  selectedLanguage="html"
+                  code={state.html}
+                  answers={exercise?.answers}
+                  onChange={(newValue) => setState({ html: newValue })}
+                />
                 <div
                   className="resizer"
                   ref={resizerRef}
                   onMouseDown={handleMouseDown}
                 ></div>
-                <PreviewPane html={previewCode.html} css={previewCode.css} />
-              </div>
-            </div>
-          )}
-        </React.Fragment>
-      ) : (
-        "Loading..."
+                <CodeEditor
+                  selectedLanguage="css"
+                  code={state.css}
+                  answers={exercise?.answers}
+                  onChange={(newValue) => setState({ css: newValue })}
+                />{" "}
+              </>
+            )}
+          </div>
+          <div className="preview-container">
+            <PreviewPane html={state.previewHtml} css={state.previewCss} />
+          </div>
+        </div>
       )}
     </div>
   );
 };
+
 export default ExerciseDetails;
