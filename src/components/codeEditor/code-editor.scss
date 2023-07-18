@@ -1,64 +1,66 @@
-.app-container {
+.output-window {
+  margin-top: 15px;
+  width: 70%;
+  padding-left: 15px;
+  min-height: 150px;
+  margin-top: 15px;
+  color: var(--text-color);
+  border: 1px solid var(--third-color);
+  background-color: var(--text-hover-color);
+}
+.horizontal-line {
+  margin-top: 15px;
+  border: 1px solid var(--third-color);
+}
+.code-editor-submit-button {
+  margin-top: 15px;
+  border: 1px solid var(--text-color);
+  height: 30px;
+  width: 60px;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
-}
-
-.editor-section {
-  width: 90%;
-  margin-bottom: 2em;
-}
-
-.submit-button {
-  display: inline-block;
-  margin-top: 1em;
-  padding: 0.5em 1em;
-  background-color: var(--text-color);
-  color: var(--text-hover-color);
-  border: none;
-  border-radius: 5px;
   cursor: pointer;
-  transition: 0.3s;
+  transition: 0.5s ease-in-out;
+  &:hover {
+    background-color: var(--text-color);
+    color: var(--text-hover-color);
+    border: 1px solid var(--text-hover-color);
+  }
 }
 
-.submit-button:hover {
-  background-color: var(--text-hover-color);
-  color: var(--text-color);
+.success {
+  border: 1px solid var(--success-color);
+
+  .horizontal-line {
+    border: 1px solid var(--success-color);
+  }
+  div .output-message {
+    color: var(--success-color);
+  }
+}
+.error {
+  border: 1px solid var(--error-color);
+
+  .horizontal-line {
+    border: 1px solid var(--error-color);
+  }
+  div .output-message {
+    color: var(--error-color);
+  }
 }
 
-.output-section {
-  width: 90%;
-  margin-bottom: 2em;
-  border: 1px solid var(--third-color);
-  padding: 1em;
-  background-color: var(--text-hover-color);
-  color: var(--text-color);
+.btn-msg-container {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-start;
 }
 
-.message.success {
-  color: var(--success-color);
-}
-
-.message.error {
-  color: var(--error-color);
-}
-
-.navigation-section {
-  width: 90%;
-}
-
-.next-link {
-  display: inline-block;
-  padding: 0.5em 1em;
-  color: var(--text-color);
-  background-color: var(--success-color);
-  text-decoration: none;
-  border-radius: 5px;
-}
-
-.next-link:hover {
-  color: var(--text-hover-color);
-  background-color: var(--text-color);
+.output-message {
+  margin-left: 15px;
+  &.success {
+  }
+  &.error {
+    color: var(--alert-color);
+  }
 }

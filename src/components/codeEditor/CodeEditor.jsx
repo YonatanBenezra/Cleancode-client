@@ -41,7 +41,7 @@ const CodeEditor = ({ selectedLanguage, code, answers, onChange }) => {
     return { question, code };
   }
   const handleSubmitValue = async () => {
-    /*  if (!parseInput(value).code.trim())
+    if (!parseInput(value).code.trim())
       return setSubmittedAnswer({ isCorrect: false, score: 0 });
 
     try {
@@ -52,7 +52,7 @@ const CodeEditor = ({ selectedLanguage, code, answers, onChange }) => {
           messages: [
             {
               role: "user",
-              content: `Please validate the accuracy of the user's response and provide a response in the specified format: {isCorrect: Boolean, score: Number}. The score indicates the proximity of the user's answer to a range between 0 and 100.
+              content: `Please validate the accuracy of the user's response and provide a response in the specified format: {isCorrect: Boolean,feedBack: String, score: Number}. The score indicates the proximity of the user's answer to a range between 0 and 100.
               Question: ${parseInput(value).question}.
               Code: ${parseInput(value).code}.`,
             },
@@ -73,7 +73,7 @@ const CodeEditor = ({ selectedLanguage, code, answers, onChange }) => {
       setSubmittedAnswer(result);
     } catch (error) {
       alert("Please try after 30 seconds");
-    } */
+    }
   };
 
   const handleEditorDidMount = (editor, monaco) => {
@@ -172,75 +172,68 @@ const CodeEditor = ({ selectedLanguage, code, answers, onChange }) => {
     formatOnType: true,
     formatOnPaste: true,
   };
-  console.log(selectedLanguage);
+
   return (
     <React.Fragment>
-      <div className="app-container">
-        <div className="editor-section">
-          <h2>{selectedLanguage} Editor</h2>
-          <Editor
-            height="50vh"
-            width="100%"
-            language={selectedLanguage}
-            value={value}
-            theme={isDarkMode ? "vs-dark" : "light"}
-            onChange={handleEditorChange}
-            onMount={handleEditorDidMount}
-            options={options}
-          />
-          <button onClick={handleSubmitValue} className="submit-button">
-            Run
-          </button>
-        </div>
-
-        {selectedLanguage === "javascript" && (
-          <div className="output-section">
-            <h2>Output / Console</h2>
-            <div
-              className={`message ${
-                submittedAnswer.isCorrect !== undefined
-                  ? submittedAnswer.isCorrect
-                    ? "success"
-                    : "error"
-                  : ""
-              }`}
+      <Editor
+        height="50vh"
+        width={selectedLanguage === "javascript" ? "70%" : "100%"}
+        language={selectedLanguage}
+        value={value}
+        theme={isDarkMode ? "vs-dark" : "light"}
+        onChange={handleEditorChange}
+        onMount={handleEditorDidMount}
+        options={options}
+      />
+      {selectedLanguage === "javascript" && (
+        <div
+          className={`output-window ${
+            submittedAnswer.isCorrect !== undefined
+              ? submittedAnswer.isCorrect
+                ? "success"
+                : "error"
+              : ""
+          }`}
+        >
+          <div className="btn-msg-container">
+            <span
+              onClick={handleSubmitValue}
+              className="code-editor-submit-button"
             >
-              {submittedAnswer.isCorrect !== undefined && (
-                <span>
-                  {submittedAnswer.isCorrect
-                    ? "Amazing, great job"
-                    : "Wrong answer, but you got this"}
-                </span>
-              )}
-            </div>
-            <div className="output-content">
-              {submittedAnswer && submittedAnswer.isCorrect !== undefined && (
-                <p>
-                  Your answer was{" "}
-                  <code>{submittedAnswer.isCorrect ? "Correct" : "Wrong"}</code>
-                  . Its score is: {submittedAnswer.score}
-                </p>
-              )}
-            </div>
+              Run
+            </span>
+            {submittedAnswer.isCorrect !== undefined && (
+              <span className="output-message">
+                {submittedAnswer.isCorrect
+                  ? "Amazing, great job"
+                  : submittedAnswer.feedback}
+              </span>
+            )}
           </div>
-        )}
-        <div className="navigation-section">
-          <a
-            className="next-link"
-            href={`/${selectedLanguage}/${topic}/${Number(exerciseNum) + 1}`}
-          >
+          <h3>Output / Console</h3>
+          <hr className="horizontal-line" />
+          <div className="output-window__content">
+            {submittedAnswer && submittedAnswer.isCorrect !== undefined && (
+              <p>
+                Your answer was{" "}
+                <code>{submittedAnswer.isCorrect ? "Correct" : "Wrong"}</code>.
+                Its score is: {submittedAnswer.score}
+              </p>
+            )}
+          </div>
+          <a href={`/${selectedLanguage}/${topic}/${Number(exerciseNum) + 1}`}>
             Next Exercise
           </a>
         </div>
-      </div>
+      )}
     </React.Fragment>
   );
 };
 
-/* CodeEditor.propTypes = {
+CodeEditor.propTypes = {
   selectedLanguage: PropTypes.string,
   code: PropTypes.string,
-  answers: PropTypes.arrayOf(PropTypes.string),
+  answers: PropTypes.arrayOf(PropTypes.object),
   onChange: PropTypes.func,
-}; */
+};
 export default CodeEditor;
