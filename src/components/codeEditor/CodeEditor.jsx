@@ -7,7 +7,7 @@ import axios from "axios";
 import { htmlSuggestions, cssSuggestions } from "../../utils/suggestions";
 import PropTypes from "prop-types";
 
-const CodeEditor = ({ selectedLanguage, code, answers, onChange }) => {
+const CodeEditor = ({ selectedLanguage, code, answers, onChange, height }) => {
   const { topic, exerciseNum } = useParams();
   const { isDarkMode } = useContext(GlobalContext);
   const [value, setValue] = useState(code || "");
@@ -172,11 +172,10 @@ const CodeEditor = ({ selectedLanguage, code, answers, onChange }) => {
     formatOnType: true,
     formatOnPaste: true,
   };
-
   return (
     <React.Fragment>
       <Editor
-        height="50vh"
+        height={height} // pass the height here
         width={selectedLanguage === "javascript" ? "70%" : "100%"}
         language={selectedLanguage}
         value={value}

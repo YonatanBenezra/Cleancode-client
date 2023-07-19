@@ -36,15 +36,21 @@ const useExercise = (exercises, topic, exerciseNum) => {
 
 const useResizer = (containerRef, resizerRef) => {
   const [isResizing, setIsResizing] = useState(false);
+  const [topEditorHeight, setTopEditorHeight] = useState("50vh"); 
+  const [bottomEditorHeight, setBottomEditorHeight] = useState("50vh"); 
 
   const handleMouseDown = () => setIsResizing(true);
   const handleMouseUp = useCallback(() => setIsResizing(false), []);
+
   const handleMouseMove = useCallback(
     (e) => {
       if (!isResizing) return;
       const containerRect = containerRef.current.getBoundingClientRect();
-      const newEditorHeight = e.clientY - containerRect.top;
-      resizerRef.current.style.top = newEditorHeight + "px";
+      const newHeightTop = e.clientY - containerRect.top;
+      const newHeightBottom = containerRect.bottom - e.clientY;
+      resizerRef.current.style.top = `${newHeightTop}px`;
+      setTopEditorHeight(`${newHeightTop}px`); // update top editor height
+      setBottomEditorHeight(`${newHeightBottom}px`); // update bottom editor height
     },
     [isResizing, containerRef, resizerRef]
   );
@@ -59,7 +65,7 @@ const useResizer = (containerRef, resizerRef) => {
     };
   }, [handleMouseMove, handleMouseUp]);
 
-  return handleMouseDown;
+  return { handleMouseDown, topEditorHeight, bottomEditorHeight }; // return both heights
 };
 
 const ExerciseDetails = () => {
@@ -70,7 +76,10 @@ const ExerciseDetails = () => {
   const { exercise, parsedCode } = useExercise(exercises, topic, exerciseNum);
   const containerRef = useRef(null);
   const resizerRef = useRef(null);
-  const handleMouseDown = useResizer(containerRef, resizerRef);
+  const { handleMouseDown, topEditorHeight, bottomEditorHeight } = useResizer(
+    containerRef,
+    resizerRef
+  );
 
   const [state, setState] = useReducer(
     (prevState, newState) => ({ ...prevState, ...newState }),
@@ -128,7 +137,10 @@ const ExerciseDetails = () => {
             </div>
             {showImage ? (
               <div className="app-container">
-                <img src="https://i.ibb.co/9crLtc0/Screenshot-3.png" alt="code" />
+                <img
+                  src="https://i.ibb.co/9crLtc0/Screenshot-3.png"
+                  alt="code"
+                />
               </div>
             ) : (
               <>
@@ -137,18 +149,22 @@ const ExerciseDetails = () => {
                   code={state.html}
                   answers={exercise?.answers}
                   onChange={(newValue) => setState({ html: newValue })}
+                  height={topEditorHeight}
                 />
+
                 <div
                   className="resizer"
                   ref={resizerRef}
                   onMouseDown={handleMouseDown}
                 ></div>
+
                 <CodeEditor
                   selectedLanguage="css"
                   code={state.css}
                   answers={exercise?.answers}
                   onChange={(newValue) => setState({ css: newValue })}
-                />{" "}
+                  height={bottomEditorHeight}
+                />
               </>
             )}
           </div>
