@@ -7,13 +7,14 @@ import axios from "axios";
 import { htmlSuggestions, cssSuggestions } from "../../utils/suggestions";
 import PropTypes from "prop-types";
 
-const CodeEditor = ({ selectedLanguage, code, answers, onChange }) => {
+const CodeEditor = ({ selectedLanguage, code, answers, onChange, height }) => {
   const { topic, exerciseNum } = useParams();
   const { isDarkMode } = useContext(GlobalContext);
   const [value, setValue] = useState(code || "");
   const [submittedAnswer, setSubmittedAnswer] = useState({});
   const [editorInstance, setEditorInstance] = useState(null);
   const ctrlPress = useKeyPress("Control");
+  const [loading, setLoading] = useState(false);
 
   const handleEditorChange = (value) => {
     setValue(value);
@@ -43,6 +44,7 @@ const CodeEditor = ({ selectedLanguage, code, answers, onChange }) => {
   const handleSubmitValue = async () => {
     if (!parseInput(value).code.trim())
       return setSubmittedAnswer({ isCorrect: false, score: 0 });
+    setLoading(true);
 
     try {
       const response = await axios.post(
@@ -52,7 +54,19 @@ const CodeEditor = ({ selectedLanguage, code, answers, onChange }) => {
           messages: [
             {
               role: "user",
-              content: `Please validate the accuracy of the user's response and provide a response in the specified format: {isCorrect: Boolean,feedBack: String, score: Number}. The score indicates the proximity of the user's answer to a range between 0 and 100.
+              content: `Ensure you adopt the following structure to assess and provide feedback on the user's response:
+
+              {
+              isCorrect: Boolean,
+              hints: String,
+              badPractices: String,
+              bestPractices: String,
+              tips: String,
+              score: Number
+              }.
+              
+              The score should express how closely the user's response aligns with the desired answer, represented on a scale from 0 to 100. Additionally, consider providing hints that guide the user towards the correct answer, outline any bad practices they may have employed, and propose best practices they should adhere to. Supply tips aimed at improving their overall coding skills. It's critical not to reveal the correct answer within the feedback.
+
               Question: ${parseInput(value).question}.
               Code: ${parseInput(value).code}.`,
             },
@@ -73,6 +87,8 @@ const CodeEditor = ({ selectedLanguage, code, answers, onChange }) => {
       setSubmittedAnswer(result);
     } catch (error) {
       alert("Please try after 30 seconds");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -176,7 +192,7 @@ const CodeEditor = ({ selectedLanguage, code, answers, onChange }) => {
   return (
     <React.Fragment>
       <Editor
-        height="50vh"
+        height={height || "50vh"}
         width={selectedLanguage === "javascript" ? "70%" : "100%"}
         language={selectedLanguage}
         value={value}
@@ -196,12 +212,13 @@ const CodeEditor = ({ selectedLanguage, code, answers, onChange }) => {
           }`}
         >
           <div className="btn-msg-container">
-            <span
+            <button
               onClick={handleSubmitValue}
               className="code-editor-submit-button"
+              disabled={loading}
             >
-              Run
-            </span>
+              {loading ? "Loading..." : "Run"}
+            </button>
             {submittedAnswer.isCorrect !== undefined && (
               <span className="output-message">
                 {submittedAnswer.isCorrect
@@ -214,11 +231,21 @@ const CodeEditor = ({ selectedLanguage, code, answers, onChange }) => {
           <hr className="horizontal-line" />
           <div className="output-window__content">
             {submittedAnswer && submittedAnswer.isCorrect !== undefined && (
-              <p>
-                Your answer was{" "}
-                <code>{submittedAnswer.isCorrect ? "Correct" : "Wrong"}</code>.
-                Its score is: {submittedAnswer.score}
-              </p>
+              <div>
+                <p>
+                  Your answer was{" "}
+                  <code>{submittedAnswer.isCorrect ? "Correct" : "Wrong"}</code>
+                  . Its score is: {submittedAnswer.score}
+                </p>
+                {submittedAnswer.hints && <p>Hints: {submittedAnswer.hints}</p>}
+                {submittedAnswer.badPractices && (
+                  <p>Bad Practices: {submittedAnswer.badPractices}</p>
+                )}
+                {submittedAnswer.bestPractices && (
+                  <p>Best Practices: {submittedAnswer.bestPractices}</p>
+                )}
+                {submittedAnswer.tips && <p>Tips: {submittedAnswer.tips}</p>}
+              </div>
             )}
           </div>
           <a href={`/${selectedLanguage}/${topic}/${Number(exerciseNum) + 1}`}>
