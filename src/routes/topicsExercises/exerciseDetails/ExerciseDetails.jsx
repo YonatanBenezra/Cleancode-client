@@ -36,8 +36,8 @@ const useExercise = (exercises, topic, exerciseNum) => {
 
 const useResizer = (containerRef, resizerRef) => {
   const [isResizing, setIsResizing] = useState(false);
-  const [topEditorHeight, setTopEditorHeight] = useState("50vh"); 
-  const [bottomEditorHeight, setBottomEditorHeight] = useState("50vh"); 
+  const [topEditorHeight, setTopEditorHeight] = useState("50vh");
+  const [bottomEditorHeight, setBottomEditorHeight] = useState("50vh");
 
   const handleMouseDown = () => setIsResizing(true);
   const handleMouseUp = useCallback(() => setIsResizing(false), []);
@@ -49,8 +49,8 @@ const useResizer = (containerRef, resizerRef) => {
       const newHeightTop = e.clientY - containerRect.top;
       const newHeightBottom = containerRect.bottom - e.clientY;
       resizerRef.current.style.top = `${newHeightTop}px`;
-      setTopEditorHeight(`${newHeightTop}px`); // update top editor height
-      setBottomEditorHeight(`${newHeightBottom}px`); // update bottom editor height
+      setTopEditorHeight(`${newHeightTop}px`);
+      setBottomEditorHeight(`${newHeightBottom}px`);
     },
     [isResizing, containerRef, resizerRef]
   );
