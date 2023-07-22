@@ -1,3 +1,4 @@
+// Library imports
 import React, {
   useContext,
   useEffect,
@@ -7,11 +8,17 @@ import React, {
   useReducer,
 } from "react";
 import { useParams } from "react-router-dom";
+import axios from "axios";
+
+// Local imports
 import GlobalContext from "../../../contexts/Global-Context";
-import "./exercise-details.scss";
 import CodeEditor from "../../../components/codeEditor/CodeEditor";
 import PreviewPane from "../../../components/previewPane/PreviewPane";
 
+// Stylesheet
+import "./exercise-details.scss";
+
+// Custom hooks
 const useExercise = (exercises, topic, exerciseNum) => {
   let topicExercises = [];
   let exercise = null;
@@ -68,6 +75,7 @@ const useResizer = (containerRef, resizerRef) => {
   return { handleMouseDown, topEditorHeight, bottomEditorHeight }; // return both heights
 };
 
+// Main Component
 const ExerciseDetails = () => {
   const { language, topic, exerciseNum } = useParams();
   const { exercises } = useContext(GlobalContext);
@@ -80,12 +88,15 @@ const ExerciseDetails = () => {
     containerRef,
     resizerRef
   );
+  const [loading, setLoading] = useState(false);
+  const [submittedAnswer, setSubmittedAnswer] = useState({});
 
   const [state, setState] = useReducer(
     (prevState, newState) => ({ ...prevState, ...newState }),
     { html: "", css: "", js: "", previewHtml: "", previewCss: "" }
   );
 
+  // Function declarations
   const handlePreviewUpdate = useCallback((type, value) => {
     const timer = setTimeout(() => {
       setState({ [`preview${type}`]: value });
@@ -102,6 +113,85 @@ const ExerciseDetails = () => {
     [state.css, handlePreviewUpdate]
   );
 
+  function parseInput(input) {
+    const lines = input.split("\n");
+    const questionLines = [];
+    const codeLines = [];
+
+    for (const line of lines) {
+      if (line.trim().startsWith("//")) {
+        const questionLine = line.replace("//", "").trim();
+        questionLines.push(questionLine);
+      } else {
+        codeLines.push(line);
+      }
+    }
+
+    const question = questionLines.join("\n");
+    const code = codeLines.join("\n");
+
+    return { question, code };
+  }
+
+  const handleSubmitValue = async () => {
+    if (
+      !parseInput(state.js).code.trim() &&
+      !state.html.trim() &&
+      !state.css.trim()
+    )
+      return setSubmittedAnswer({ isCorrect: false, score: 0 });
+    setLoading(true);
+
+    try {
+      const response = await axios.post(
+        "https://api.openai.com/v1/chat/completions",
+        {
+          model: "gpt-3.5-turbo-16k",
+          messages: [
+            {
+              role: "user",
+              content: `Ensure you adopt the following structure to assess and provide feedback on the user's response:
+
+              {
+              isCorrect: Boolean,
+              hints: String,
+              badPractices: String,
+              bestPractices: String,
+              tips: String,
+              score: Number
+              }.
+              
+              The score should express how closely the user's response aligns with the desired answer, represented on a scale from 0 to 100. Additionally, consider providing hints that guide the user towards the correct answer, outline any bad practices they may have employed, and propose best practices they should adhere to. Supply tips aimed at improving their overall coding skills. It's critical not to reveal the correct answer within the feedback.
+
+              Question: ${parseInput(state.js).question}.
+              Code: 
+              HTML:\n${state.html}\n
+              CSS:\n${state.css}\n
+              JS:\n${parseInput(state.js).code}.`,
+            },
+          ],
+          max_tokens: 200,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${import.meta.env.VITE_APP_GPT_KEY}`,
+          },
+        }
+      );
+
+      const result = Function(
+        `"use strict"; return (${response.data.choices[0].message.content});`
+      )();
+      setSubmittedAnswer(result);
+    } catch (error) {
+      alert("Please try after 30 seconds");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Render JSX
   return (
     <div className="exercise-details-container">
       {exercise === null ? (
@@ -118,6 +208,58 @@ const ExerciseDetails = () => {
               onChange={(newValue) => setState({ js: newValue })}
             />
           )}
+          <div
+            className={`output-window ${
+              submittedAnswer.isCorrect !== undefined
+                ? submittedAnswer.isCorrect
+                  ? "success"
+                  : "error"
+                : ""
+            }`}
+          >
+            <div className="btn-msg-container">
+              <button
+                onClick={handleSubmitValue}
+                className="code-editor-submit-button"
+                disabled={loading}
+              >
+                {loading ? "Loading..." : "Run"}
+              </button>
+              {submittedAnswer.isCorrect !== undefined && (
+                <span className="output-message">
+                  {submittedAnswer.isCorrect
+                    ? "Amazing, great job"
+                    : submittedAnswer.feedback}
+                </span>
+              )}
+            </div>
+            <h3>Output / Console</h3>
+            <hr className="horizontal-line" />
+            <div className="output-window__content">
+              {submittedAnswer && submittedAnswer.isCorrect !== undefined && (
+                <div>
+                  <p>
+                    Your answer was{" "}
+                    <code>
+                      {submittedAnswer.isCorrect ? "Correct" : "Wrong"}
+                    </code>
+                    . Its score is: {submittedAnswer.score}
+                  </p>
+                  {submittedAnswer.hints && (
+                    <p>Hints: {submittedAnswer.hints}</p>
+                  )}
+                  {submittedAnswer.badPractices && (
+                    <p>Bad Practices: {submittedAnswer.badPractices}</p>
+                  )}
+                  {submittedAnswer.bestPractices && (
+                    <p>Best Practices: {submittedAnswer.bestPractices}</p>
+                  )}
+                  {submittedAnswer.tips && <p>Tips: {submittedAnswer.tips}</p>}
+                </div>
+              )}
+            </div>
+            <a href={`/javascript/${topic}/${Number() + 1}`}>Next Exercise</a>
+          </div>
         </React.Fragment>
       ) : (
         <div
@@ -144,6 +286,7 @@ const ExerciseDetails = () => {
               </div>
             ) : (
               <>
+              <h2 className="panel-label">HTML</h2>
                 <CodeEditor
                   selectedLanguage="html"
                   code={state.html}
@@ -157,7 +300,7 @@ const ExerciseDetails = () => {
                   ref={resizerRef}
                   onMouseDown={handleMouseDown}
                 ></div>
-
+<h2 className="panel-label">CSS</h2>
                 <CodeEditor
                   selectedLanguage="css"
                   code={state.css}
