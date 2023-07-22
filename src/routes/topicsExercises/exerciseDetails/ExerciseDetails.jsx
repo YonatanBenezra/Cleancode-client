@@ -1,4 +1,3 @@
-// Library imports
 import React, {
   useContext,
   useEffect,
@@ -9,94 +8,142 @@ import React, {
 } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import Modal from "react-modal";
 
-// Local imports
 import GlobalContext from "../../../contexts/Global-Context";
 import CodeEditor from "../../../components/codeEditor/CodeEditor";
 import PreviewPane from "../../../components/previewPane/PreviewPane";
-
-// Stylesheet
 import "./exercise-details.scss";
 
-// Custom hooks
-const useExercise = (exercises, topic, exerciseNum) => {
-  let topicExercises = [];
-  let exercise = null;
+const useModal = () => {
+  const [modalIsOpen, setIsOpen] = useState(false);
 
-  if (exercises) {
-    topicExercises = exercises.filter(
-      (exercise) => exercise.topic.name === topic
-    );
-    topicExercises.sort((a, b) => (a.position > b.position ? 1 : -1));
-    exercise = topicExercises[exerciseNum];
-  }
+  const openModal = () => setIsOpen(true);
+  const closeModal = () => setIsOpen(false);
 
-  let parsedCode = exercise?.code
-    ? exercise.code
-        .split("-")
-        .map((code) => code + "\n")
-        .join("")
-    : null;
-
-  return { exercise, parsedCode };
+  return { modalIsOpen, openModal, closeModal };
 };
 
-const useResizer = (containerRef, resizerRef) => {
-  const [isResizing, setIsResizing] = useState(false);
-  const [topEditorHeight, setTopEditorHeight] = useState("50vh");
-  const [bottomEditorHeight, setBottomEditorHeight] = useState("50vh");
-
-  const handleMouseDown = () => setIsResizing(true);
-  const handleMouseUp = useCallback(() => setIsResizing(false), []);
-
-  const handleMouseMove = useCallback(
-    (e) => {
-      if (!isResizing) return;
-      const containerRect = containerRef.current.getBoundingClientRect();
-      const newHeightTop = e.clientY - containerRect.top;
-      const newHeightBottom = containerRect.bottom - e.clientY;
-      resizerRef.current.style.top = `${newHeightTop}px`;
-      setTopEditorHeight(`${newHeightTop}px`);
-      setBottomEditorHeight(`${newHeightBottom}px`);
-    },
-    [isResizing, containerRef, resizerRef]
-  );
-
-  useEffect(() => {
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
-
-    return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
-    };
-  }, [handleMouseMove, handleMouseUp]);
-
-  return { handleMouseDown, topEditorHeight, bottomEditorHeight }; // return both heights
-};
-
-// Main Component
 const ExerciseDetails = () => {
   const { language, topic, exerciseNum } = useParams();
   const { exercises } = useContext(GlobalContext);
-  const [showImage, setShowImage] = useState(false);
+  const {
+    modalIsOpen: modalIsOpen1,
+    openModal: openModal1,
+    closeModal: closeModal1,
+  } = useModal();
+  const {
+    modalIsOpen: modalIsOpen2,
+    openModal: openModal2,
+    closeModal: closeModal2,
+  } = useModal();
 
-  const { exercise, parsedCode } = useExercise(exercises, topic, exerciseNum);
-  const containerRef = useRef(null);
-  const resizerRef = useRef(null);
-  const { handleMouseDown, topEditorHeight, bottomEditorHeight } = useResizer(
-    containerRef,
-    resizerRef
-  );
+  const [showImage, setShowImage] = useState(false);
   const [loading, setLoading] = useState(false);
   const [submittedAnswer, setSubmittedAnswer] = useState({});
+  const containerRef = useRef(null);
+  const resizerRef = useRef(null);
 
   const [state, setState] = useReducer(
     (prevState, newState) => ({ ...prevState, ...newState }),
     { html: "", css: "", js: "", previewHtml: "", previewCss: "" }
   );
 
-  // Function declarations
+  const customStyles = {
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+      width: "30%",
+    },
+  };
+  // Custom hook
+  const useExercise = (exercises, topic, exerciseNum) => {
+    let topicExercises = [];
+    let exercise = null;
+
+    if (exercises) {
+      topicExercises = exercises.filter(
+        (exercise) => exercise.topic.name === topic
+      );
+      topicExercises.sort((a, b) => (a.position > b.position ? 1 : -1));
+      exercise = topicExercises[exerciseNum];
+    }
+
+    let parsedCode = exercise?.code
+      ? exercise.code
+          .split("-")
+          .map((code) => code + "\n")
+          .join("")
+      : null;
+
+    return { exercise, parsedCode };
+  };
+  const { exercise, parsedCode } = useExercise(exercises, topic, exerciseNum);
+
+  // Custom hook
+  const useResizer = (containerRef, resizerRef) => {
+    const [isResizing, setIsResizing] = useState(false);
+    const [topEditorHeight, setTopEditorHeight] = useState("50vh");
+    const [bottomEditorHeight, setBottomEditorHeight] = useState("50vh");
+
+    const handleMouseDown = () => setIsResizing(true);
+    const handleMouseUp = useCallback(() => setIsResizing(false), []);
+
+    const handleMouseMove = useCallback(
+      (e) => {
+        if (!isResizing) return;
+        const containerRect = containerRef.current.getBoundingClientRect();
+        const newHeightTop = e.clientY - containerRect.top;
+        const newHeightBottom = containerRect.bottom - e.clientY;
+        resizerRef.current.style.top = `${newHeightTop}px`;
+        setTopEditorHeight(`${newHeightTop}px`);
+        setBottomEditorHeight(`${newHeightBottom}px`);
+      },
+      [isResizing, containerRef, resizerRef]
+    );
+
+    useEffect(() => {
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+
+      return () => {
+        document.removeEventListener("mousemove", handleMouseMove);
+        document.removeEventListener("mouseup", handleMouseUp);
+      };
+    }, [handleMouseMove, handleMouseUp]);
+
+    return { handleMouseDown, topEditorHeight, bottomEditorHeight }; // return both heights
+  };
+  const { handleMouseDown, topEditorHeight, bottomEditorHeight } = useResizer(
+    containerRef,
+    resizerRef
+  );
+  // Helper function to parse input
+  const parseInput = (input) => {
+    const lines = input.split("\n");
+    const questionLines = [];
+    const codeLines = [];
+
+    for (const line of lines) {
+      if (line.trim().startsWith("//")) {
+        const questionLine = line.replace("//", "").trim();
+        questionLines.push(questionLine);
+      } else {
+        codeLines.push(line);
+      }
+    }
+
+    const question = questionLines.join(" ");
+    const code = codeLines.join("");
+
+    return { question, code };
+  };
+
+  // Handle update of preview
   const handlePreviewUpdate = useCallback((type, value) => {
     const timer = setTimeout(() => {
       setState({ [`preview${type}`]: value });
@@ -113,33 +160,37 @@ const ExerciseDetails = () => {
     [state.css, handlePreviewUpdate]
   );
 
-  function parseInput(input) {
-    const lines = input.split("\n");
-    const questionLines = [];
-    const codeLines = [];
+  // Handle form submission
+  const handleSubmitValue = async () => {
+    let content = `Ensure you adopt the following structure to assess and provide feedback on the user's response:
+      {
+        isCorrect: Boolean,
+        hints: String,
+        badPractices: String,
+        bestPractices: String,
+        tips: String,
+        score: Number
+      }.
+      The score should express how closely the user's response aligns with the desired answer, represented on a scale from 0 to 100. Additionally, consider providing hints that guide the user towards the correct answer, outline any bad practices they may have employed, and propose best practices they should adhere to. Supply tips aimed at improving their overall coding skills. It's critical not to reveal the correct answer within the feedback.`;
 
-    for (const line of lines) {
-      if (line.trim().startsWith("//")) {
-        const questionLine = line.replace("//", "").trim();
-        questionLines.push(questionLine);
-      } else {
-        codeLines.push(line);
-      }
+    if (language === "javascript") {
+      content += `\nQuestion: ${parseInput(state.js).question}.\nJS: ${
+        parseInput(state.js).code
+      }.`;
+    } else {
+      content += `\nQuestion: ${parsedCode}.\nHTML: ${state.html}\nCSS: ${state.css}\n`;
     }
 
-    const question = questionLines.join("\n");
-    const code = codeLines.join("\n");
-
-    return { question, code };
-  }
-
-  const handleSubmitValue = async () => {
     if (
-      !parseInput(state.js).code.trim() &&
-      !state.html.trim() &&
-      !state.css.trim()
-    )
+      !(
+        parseInput(state.js)?.code?.trim() ||
+        state.html.trim() ||
+        state.css.trim()
+      )
+    ) {
       return setSubmittedAnswer({ isCorrect: false, score: 0 });
+    }
+
     setLoading(true);
 
     try {
@@ -150,24 +201,7 @@ const ExerciseDetails = () => {
           messages: [
             {
               role: "user",
-              content: `Ensure you adopt the following structure to assess and provide feedback on the user's response:
-
-              {
-              isCorrect: Boolean,
-              hints: String,
-              badPractices: String,
-              bestPractices: String,
-              tips: String,
-              score: Number
-              }.
-              
-              The score should express how closely the user's response aligns with the desired answer, represented on a scale from 0 to 100. Additionally, consider providing hints that guide the user towards the correct answer, outline any bad practices they may have employed, and propose best practices they should adhere to. Supply tips aimed at improving their overall coding skills. It's critical not to reveal the correct answer within the feedback.
-
-              Question: ${parseInput(state.js).question}.
-              Code: 
-              HTML:\n${state.html}\n
-              CSS:\n${state.css}\n
-              JS:\n${parseInput(state.js).code}.`,
+              content: content,
             },
           ],
           max_tokens: 200,
@@ -184,6 +218,7 @@ const ExerciseDetails = () => {
         `"use strict"; return (${response.data.choices[0].message.content});`
       )();
       setSubmittedAnswer(result);
+      if (!(language === "javascript")) openModal2();
     } catch (error) {
       alert("Please try after 30 seconds");
     } finally {
@@ -269,12 +304,25 @@ const ExerciseDetails = () => {
           <div className="html-css-editor">
             <div style={{ textAlign: "center" }}>
               <h3>{exercise?.description}</h3>
-              <p>{parsedCode}</p>
+              <p>
+                {parsedCode?.slice(0, 60)}...
+                <button className="see-more" onClick={openModal1}>
+                  See More
+                </button>
+              </p>
               <button
                 onClick={() => setShowImage((prev) => !prev)}
                 className="next-link"
               >
                 {showImage ? "Show Code" : "Show Image"}
+              </button>
+              <button
+                onClick={handleSubmitValue}
+                
+                className="code-editor-submit-button"
+                disabled={loading}
+              >
+                {loading ? "Loading..." : "Run"}
               </button>
             </div>
             {showImage ? (
@@ -285,8 +333,8 @@ const ExerciseDetails = () => {
                 />
               </div>
             ) : (
-              <>
-              <h2 className="panel-label">HTML</h2>
+              <React.Fragment>
+                <h2 className="panel-label">HTML</h2>
                 <CodeEditor
                   selectedLanguage="html"
                   code={state.html}
@@ -300,7 +348,7 @@ const ExerciseDetails = () => {
                   ref={resizerRef}
                   onMouseDown={handleMouseDown}
                 ></div>
-<h2 className="panel-label">CSS</h2>
+                <h2 className="panel-label">CSS</h2>
                 <CodeEditor
                   selectedLanguage="css"
                   code={state.css}
@@ -308,7 +356,7 @@ const ExerciseDetails = () => {
                   onChange={(newValue) => setState({ css: newValue })}
                   height={bottomEditorHeight}
                 />
-              </>
+              </React.Fragment>
             )}
           </div>
           <div className="preview-container">
@@ -316,6 +364,42 @@ const ExerciseDetails = () => {
           </div>
         </div>
       )}
+
+      {/* Render Modal for JavaScript */}
+      <Modal
+        isOpen={modalIsOpen1}
+        onRequestClose={closeModal1}
+        style={customStyles}
+        contentLabel="Example Modal"
+      >
+        <button onClick={closeModal1}>close</button>
+        <h4 className="modal-content">{parsedCode}</h4>
+      </Modal>
+
+      {/* Render Modal for HTML/CSS */}
+      <Modal
+        isOpen={modalIsOpen2}
+        onRequestClose={closeModal2}
+        style={customStyles}
+        contentLabel="Example Modal"
+      >
+        <button onClick={closeModal2}>close</button>
+        <div className="modal-content">
+          <p>
+            Your answer was{" "}
+            <code>{submittedAnswer.isCorrect ? "Correct" : "Wrong"}</code>. Its
+            score is: {submittedAnswer.score}
+          </p>
+          {submittedAnswer.hints && <p>Hints: {submittedAnswer.hints}</p>}
+          {submittedAnswer.badPractices && (
+            <p>Bad Practices: {submittedAnswer.badPractices}</p>
+          )}
+          {submittedAnswer.bestPractices && (
+            <p>Best Practices: {submittedAnswer.bestPractices}</p>
+          )}
+          {submittedAnswer.tips && <p>Tips: {submittedAnswer.tips}</p>}
+        </div>
+      </Modal>
     </div>
   );
 };

@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import React from "react";
 import { GlobalProvider } from "./contexts/Global-Context";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Modal from "react-modal";
 
 import Home from "./routes/home/Home";
 import ErrorPage from "./routes/error/ErrorPage";
@@ -46,6 +47,7 @@ const router = createBrowserRouter([
     ],
   },
 ]);
+Modal.setAppElement(document.getElementById("root"));
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
