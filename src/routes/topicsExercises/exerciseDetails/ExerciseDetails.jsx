@@ -27,6 +27,8 @@ const useModal = () => {
 const ExerciseDetails = () => {
   const { language, topic, exerciseNum } = useParams();
   const { exercises } = useContext(GlobalContext);
+  const [remainingTime, setRemainingTime] = useState(0);
+
   const {
     modalIsOpen: modalIsOpen1,
     openModal: openModal1,
@@ -162,6 +164,16 @@ const ExerciseDetails = () => {
 
   // Handle form submission
   const handleSubmitValue = async () => {
+    setRemainingTime(30);
+    const countdown = setInterval(() => {
+      setRemainingTime((prevTime) => {
+        if (prevTime <= 1) {
+          clearInterval(countdown);
+          return 0;
+        }
+        return prevTime - 1;
+      });
+    }, 1000);
     let content = `Ensure you adopt the following structure to assess and provide feedback on the user's response:
       {
         isCorrect: Boolean,
@@ -256,10 +268,13 @@ const ExerciseDetails = () => {
               <button
                 onClick={handleSubmitValue}
                 className="code-editor-submit-button"
-                disabled={loading}
+                disabled={loading || remainingTime > 0}
               >
                 {loading ? "Loading..." : "Run"}
               </button>
+              {remainingTime > 0 && (
+                <p>*{remainingTime} seconds remaining for next run</p>
+              )}
               {submittedAnswer.isCorrect !== undefined && (
                 <span className="output-message">
                   {submittedAnswer.isCorrect
@@ -318,19 +333,18 @@ const ExerciseDetails = () => {
               </button>
               <button
                 onClick={handleSubmitValue}
-                
                 className="code-editor-submit-button"
-                disabled={loading}
+                disabled={loading || remainingTime > 0}
               >
                 {loading ? "Loading..." : "Run"}
               </button>
+              {remainingTime > 0 && (
+                <p>*{remainingTime} seconds remaining for next run</p>
+              )}
             </div>
             {showImage ? (
-              <div className="app-container">
-                <img
-                  src="https://i.ibb.co/9crLtc0/Screenshot-3.png"
-                  alt="code"
-                />
+              <div className="app-container" style={{ textAlign: "center" }}>
+                <img src={exercise.imageUrl} alt="code" />
               </div>
             ) : (
               <React.Fragment>
