@@ -47,8 +47,41 @@
   }
 }
 
+.panel-label {
+  color: var(--third-color);
+  margin-left: 8%;
+  font-weight: 400;
+}
+
 .modal-content {
   color: #000;
   font-size: 20px;
   font-weight: 300;
+}
+
+.btn {
+  font-size: 18px;
+  font-weight: 400;
+  border: none;
+  border-radius: 5px;
+  transition: 0.3s all ease-in;
+  padding: 5px 10px;
+  cursor: pointer;
+  background: var(--third-color);
+  color: var(--text-color);
+}
+
+
+[data-theme="dark"] .btn {
+  background: var(--third-color);
+  color: var(--primary-color);
+}
+
+.btn:hover {
+  background: var(--primary-color);
+  color: var(--third-color);
+}
+
+.see-more {
+  font-size: 14px;
 }
