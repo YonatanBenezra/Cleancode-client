@@ -15,6 +15,7 @@ html {
   --text-hover-color: #ffffff;
   --success-color: #198754;
   --error-color: #dc4c64;
+
 }
 
 [data-theme="dark"] {
@@ -33,11 +34,13 @@ html {
   --success-color: #198754;
   --error-color: #dc4c64;
 }
+
 body {
   margin: 0;
   font-family: sans-serif;
   color: var(--text-color);
 }
+
 a {
   text-decoration: none;
   color: var(--text-color);
@@ -51,6 +54,7 @@ a {
   margin-left: 175px;
   transition: 0.5s;
 }
+
 .app.false {
   margin-left: 60px;
   transition: 0.5s;

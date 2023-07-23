@@ -255,8 +255,9 @@ const ExerciseDetails = () => {
             <div className="btn-msg-container">
               <button
                 onClick={handleSubmitValue}
-                className="code-editor-submit-button"
+                className="btn"
                 disabled={loading}
+                style={{ marginTop: "15px" }}
               >
                 {loading ? "Loading..." : "Run"}
               </button>
@@ -306,21 +307,21 @@ const ExerciseDetails = () => {
               <h3>{exercise?.description}</h3>
               <p>
                 {parsedCode?.slice(0, 60)}...
-                <button className="see-more" onClick={openModal1}>
+                <button className="btn see-more" onClick={openModal1}>
                   See More
                 </button>
               </p>
               <button
                 onClick={() => setShowImage((prev) => !prev)}
-                className="next-link"
+                className="btn next-link"
               >
                 {showImage ? "Show Code" : "Show Image"}
               </button>
               <button
                 onClick={handleSubmitValue}
-                
-                className="code-editor-submit-button"
+                className="btn"
                 disabled={loading}
+                style={{ marginLeft: "20px" }}
               >
                 {loading ? "Loading..." : "Run"}
               </button>
