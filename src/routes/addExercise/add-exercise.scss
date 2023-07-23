@@ -131,3 +131,32 @@
 .add-exercise-error {
   color: var(--error-color);
 }
+/* Style for the Dropzone container */
+.dropzone-container {
+  border: 2px dashed #ccc;
+  border-radius: 5px;
+  padding: 8px 15px;
+  text-align: center;
+  cursor: pointer;
+}
+
+/* Style for the text inside the Dropzone container */
+.dropzone-text {
+  font-size: 16px;
+  text-transform: capitalize;
+  color: #fff;
+}
+
+/* Style for the image preview */
+.image-preview {
+  max-width: 100%;
+  max-height: 300px;
+  margin: 20px 0;
+  border-radius: 5px;
+}
+
+/* Style for the image preview container */
+.image-preview-container {
+  text-align: center;
+  width: 100%;
+}

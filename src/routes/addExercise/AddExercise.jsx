@@ -4,6 +4,7 @@ import GlobalContext from "../../contexts/Global-Context";
 import "./add-exercise.scss";
 import axios from "axios";
 import Success from "../../components/sucess/Success";
+import Dropzone from "react-dropzone";
 
 const AddExercise = () => {
   const { languages, topics } = useContext(GlobalContext);
@@ -35,9 +36,11 @@ const AddExercise = () => {
   const onSubmit = async (data) => {
     try {
       data.language = selectedLanguage;
+      data.imageUrl = uploadedImage;
       await axios.post(`${import.meta.env.VITE_API_URL}/api/exercises`, data);
       setSubmitted(true);
       reset();
+      setUploadedImage(null);
       setErrorMessage("");
     } catch (err) {
       setErrorMessage("An error occurred while adding the exercise.");
@@ -52,6 +55,24 @@ const AddExercise = () => {
     clearErrors();
     setSelectedLanguage(id);
     setStep((prevStep) => prevStep + 1);
+  };
+  const [uploadedImage, setUploadedImage] = useState(null);
+
+  const onDrop = async (acceptedFiles) => {
+    const formData = new FormData();
+    formData.append("file", acceptedFiles[0]);
+    formData.append("upload_preset", "cleancode");
+
+    try {
+      const response = await axios.post(
+        "https://api.cloudinary.com/v1_1/djkdk03mf/image/upload",
+        formData
+      );
+      const imageUrl = response.data.secure_url;
+      setUploadedImage(imageUrl);
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
   };
 
   return (
@@ -104,6 +125,26 @@ const AddExercise = () => {
                     This field is required
                   </div>
                 )}
+
+                <Dropzone onDrop={onDrop} accept="image/*">
+                  {({ getRootProps, getInputProps }) => (
+                    <div className="dropzone-container" {...getRootProps()}>
+                      <input {...getInputProps()} />
+                      <p className="dropzone-text">
+                        Drag and drop an image here, or click to select an image
+                      </p>
+                    </div>
+                  )}
+                </Dropzone>
+                {uploadedImage && (
+                  <div className="image-preview-container">
+                    <img
+                      src={uploadedImage}
+                      alt="Uploaded"
+                      className="image-preview"
+                    />
+                  </div>
+                )}
                 <div className="add-exercise-form-group">
                   <label className="add-exercise-label">Description</label>
                   <textarea
@@ -132,7 +173,7 @@ const AddExercise = () => {
                   </div>
                 )}
 
-                <div className="add-exercise-form-group">
+                {/* <div className="add-exercise-form-group">
                   <label className="add-exercise-label">Answer</label>
                   <textarea
                     className="add-exercise-input"
@@ -144,7 +185,7 @@ const AddExercise = () => {
                   <div className="add-exercise-error">
                     This field is required
                   </div>
-                )}
+                )} */}
 
                 <div className="add-exercise-form-group">
                   <label className="add-exercise-label">Difficulty</label>
