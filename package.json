@@ -23,7 +23,10 @@
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.43.9",
     "react-modal": "^3.16.1",
+    "react-quill": "^2.0.0",
     "react-router-dom": "^6.10.0",
+    "react-tag-input": "^6.8.1",
+    "react-tagsinput": "^3.20.3",
     "sass": "^1.62.0"
   },
   "devDependencies": {
