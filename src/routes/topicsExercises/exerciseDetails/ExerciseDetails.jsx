@@ -346,7 +346,11 @@ const ExerciseDetails = () => {
             </div>
             {showImage ? (
               <div className="app-container" style={{ textAlign: "center" }}>
-                <img src={exercise.imageUrl} alt="code" />
+                <img
+                  src={exercise.imageUrl}
+                  alt="code"
+                  style={{ margin: "20px", width: "80%", borderRadius: "5px" }}
+                />
               </div>
             ) : (
               <React.Fragment>
