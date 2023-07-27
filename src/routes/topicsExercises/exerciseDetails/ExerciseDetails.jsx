@@ -6,7 +6,7 @@ import React, {
   useCallback,
   useReducer,
 } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import Modal from "react-modal";
 
@@ -237,7 +237,6 @@ const ExerciseDetails = () => {
       setLoading(false);
     }
   };
-
   // Render JSX
   return (
     <div className="exercise-details-container">
@@ -340,6 +339,13 @@ const ExerciseDetails = () => {
               >
                 {loading ? "Loading..." : "Run"}
               </button>
+              <Link
+                className="btn"
+                style={{ marginLeft: "20px" }}
+                to={`/html/${topic}/${+exerciseNum + 1}`}
+              >
+                Next
+              </Link>
               {remainingTime > 0 && (
                 <p>*{remainingTime} seconds remaining for next run</p>
               )}
