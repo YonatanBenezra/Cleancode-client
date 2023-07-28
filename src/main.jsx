@@ -14,7 +14,7 @@ import TopicExercises from "./routes/topicsExercises/topicExercises/TopicExercis
 import ExerciseDetails from "./routes/topicsExercises/exerciseDetails/ExerciseDetails";
 import AddBlog from "./routes/addBlog/AddBlog";
 import AllBlog from "./routes/allBlog/AllBlog";
-import BlogDetails from "./routes/blogDetails.jsx/blogDetails";
+import BlogDetails from "./routes/blogDetails.jsx/BlogDetails";
 
 Modal.setAppElement(document.getElementById("root"));
 
