@@ -13,7 +13,7 @@ import Topics from "./routes/topicsExercises/topics/Topics";
 import TopicExercises from "./routes/topicsExercises/topicExercises/TopicExercises";
 import ExerciseDetails from "./routes/topicsExercises/exerciseDetails/ExerciseDetails";
 import AddBlog from "./routes/addBlog/AddBlog";
-import AllBlog from "./routes/allBlog/allBlog";
+import AllBlog from "./routes/allBlog/AllBlog";
 import BlogDetails from "./routes/blogDetails.jsx/blogDetails";
 
 Modal.setAppElement(document.getElementById("root"));
