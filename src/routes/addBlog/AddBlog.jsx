@@ -115,6 +115,43 @@ function AddBlog() {
               value={field.value}
               onChange={field.onChange}
               placeholder="Write your blog content here"
+              modules={{
+                toolbar: [
+                  ["bold", "italic", "underline", "strike"],
+                  ["blockquote", "code-block"],
+                  [{ header: 1 }, { header: 2 }],
+                  [{ list: "ordered" }, { list: "bullet" }],
+                  [{ script: "sub" }, { script: "super" }],
+                  [{ indent: "-1" }, { indent: "+1" }],
+                  [{ direction: "rtl" }],
+                  [{ size: ["small", false, "large", "huge"] }],
+                  [{ header: [1, 2, 3, 4, 5, 6, false] }],
+                  [{ color: [] }, { background: [] }],
+                  [{ font: [] }],
+                  [{ align: [] }],
+                  ["clean"],
+                ],
+              }}
+              theme="snow"
+              formats={[
+                "header",
+                "bold",
+                "italic",
+                "underline",
+                "strike",
+                "blockquote",
+                "list",
+                "bullet",
+                "indent",
+                "link",
+                "image",
+                "color",
+                "background",
+                "font",
+                "align",
+                "direction",
+                "size",
+              ]}
             />
           )}
         />

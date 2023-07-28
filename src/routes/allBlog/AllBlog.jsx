@@ -13,7 +13,9 @@ const AllBlog = () => {
       setBlogs(response.data.data.data);
     })();
   }, []);
-
+  const renderHTML = (htmlContent) => {
+    return { __html: htmlContent };
+  };
   return (
     <div>
       <h1>All Blogs</h1>
@@ -21,7 +23,7 @@ const AllBlog = () => {
         <div key={blog._id}>
           <h2>{blog.title}</h2>
           <img src={blog.imgUrl} alt={blog.title} />
-          <p>{blog.content}</p>
+          <p dangerouslySetInnerHTML={renderHTML(blog.content)} />
           <p>Author: {blog.author}</p>
           <p>Tags: {blog.tags.join(", ")}</p>
           <Link to={`/blog/${blog._id}`}>Details</Link>

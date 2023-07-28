@@ -1,65 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clean Code - Web Development Exercises and Quizzes</title>
+    <meta
+      name="description"
+      content="Practice HTML, CSS, JavaScript, and other web development topics with Clean Code. Access exercises and quizzes to enhance your web development skills."
+    />
+    <meta
+      name="keywords"
+      content="clean code, web development exercises, HTML exercises, CSS exercises, JavaScript exercises, web development quizzes"
+    />
+    <meta name="author" content="Clean-code" />
+    <link rel="icon" type="image/svg+xml" href="/cleanCode.svg" />
+    <link rel="apple-touch-icon" href="/cleanCode.svg" />
+    <meta name="theme-color" content="#264653" />
+    <meta
+      name="robots"
+      content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large"
+    />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="upgrade-insecure-requests"
+    />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Clean Code - Web Development Exercises and Quizzes</title>
-  <meta name="description"
-    content="Practice HTML, CSS, JavaScript, and other web development topics with Clean Code. Access exercises and quizzes to enhance your web development skills." />
-  <meta name="keywords"
-    content="clean code, web development exercises, HTML exercises, CSS exercises, JavaScript exercises, web development quizzes" />
-  <meta name="author" content="Clean-code" />
-  <link rel="icon" type="image/svg+xml" href="/cleanCode.svg" />
-  <link rel="apple-touch-icon" href="/cleanCode.svg" />
-  <meta name="theme-color" content="#264653" />
-  <meta name="robots" content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large" />
-  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+    <!-- Open Graph meta tags -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://clean-code.io/" />
+    <meta
+      property="og:title"
+      content="Clean Code - Web Development Exercises and Quizzes"
+    />
+    <meta
+      property="og:description"
+      content="Practice HTML, CSS, JavaScript, and other web development topics with Clean Code. Access exercises and quizzes to enhance your web development skills."
+    />
+    <meta
+      property="og:image"
+      content="https://res.cloudinary.com/djkdk03mf/image/upload/v1690372716/Screenshot_5_wvkhfn.png"
+    />
+    <meta property="og:image:width" content="1100" />
+    <meta property="og:image:height" content="323" />
 
-  <!-- Open Graph meta tags -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://clean-code.io/" />
-  <meta property="og:title" content="Clean Code - Web Development Exercises and Quizzes" />
-  <meta property="og:description"
-    content="Practice HTML, CSS, JavaScript, and other web development topics with Clean Code. Access exercises and quizzes to enhance your web development skills." />
-  <meta property="og:image"
-    content="https://res.cloudinary.com/djkdk03mf/image/upload/v1690372716/Screenshot_5_wvkhfn.png" />
-  <meta property="og:image:width" content="1100" />
-  <meta property="og:image:height" content="323" />
+    <!-- Twitter Card meta tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://clean-code.io/" />
+    <meta
+      name="twitter:title"
+      content="Clean Code - Web Development Exercises and Quizzes"
+    />
+    <meta
+      name="twitter:description"
+      content="Practice HTML, CSS, JavaScript, and other web development topics with Clean Code. Access exercises and quizzes to enhance your web development skills."
+    />
+    <meta
+      name="twitter:image"
+      content="https://res.cloudinary.com/djkdk03mf/image/upload/v1690372716/Screenshot_5_wvkhfn.png"
+    />
 
-  <!-- Twitter Card meta tags -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:url" content="https://clean-code.io/" />
-  <meta name="twitter:title" content="Clean Code - Web Development Exercises and Quizzes" />
-  <meta name="twitter:description"
-    content="Practice HTML, CSS, JavaScript, and other web development topics with Clean Code. Access exercises and quizzes to enhance your web development skills." />
-  <meta name="twitter:image"
-    content="https://res.cloudinary.com/djkdk03mf/image/upload/v1690372716/Screenshot_5_wvkhfn.png" />
+    <!-- Google Tag Manager (optional) -->
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-MWG27CVNL6"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-MWG27CVNL6");
+    </script>
 
-  <!-- Google Tag Manager (optional) -->
-  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MWG27CVNL6"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-    gtag("js", new Date());
-    gtag("config", "G-MWG27CVNL6");
-  </script>
+    <!-- External CSS (Font Awesome) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+  </head>
 
-  <!-- External CSS (Font Awesome) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous" />
-</head>
-
-<body>
-  <div id="root"></div>
-  <script type="module" src="/src/main.jsx"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-    crossorigin="anonymous"></script>
-</body>
-
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
+  </body>
 </html>
