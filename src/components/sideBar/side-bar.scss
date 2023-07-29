@@ -3,68 +3,57 @@
   min-height: 100vh;
   box-shadow: 0 0 150px 0 rgba(0, 0, 0, 0.12), 0 2px 200px 0 rgba(0, 0, 0, 0.22);
   font-size: 20px;
-  font-weight: 900;
-  display: flex;
-  justify-content: flex-start;
-  flex-direction: column;
+  font-weight: 400;
   color: var(--text-color);
   background-color: var(--primary-color);
-  position: fixed;
-  top: 0;
-  left: 0;
-  font-family: "Rubik";
-  z-index: 1;
+}
+.sidebar-navlinks {
+  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 }
 
 .sidebar-navlink {
-  padding-left: 20px;
-  margin-top: 5vh;
-  padding-top: 1vh;
-  padding-bottom: 1vh;
+  padding: 10px 0;
   display: flex;
-  justify-content: flex-start;
   align-items: center;
   cursor: pointer;
-}
-
-.sidebar-navlink-icon {
-  display: flex;
-  align-items: center;
-  margin-right: 7px;
+  gap: 8px;
+  padding-left: 20px;
 }
 
 .sidebar-collapse {
-  top: 22px;
+  box-shadow: 0 0 0 2px var(--third-color);
   width: 15px;
   height: 15px;
-  border: 1px solid black;
   border-radius: 50%;
-  position: sticky;
-  left: 100%;
-  margin-right: -9px;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  font-size: 16px !important;
-  box-shadow: 0 0 0 2px var(--third-color);
+  font-size: 8px;
   color: var(--text-color);
+  position: absolute;
+  right: 0;
+  transform: translate(50%, 25px);
 }
 .sidebar.false {
-  font-size: calc(0.5vw);
-  width: calc(60px);
+  font-size: 0.6vw;
+  width: 60px;
   transition: 0.5s;
 }
 .sidebar.true {
   font-size: 20px;
-  width: 175px;
+  width: 135px;
   transition: 0.5s;
 }
-div.borderXwidth a {
+
+.borderXwidth a {
   position: relative;
 }
-div.borderXwidth a:before,
-div.borderXwidth a:after {
+.borderXwidth a:before,
+.borderXwidth a:after {
   position: absolute;
   opacity: 0;
   width: 0%;
@@ -74,18 +63,18 @@ div.borderXwidth a:after {
   transition: all 0.3s;
 }
 
-div.borderXwidth a:before {
+.borderXwidth a:before {
   left: 0px;
   top: 0px;
 }
 
-div.borderXwidth a:after {
+.borderXwidth a:after {
   right: 0px;
   bottom: 0px;
 }
 
-div.borderXwidth a:hover:before,
-div.borderXwidth a:hover:after {
+.borderXwidth a:hover:before,
+.borderXwidth a:hover:after {
   opacity: 1;
   width: 100%;
 }

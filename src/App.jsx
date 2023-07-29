@@ -19,7 +19,7 @@ const App = () => {
   }, [setIsCollapsed]);
 
   return (
-    <div className={`app ${isCollapsed}`}>
+    <div className={`app ${isCollapsed} d-flex`}>
       <SideBar />
       <div className="content-container">
         <Outlet />

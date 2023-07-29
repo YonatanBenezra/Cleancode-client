@@ -8,6 +8,11 @@
   border: 1px solid var(--third-color);
   background-color: var(--text-hover-color);
 }
+@media screen and (max-width: 768px) {
+  .output-window {
+    width: 90%;
+  }
+}
 .horizontal-line {
   margin-top: 15px;
   border: 1px solid var(--third-color);

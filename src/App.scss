@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600;700&display=swap");
 
 html {
   --primary-color: #fffefeac;
@@ -15,7 +15,6 @@ html {
   --text-hover-color: #ffffff;
   --success-color: #198754;
   --error-color: #dc4c64;
-
 }
 
 [data-theme="dark"] {
@@ -34,35 +33,47 @@ html {
   --success-color: #198754;
   --error-color: #dc4c64;
 }
-
-body {
+* {
   margin: 0;
-  font-family: sans-serif;
+  padding: 0;
+  box-sizing: border-box;
+}
+/* For the entire body (paragraphs, etc.), use Roboto */
+body {
+  font-family: "Roboto", sans-serif;
   color: var(--text-color);
+  font-weight: 400;
+}
+
+/* For headings (h1, h2, h3, etc.), use Roboto Mono */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Roboto Mono", monospace;
+}
+
+/* For code snippets (e.g., <code> elements), use Source Code Pro */
+code {
+  font-family: "Source Code Pro", monospace;
 }
 
 a {
   text-decoration: none;
   color: var(--text-color);
 }
-
-.app {
-  margin-left: 190px;
-}
-
-.app.true {
-  margin-left: 175px;
-  transition: 0.5s;
-}
-
-.app.false {
-  margin-left: 60px;
-  transition: 0.5s;
-}
-
 .content-container {
   width: 100%;
   height: 100%;
   min-height: 100vh;
   background-color: var(--secondary-color);
+}
+@media screen and (max-width: 768px) {
+  * {
+    font-size: 14px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--third-color) var(--secondary-color);
+  }
 }
