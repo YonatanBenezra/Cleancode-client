@@ -237,6 +237,17 @@ const ExerciseDetails = () => {
       setLoading(false);
     }
   };
+  const exercisesLength = exercises.filter(
+    (exercise) =>
+      exercise.topic.language.name === language && exercise.topic.name === topic
+  ).length;
+
+  const handleNextClick = () => {
+    if (exercisesLength <= Number(exerciseNum) + 1)
+      alert(
+        `You have mastered ${topic}, please select another topic to continue`
+      );
+  };
   // Render JSX
   return (
     <div className="exercise-details-container">
@@ -332,6 +343,7 @@ const ExerciseDetails = () => {
               >
                 {showImage ? "Show Code" : "Show Image"}
               </button>
+
               <button
                 onClick={handleSubmitValue}
                 disabled={loading || remainingTime > 0}
@@ -340,13 +352,29 @@ const ExerciseDetails = () => {
               >
                 {loading ? "Loading..." : "Run"}
               </button>
-              <Link
-                className="btn"
-                style={{ marginLeft: "20px" }}
-                to={`/html/${topic}/${+exerciseNum + 1}`}
-              >
-                Next
-              </Link>
+              {!!Number(exerciseNum) && (
+                <Link
+                  className="btn"
+                  style={{ marginLeft: "20px" }}
+                  to={`/${language}/${topic}/${+exerciseNum - 1}`}
+                >
+                  Prev
+                </Link>
+              )}
+              {
+                <Link
+                  className="btn"
+                  style={{ marginLeft: "20px" }}
+                  to={
+                    exercisesLength <= Number(exerciseNum) + 1
+                      ? `/${language}`
+                      : `/${language}/${topic}/${+exerciseNum + 1}`
+                  }
+                  onClick={handleNextClick}
+                >
+                  Next
+                </Link>
+              }
               {remainingTime > 0 && (
                 <p>*{remainingTime} seconds remaining for next run</p>
               )}

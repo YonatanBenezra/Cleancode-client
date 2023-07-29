@@ -5,6 +5,7 @@ import "./add-exercise.scss";
 import axios from "axios";
 import Success from "../../components/sucess/Success";
 import Dropzone from "react-dropzone";
+import LanguageList from "../../components/languageList/LanguageList";
 
 const AddExercise = () => {
   const { languages, topics } = useContext(GlobalContext);
@@ -12,12 +13,10 @@ const AddExercise = () => {
   const [selectedLanguage, setSelectedLanguage] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [sortedLanguages, setSortedLanguages] = useState([]);
   const [sortedTopics, setSortedTopics] = useState([]);
 
   useEffect(() => {
     if (languages && topics) {
-      setSortedLanguages(languages.sort((a, b) => a.position - b.position));
       setSortedTopics(
         topics
           .filter((topic) => topic.language._id === selectedLanguage)
@@ -85,25 +84,7 @@ const AddExercise = () => {
           <span className="add-exercise-header">Add Exercise</span>
           <form onSubmit={handleSubmit(onSubmit)}>
             {step === 1 ? (
-              <div className="add-exercise-step">
-                <h3>Select a language:</h3>
-                <div className="add-exercise-languages">
-                  {sortedLanguages.map((language, index) => (
-                    <span
-                      key={index}
-                      className={`add-exercise-language`}
-                      onClick={() => handleNext(language._id)}
-                    >
-                      {language.name}
-                    </span>
-                  ))}
-                </div>
-                {errors.language && (
-                  <span className="add-exercise-error">
-                    {errors.language.message}
-                  </span>
-                )}
-              </div>
+              <LanguageList handleNext={handleNext} />
             ) : (
               <div className="add-exercise-step-two">
                 <div className="add-exercise-form-group">

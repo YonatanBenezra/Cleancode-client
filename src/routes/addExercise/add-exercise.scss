@@ -46,14 +46,13 @@
 .add-exercise-languages {
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
+  gap: 50px;
   flex-wrap: wrap;
-  width: calc(60% - 20vw + 50px);
-  margin: auto;
+  margin-top: 30px;
 }
 
 .add-exercise-step {
-  width: calc(100vw - 100px);
   text-align: center;
 }
 

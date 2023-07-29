@@ -30,7 +30,7 @@ const Home = () => {
       <p className="hero-subheading">
         Learn and exercise FullStack technologies with our exercises.
       </p>
-      <NavLink to="/javascript" className="hero-button">
+      <NavLink to="/get-started" className="hero-button">
         Get started
       </NavLink>
     </section>
