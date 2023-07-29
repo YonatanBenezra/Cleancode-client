@@ -20,11 +20,16 @@
   background-color: var(--primary-color);
   cursor: pointer;
   transition: all 0.5s ease-in-out;
-  animation: fadeUp 3s ease-in-out forwards;
+  animation: fadeUp 1s ease-in-out forwards;
   &:hover {
     background-color: var(--third-color);
     color: var(--text-hover-color);
     box-shadow: 0 0.2rem 0.2rem var(--text-color);
+  }
+}
+@media  screen and (max-width: 768px) {
+  .exercise {
+    font-size: 14px;
   }
 }
 

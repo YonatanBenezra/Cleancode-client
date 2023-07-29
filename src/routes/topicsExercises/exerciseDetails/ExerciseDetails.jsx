@@ -248,6 +248,7 @@ const ExerciseDetails = () => {
           <p>{exercise?.question}</p>
           {parsedCode && (
             <CodeEditor
+              height={window.innerWidth > 768 ? "50vh" : "70vh"}
               code={parsedCode}
               answers={exercise?.answers}
               selectedLanguage={language}
@@ -366,21 +367,7 @@ const ExerciseDetails = () => {
                   code={state.html}
                   answers={exercise?.answers}
                   onChange={(newValue) => setState({ html: newValue })}
-                  height={topEditorHeight}
-                />
-
-                <div
-                  className="resizer"
-                  ref={resizerRef}
-                  onMouseDown={handleMouseDown}
-                ></div>
-                <h2 className="panel-label">CSS</h2>
-                <CodeEditor
-                  selectedLanguage="css"
-                  code={state.css}
-                  answers={exercise?.answers}
-                  onChange={(newValue) => setState({ css: newValue })}
-                  height={bottomEditorHeight}
+                  height={"100%"}
                 />
               </React.Fragment>
             )}
