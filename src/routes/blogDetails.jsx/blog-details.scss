@@ -1,0 +1,28 @@
+.blog-title {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 400;
+}
+
+.blog-img {
+  height: 40vh;
+  object-fit: contain;
+  margin: 20px 0 20px;
+}
+
+.blog-content h3,
+.blog-content h5 {
+  font-size: 25px;
+  color: var(--third-color);
+}
+
+.detailed-tags {
+  background: var(--primary-color);
+  color: var(--text-color);
+  padding: 5px 10px;
+  border: 1px solid var(--third-color);
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  font-size: 16px;
+  width: auto;
+}
