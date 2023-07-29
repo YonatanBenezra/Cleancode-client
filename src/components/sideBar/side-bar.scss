@@ -25,14 +25,14 @@
 
 .sidebar-collapse {
   box-shadow: 0 0 0 2px var(--third-color);
-  width: 25px;
-  height: 25px;
+  width: 15px;
+  height: 15px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 8px;
   color: var(--text-color);
   position: absolute;
   right: 0;
@@ -45,7 +45,7 @@
 }
 .sidebar.true {
   font-size: 20px;
-  width: 175px;
+  width: 135px;
   transition: 0.5s;
 }
 
