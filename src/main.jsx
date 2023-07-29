@@ -13,10 +13,11 @@ import Topics from "./routes/topicsExercises/topics/Topics";
 import TopicExercises from "./routes/topicsExercises/topicExercises/TopicExercises";
 import ExerciseDetails from "./routes/topicsExercises/exerciseDetails/ExerciseDetails";
 import AddBlog from "./routes/addBlog/AddBlog";
-import AllBlog from "./routes/allBlog/allBlog";
-import BlogDetails from "./routes/blogDetails.jsx/blogDetails";
 import GetStarted from "./routes/getStarted/GetStarted";
 import ScrollToTop from "./utils/ScrollToTop";
+import AllBlog from "./routes/allBlog/AllBlog";
+import BlogDetails from "./routes/blogDetails.jsx/BlogDetails";
+
 
 Modal.setAppElement(document.getElementById("root"));
 
