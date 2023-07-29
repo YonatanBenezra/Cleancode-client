@@ -78,3 +78,9 @@
   opacity: 1;
   width: 100%;
 }
+
+.borderXwidth a.active:before,
+.borderXwidth a.active:after {
+  opacity: 1;
+  width: 100%;
+}

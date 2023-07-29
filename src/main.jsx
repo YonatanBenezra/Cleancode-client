@@ -15,6 +15,8 @@ import ExerciseDetails from "./routes/topicsExercises/exerciseDetails/ExerciseDe
 import AddBlog from "./routes/addBlog/AddBlog";
 import AllBlog from "./routes/allBlog/allBlog";
 import BlogDetails from "./routes/blogDetails.jsx/blogDetails";
+import GetStarted from "./routes/getStarted/GetStarted";
+import ScrollToTop from "./utils/ScrollToTop";
 
 Modal.setAppElement(document.getElementById("root"));
 
@@ -22,10 +24,12 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <GlobalProvider>
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<App />}>
             <Route index element={<Home />} />
             <Route path="/add-exercise" element={<AddExercise />} />
+            <Route path="/get-started" element={<GetStarted />} />
             <Route path="/add-blog" element={<AddBlog />} />
             <Route path="/blogs" element={<AllBlog />} />
             <Route path="/blog/:blogId" element={<BlogDetails />} />

@@ -56,7 +56,6 @@ const SideBar = () => {
         </div>
       </div>
       <ThemeButton />
-      <div className="sidebar-header"></div>
       <div className="sidebar-navlinks">
         {navLinks.map(({ name, path }) => (
           <div className="borderXwidth" key={path}>
