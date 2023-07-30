@@ -43,7 +43,7 @@
     height: 100%;
     position: relative;
   }
-  @media  screen and (max-width: 768px) {
+  @media screen and (max-width: 768px) {
     .html-css-editor {
       width: 100%;
     }
@@ -81,7 +81,10 @@
   color: var(--text-color);
 }
 
-
+.btn.active {
+  background: var(--primary-color) !important;
+  color: var(--third-color) !important;
+}
 [data-theme="dark"] .btn {
   background: var(--third-color);
   color: var(--primary-color);
