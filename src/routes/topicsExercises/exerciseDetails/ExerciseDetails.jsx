@@ -395,7 +395,20 @@ const ExerciseDetails = () => {
                   code={state.html}
                   answers={exercise?.answers}
                   onChange={(newValue) => setState({ html: newValue })}
-                  height={"100%"}
+                  height={topEditorHeight}
+                />
+                <div
+                  className="resizer"
+                  ref={resizerRef}
+                  onMouseDown={handleMouseDown}
+                ></div>
+                <h2 className="panel-label">CSS</h2>
+                <CodeEditor
+                  selectedLanguage="css"
+                  code={state.css}
+                  answers={exercise?.answers}
+                  onChange={(newValue) => setState({ css: newValue })}
+                  height={bottomEditorHeight}
                 />
               </React.Fragment>
             )}
