@@ -32,12 +32,15 @@ html {
   --text-hover-color: #212121;
   --success-color: #198754;
   --error-color: #dc4c64;
+  --editor-color: #ffffff
 }
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+
 /* For the entire body (paragraphs, etc.), use Roboto */
 body {
   font-family: "Roboto", sans-serif;
@@ -64,11 +67,13 @@ a {
   text-decoration: none;
   color: var(--text-color);
 }
+
 .content-container {
   width: 100%;
   min-height: 100vh;
   background-color: var(--secondary-color);
 }
+
 @media screen and (max-width: 768px) {
   * {
     font-size: 14px;
