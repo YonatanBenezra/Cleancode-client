@@ -1,5 +1,5 @@
 import App from "./App";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import React from "react";
 import { GlobalProvider } from "./contexts/Global-Context";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -17,6 +17,7 @@ import GetStarted from "./routes/getStarted/GetStarted";
 import ScrollToTop from "./utils/ScrollToTop";
 import AllBlog from "./routes/allBlog/AllBlog";
 import BlogDetails from "./routes/blogDetails.jsx/BlogDetails";
+import Auth from "./components/auth/Auth";
 
 
 Modal.setAppElement(document.getElementById("root"));
@@ -29,6 +30,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Routes>
           <Route path="/" element={<App />}>
             <Route index element={<Home />} />
+            <Route path="/login" element={<Auth />} />
             <Route path="/add-exercise" element={<AddExercise />} />
             <Route path="/get-started" element={<GetStarted />} />
             <Route path="/add-blog" element={<AddBlog />} />

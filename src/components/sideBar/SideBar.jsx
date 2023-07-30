@@ -12,6 +12,8 @@ import WhiteCss from "../../assets/whiteCss.svg";
 import BlackCss from "../../assets/blackCss.svg";
 import WhitePlus from "../../assets/whitePlus.svg";
 import BlackPlus from "../../assets/blackPlus.svg";
+import WhiteLogin from "../../assets/whiteLogin.svg";
+import BlackLogin from "../../assets/blackLogin.svg";
 
 // Context
 import { useContext } from "react";
@@ -22,6 +24,7 @@ import { NavLink } from "react-router-dom";
 import ThemeButton from "../themeButton/ThemeButton";
 
 const icons = {
+  Login: { dark: WhiteLogin, light: BlackLogin },
   Home: { dark: WhiteHome, light: BlackHome },
   HTML: { dark: WhiteHtml, light: BlackHtml },
   CSS: { dark: WhiteCss, light: BlackCss },
@@ -33,6 +36,7 @@ const SideBar = () => {
   const { isCollapsed, setIsCollapsed, isDarkMode } = useContext(GlobalContext);
 
   const navLinks = [
+    { name: "Login", path: "/login" },
     { name: "Home", path: "/" },
     { name: "HTML", path: "/html" },
     { name: "CSS", path: "/css" },
