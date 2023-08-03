@@ -1,10 +1,10 @@
 import App from "./App";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import React from "react";
 import { GlobalProvider } from "./contexts/Global-Context";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Modal from "react-modal";
-
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import Home from "./routes/home/Home";
 import ErrorPage from "./routes/error/ErrorPage";
 import AddExercise from "./routes/addExercise/AddExercise";
@@ -17,33 +17,42 @@ import GetStarted from "./routes/getStarted/GetStarted";
 import ScrollToTop from "./utils/ScrollToTop";
 import AllBlog from "./routes/allBlog/AllBlog";
 import BlogDetails from "./routes/blogDetails.jsx/BlogDetails";
-
+import Login from "./routes/login/Login";
+import Registration from "./routes/registration/Registration";
+import Profile from "./routes/profile/profile";
 
 Modal.setAppElement(document.getElementById("root"));
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <GlobalProvider>
-      <BrowserRouter>
-        <ScrollToTop />
-        <Routes>
-          <Route path="/" element={<App />}>
-            <Route index element={<Home />} />
-            <Route path="/add-exercise" element={<AddExercise />} />
-            <Route path="/get-started" element={<GetStarted />} />
-            <Route path="/add-blog" element={<AddBlog />} />
-            <Route path="/blogs" element={<AllBlog />} />
-            <Route path="/blog/:blogId" element={<BlogDetails />} />
-            <Route path="/:language" element={<Topics />} />
-            <Route path="/:language/:topic" element={<TopicExercises />} />
-            <Route
-              path="/:language/:topic/:exerciseNum"
-              element={<ExerciseDetails />}
-            />
-            <Route path="*" element={<ErrorPage />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <GoogleOAuthProvider
+        clientId={import.meta.env.VITE_APP_GOOGLE_LOGIN_CLIENT_ID}
+      >
+        <BrowserRouter>
+          <ScrollToTop />
+          <Routes>
+            <Route path="/" element={<App />}>
+              <Route index element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/registration" element={<Registration />} />
+              <Route path="/add-exercise" element={<AddExercise />} />
+              <Route path="/get-started" element={<GetStarted />} />
+              <Route path="/add-blog" element={<AddBlog />} />
+              <Route path="/blogs" element={<AllBlog />} />
+              <Route path="/blog/:blogId" element={<BlogDetails />} />
+              <Route path="/:language" element={<Topics />} />
+              <Route path="/:language/:topic" element={<TopicExercises />} />
+              <Route
+                path="/:language/:topic/:exerciseNum"
+                element={<ExerciseDetails />}
+              />
+              <Route path="*" element={<ErrorPage />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </GoogleOAuthProvider>
     </GlobalProvider>
   </React.StrictMode>
 );

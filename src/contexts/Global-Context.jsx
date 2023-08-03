@@ -22,6 +22,7 @@ export const GlobalProvider = ({ children }) => {
   const [exercises, setExercises] = useState([]);
   const [languages, setLanguages] = useState([]);
   const [topics, setTopics] = useState([]);
+  const [user, setUser] = useState({});
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -38,6 +39,7 @@ export const GlobalProvider = ({ children }) => {
       `${import.meta.env.VITE_API_URL}/api/topics/`,
       setTopics
     );
+    fetchDataAndSetState(`${import.meta.env.VITE_API_URL}/api/users/`, setUser);
     fetchDataAndSetState(
       `${import.meta.env.VITE_API_URL}/api/exercises/`,
       setExercises
@@ -78,6 +80,8 @@ export const GlobalProvider = ({ children }) => {
         setExercises,
         languages,
         setLanguages,
+        setUser,
+        user,
         error,
       }}
     >

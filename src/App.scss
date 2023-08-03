@@ -64,6 +64,9 @@ a {
   text-decoration: none;
   color: var(--text-color);
 }
+label {
+  color: var(--third-color);
+}
 .content-container {
   width: 100%;
   min-height: 100vh;

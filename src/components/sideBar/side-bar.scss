@@ -1,5 +1,5 @@
 .sidebar {
-  width: 135px;
+  width: 175px;
   min-height: 100vh;
   box-shadow: 0 0 150px 0 rgba(0, 0, 0, 0.12), 0 2px 200px 0 rgba(0, 0, 0, 0.22);
   font-size: 20px;
@@ -7,8 +7,9 @@
   color: var(--text-color);
   background-color: var(--primary-color);
 }
+
 .sidebar-navlinks {
-  margin-top: 60px;
+  margin-top: 30px;
   display: flex;
   flex-direction: column;
   gap: 30px;
@@ -20,7 +21,7 @@
   align-items: center;
   cursor: pointer;
   gap: 8px;
-  padding-left: 15px;
+  padding-left: 20px;
 }
 
 .sidebar-collapse {
@@ -38,20 +39,23 @@
   right: 0;
   transform: translate(50%, 25px);
 }
+
 .sidebar.false {
   font-size: 0.6vw;
   width: 60px;
   transition: 0.5s;
 }
+
 .sidebar.true {
   font-size: 20px;
-
+  width: 135px;
   transition: 0.5s;
 }
 
 .borderXwidth a {
   position: relative;
 }
+
 .borderXwidth a:before,
 .borderXwidth a:after {
   position: absolute;
@@ -83,4 +87,33 @@
 .borderXwidth a.active:after {
   opacity: 1;
   width: 100%;
+}
+
+.profile-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 1px solid var(--text-color);
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+    rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
+    rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+  transition: 0.3s all ease-in;
+}
+
+.profile-title {
+  font-size: 14px;
+  color: var(--text-color);
+  font-weight: 400;
+}
+
+.profile-title .name {
+  color: var(--third-color);
+}
+
+.sidebar.false .profile-img {
+  width: 35px;
+  height: 35px;
+}
+.sidebar-navlink-icon {
+  width: 20px;
 }
