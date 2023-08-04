@@ -1,0 +1,48 @@
+.blog-title {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 400;
+}
+
+.blog-label {
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--third-color);
+}
+
+.blog-text-editor {
+  background: var(--editor-color);
+  border-radius: 10px;
+  height: 25vh;
+  color: var(--text-hover-color);
+  border: 1px solid #ccc;
+}
+
+.blog-text-editor div {
+  border: 0 !important;
+
+}
+
+.blog-tags input {
+  font-size: 16px;
+  font-family: inherit;
+  margin-bottom: 0;
+  padding: 0;
+}
+
+.submit-button {
+  background: var(--primary-color);
+  color: var(--text-color);
+  padding: 10px 20px;
+  border: 1px solid var(--third-color);
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  font-size: 18px;
+  width: auto;
+  transition: 0.3s all ease-in-out;
+}
+
+.submit-button:hover {
+  background: var(--text-color);
+  color: var(--primary-color);
+}
