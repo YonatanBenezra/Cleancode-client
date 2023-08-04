@@ -19,7 +19,7 @@ import AllBlog from "./routes/allBlog/AllBlog";
 import BlogDetails from "./routes/blogDetails.jsx/BlogDetails";
 import Login from "./routes/login/Login";
 import Registration from "./routes/registration/Registration";
-import Profile from "./routes/profile/profile";
+import Profile from "./routes/profile/Profile";
 
 Modal.setAppElement(document.getElementById("root"));
 
