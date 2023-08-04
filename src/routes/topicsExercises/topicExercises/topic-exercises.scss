@@ -33,7 +33,11 @@
     box-shadow: 0 0.2rem 0.2rem var(--text-color);
   }
 }
-
+.finished {
+  background-color: var(--third-color);
+  color: var(--text-hover-color);
+  box-shadow: 0 0.2rem 0.2rem var(--text-color);
+}
 @keyframes fadeUp {
   from {
     opacity: 0;

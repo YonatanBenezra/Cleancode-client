@@ -26,7 +26,7 @@ const useModal = () => {
 
 const ExerciseDetails = () => {
   const { language, topic, exerciseNum } = useParams();
-  const { exercises } = useContext(GlobalContext);
+  const { exercises, setUser } = useContext(GlobalContext);
   const [remainingTime, setRemainingTime] = useState(0);
 
   const {
@@ -85,7 +85,6 @@ const ExerciseDetails = () => {
     return { exercise, parsedCode };
   };
   const { exercise, parsedCode } = useExercise(exercises, topic, exerciseNum);
-
   // Custom hook
   const useResizer = (containerRef, resizerRef) => {
     const [isResizing, setIsResizing] = useState(false);
@@ -229,6 +228,21 @@ const ExerciseDetails = () => {
       const result = Function(
         `"use strict"; return (${response.data.choices[0].message.content});`
       )();
+      if (result.isCorrect) {
+        const res = await axios.patch(
+          `${import.meta.env.VITE_API_URL}/api/users/updateMe`,
+          {
+            finishedExercise: exercise._id,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        setUser(res.data.data.user);
+      }
+
       setSubmittedAnswer(result);
       if (!(language === "javascript")) openModal2();
     } catch (error) {
