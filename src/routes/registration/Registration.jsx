@@ -4,7 +4,6 @@ import GlobalContext from "../../contexts/Global-Context";
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
-import Cookies from "js-cookie";
 
 const Registration = () => {
   const { setUser } = useContext(GlobalContext);

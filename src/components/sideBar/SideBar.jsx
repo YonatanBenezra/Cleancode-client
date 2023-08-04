@@ -27,6 +27,7 @@ import GlobalContext from "../../contexts/Global-Context";
 import { NavLink } from "react-router-dom";
 import ThemeButton from "../themeButton/ThemeButton";
 import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 const icons = {
   Home: { dark: WhiteHome, light: BlackHome },
@@ -40,6 +41,8 @@ const icons = {
 };
 
 const SideBar = () => {
+  const navigate = useNavigate();
+
   const { isCollapsed, setIsCollapsed, isDarkMode, user, setUser } =
     useContext(GlobalContext);
   const navLinks = [
@@ -64,6 +67,7 @@ const SideBar = () => {
   const handleLogout = () => {
     Cookies.remove("token");
     setUser({});
+    navigate(`/`);
   };
 
   return (

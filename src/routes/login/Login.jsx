@@ -4,7 +4,6 @@ import axios from "axios";
 import GlobalContext from "../../contexts/Global-Context";
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
 
 const Login = () => {
   const { setUser } = useContext(GlobalContext);

@@ -37,7 +37,7 @@ const App = () => {
         }
       }
     })();
-  }, [token]);
+  }, [setUser, token]);
   return (
     <div className={`app ${isCollapsed} d-flex`}>
       <SideBar />
