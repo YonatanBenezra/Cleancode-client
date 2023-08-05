@@ -15,6 +15,7 @@ const TopicExercises = () => {
   }
 
   const hasUserFinished = (exerciseId) => {
+    if (!user._id) return false;
     return user.finishedExercises.map((user) => user._id).includes(exerciseId);
   };
 
