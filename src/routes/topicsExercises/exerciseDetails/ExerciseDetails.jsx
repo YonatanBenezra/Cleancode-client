@@ -26,7 +26,7 @@ const useModal = () => {
 
 const ExerciseDetails = () => {
   const { language, topic, exerciseNum } = useParams();
-  const { exercises, setUser } = useContext(GlobalContext);
+  const { exercises, setUser, user } = useContext(GlobalContext);
   const [remainingTime, setRemainingTime] = useState(0);
 
   const {
@@ -228,7 +228,7 @@ const ExerciseDetails = () => {
       const result = Function(
         `"use strict"; return (${response.data.choices[0].message.content});`
       )();
-      if (result.isCorrect) {
+      if (result.isCorrect && user._id) {
         const res = await axios.patch(
           `${import.meta.env.VITE_API_URL}/api/users/updateMe`,
           {
