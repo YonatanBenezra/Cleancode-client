@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import GlobalContext from "../../contexts/Global-Context";
 import PropTypes from "prop-types";
+import "./language-list.scss";
 
 const LanguageList = ({ handleNext }) => {
   const { languages } = useContext(GlobalContext);

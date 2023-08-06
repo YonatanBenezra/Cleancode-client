@@ -2,12 +2,39 @@
   padding-top: 30px;
   min-height: initial;
 }
+
+.user-profile .exercise div {
+  padding: 30px;
+}
+
 .user-profile p {
   margin: 0;
 }
+
 .user-profile p.text {
   font-size: 22px;
 }
+
 .user-profile p.number {
   font-size: 36px;
+}
+
+@media only screen and (max-width: 992px) {
+  .user-profile p.number {
+    font-size: 32px;
+  }
+
+  .user-profile p.text {
+    font-size: 20px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .user-profile p.number {
+    font-size: 26px;
+  }
+
+  .user-profile p.text {
+    font-size: 14px;
+  }
 }

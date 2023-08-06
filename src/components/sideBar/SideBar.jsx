@@ -80,6 +80,7 @@ const SideBar = () => {
           )}
         </div>
       </div>
+      <ThemeButton />
       {user._id && (
         <div className="text-center mt-5">
           <img src={user.photo} alt={user.name} className="profile-img" />
@@ -88,7 +89,7 @@ const SideBar = () => {
           </h5>
         </div>
       )}
-      <ThemeButton />
+
       <div className="sidebar-navlinks">
         {navLinks.map(({ name, path }) => (
           <div className="borderXwidth" key={path}>
