@@ -46,3 +46,70 @@
   background: var(--text-color);
   color: var(--primary-color);
 }
+
+@media only screen and (max-width: 1200px) {
+  .blog-title {
+    font-size: 30px;
+  }
+
+  .blog-label {
+    font-size: 18px;
+  }
+
+  .submit-button {
+    font-size: 16px;
+    padding: 8px 18px;
+  }
+
+}
+
+@media only screen and (max-width: 992px) {
+  .blog-title {
+    font-size: 28px;
+  }
+
+  .blog-label {
+    font-size: 16px;
+  }
+
+  .submit-button {
+    font-size: 15px;
+    padding: 7px 16px;
+  }
+
+}
+
+@media only screen and (max-width: 768px) {
+  .blog-title {
+    font-size: 26px;
+  }
+
+  .blog-tags input {
+    font-size: 14px;
+  }
+
+  .submit-button {
+    font-size: 14px;
+    padding: 6px 14px;
+    border-radius: 8px;
+
+  }
+
+}
+
+@media only screen and (max-width: 576px) {
+  .blog-title {
+    font-size: 24px;
+  }
+
+  .blog-tags input {
+    font-size: 12px;
+  }
+
+  .submit-button {
+    font-size: 12px;
+    padding: 5px 12px;
+
+  }
+
+}

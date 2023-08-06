@@ -44,7 +44,7 @@ const AllBlog = () => {
   return (
     <div>
       <div className="container">
-        <h1 className="my-5 text-center">All Blogs</h1>
+        <h1 className="my-5 text-center page-title">All Blogs</h1>
 
         {/* Add search field */}
         <input
@@ -61,7 +61,7 @@ const AllBlog = () => {
             <button
               key={tag}
               onClick={() => toggleTag(tag)}
-              className={`btn me-2 ${
+              className={`btn me-2 mt-sm-2 ${
                 selectedTags.includes(tag) ? "active" : ""
               }`}
             >
