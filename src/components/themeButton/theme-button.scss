@@ -11,7 +11,9 @@
     inset 0px -5px 15px rgba(255, 255, 255, 0.4);
   cursor: pointer;
   transition: 0.3s;
-  left: 20px;
+  // left: 25px;
+  margin: auto;
+  margin-top: 22px;
 
   &:after {
     content: "";
@@ -85,7 +87,7 @@
       .theme-label {
         left: 2px;
         width: 50px;
-        margin-top: 30px;
+        // margin-top: 30px;
       }
 
       .theme-container-toggle:checked {

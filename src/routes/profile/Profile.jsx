@@ -24,7 +24,7 @@ const Profile = () => {
     }, {}) || {};
   return (
     <div className="text-center my-5 user-profile">
-      <h1>{user.name}'s Profile</h1>
+      <h1 className="page-title">{user.name}'s Profile</h1>
       <div className="topics-container d-flex flex-wrap flex-row justify-content-center align-items-center gap-3">
         <span className="topics-topic">
           <span className="exercise">

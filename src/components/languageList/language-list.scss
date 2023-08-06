@@ -1,0 +1,23 @@
+.add-exercise-language {
+  font-size: 28px;
+  text-transform: capitalize;
+  padding: 20px;
+}
+
+@media only screen and (max-width: 992px) {
+  .add-exercise-language {
+    font-size: 24px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .add-exercise-language {
+    font-size: 22px;
+  }
+}
+
+@media only screen and (max-width: 576px) {
+  .add-exercise-language {
+    font-size: 18px;
+  }
+}
