@@ -26,7 +26,6 @@ import GlobalContext from "../../contexts/Global-Context";
 // Components
 import { NavLink } from "react-router-dom";
 import ThemeButton from "../themeButton/ThemeButton";
-import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 
 const icons = {
@@ -65,7 +64,7 @@ const SideBar = () => {
     setIsCollapsed(!isCollapsed);
   };
   const handleLogout = () => {
-    Cookies.remove("token");
+    localStorage.removeItem("token");
     setUser({});
     navigate(`/`);
   };

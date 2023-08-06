@@ -34,7 +34,7 @@ const BlogDetails = () => {
             className="blog-content"
           />
           {/* <p>Author: {blog.author}</p> */}
-          <p className="detailed-tags">Tags: {blog.tags.join(", ")}</p>
+          <p className="detailed-tags ms-2">Tags: {blog.tags.join(", ")}</p>
         </div>
       </div>
     </div>

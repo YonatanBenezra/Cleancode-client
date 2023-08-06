@@ -16,6 +16,11 @@
   color: var(--third-color);
 }
 
+.blog-content h2 {
+  font-size: 28px;
+  color: var(--third-color);
+}
+
 .detailed-tags {
   background: var(--primary-color);
   color: var(--text-color);
@@ -25,4 +30,83 @@
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   font-size: 16px;
   width: auto;
+}
+
+
+@media only screen and (max-width: 1200px) {
+  .blog-title {
+    font-size: 30px;
+  }
+
+  .blog-content h3,
+  .blog-content h5 {
+    font-size: 24px;
+  }
+
+  .blog-content h2 {
+    font-size: 26px;
+  }
+
+}
+
+@media only screen and (max-width: 992px) {
+  .blog-title {
+    font-size: 28px;
+  }
+
+  .blog-content h3,
+  .blog-content h5 {
+    font-size: 22px;
+  }
+
+  .blog-content h2 {
+    font-size: 24px;
+  }
+
+  .detailed-tags {
+    padding: 4px 8px;
+    font-size: 15px;
+  }
+
+}
+
+@media only screen and (max-width: 768px) {
+  .blog-title {
+    font-size: 26px;
+  }
+
+  .blog-content h3,
+  .blog-content h5 {
+    font-size: 20px;
+  }
+
+  .blog-content h2 {
+    font-size: 22px;
+  }
+
+  .detailed-tags {
+    font-size: 14px;
+    padding: 4px 6px;
+  }
+
+}
+
+@media only screen and (max-width: 576px) {
+  .blog-title {
+    font-size: 24px;
+  }
+
+  .blog-content h3,
+  .blog-content h5 {
+    font-size: 18px;
+  }
+
+  .blog-content h2 {
+    font-size: 20px;
+  }
+
+  .detailed-tags {
+    font-size: 12px;
+    padding: 3px 5px;
+  }
 }
