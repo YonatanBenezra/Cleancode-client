@@ -4,16 +4,20 @@ import GlobalContext from "../../contexts/Global-Context";
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
+import Dropzone from "react-dropzone";
 
 const Registration = () => {
   const { setUser } = useContext(GlobalContext);
   const [error, setError] = useState(null);
+  const [uploadedImg, setUploadedImg] = useState(null);
+
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
+    setValue,
   } = useForm();
 
   const onFormSubmit = async (userData) => {
@@ -67,6 +71,23 @@ const Registration = () => {
     onSuccess: handleGoogleSuccess,
     onError: handleGoogleError,
   });
+  const onDrop = async (acceptedFiles) => {
+    const formData = new FormData();
+    formData.append("file", acceptedFiles[0]);
+    formData.append("upload_preset", "cleancode");
+
+    try {
+      const response = await axios.post(
+        "https://api.cloudinary.com/v1_1/djkdk03mf/image/upload",
+        formData
+      );
+      const photo = response.data.secure_url;
+      setValue("photo", photo);
+      setUploadedImg(photo);
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
+  };
 
   return (
     <div
@@ -106,6 +127,37 @@ const Registration = () => {
           {errors.email && (
             <div className="invalid-feedback">Email is required</div>
           )}
+        </div>
+        <div className="mb-3">
+          {uploadedImg && (
+            <div className="text-center">
+              <img
+                src={uploadedImg}
+                alt="Uploaded"
+                style={{
+                  width: "100px",
+                  height: "100%",
+                  objectFit: "cover",
+                  borderRadius: "50%",
+                }}
+              />
+            </div>
+          )}
+          <label htmlFor="imgUrl" className="form-label blog-label">
+            Upload Image:
+          </label>
+          <div>
+            <Dropzone onDrop={onDrop} accept="image/*">
+              {({ getRootProps, getInputProps }) => (
+                <div className="dropzone-container" {...getRootProps()}>
+                  <input {...getInputProps()} id="imgUrl" />
+                  <p className="dropzone-text">
+                    Drag and drop an image here, or click to select an image
+                  </p>
+                </div>
+              )}
+            </Dropzone>
+          </div>
         </div>
         <div className="mb-3">
           <label htmlFor="password" className="form-label">
