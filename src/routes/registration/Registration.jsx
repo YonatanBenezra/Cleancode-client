@@ -90,132 +90,142 @@ const Registration = () => {
   };
 
   return (
-    <div
-      className="container my-5 px-4 py-5 rounded-3"
-      style={{ backgroundColor: "rgb(38,70,83)" }}
-    >
-      {error && (
-        <div className="alert alert-danger text-center" role="alert">
-          {error}
-        </div>
-      )}
-      <form onSubmit={handleSubmit(onFormSubmit)}>
-        <div className="mb-3">
-          <label htmlFor="name" className="form-label">
-            Name
-          </label>
-          <input
-            {...register("name", { required: true })}
-            type="text"
-            name="name"
-            className={`form-control ${errors.name ? "is-invalid" : ""}`}
-          />
-          {errors.name && (
-            <div className="invalid-feedback">Name is required</div>
-          )}
-        </div>
-        <div className="mb-3">
-          <label htmlFor="email" className="form-label">
-            Email
-          </label>
-          <input
-            {...register("email", { required: true })}
-            type="email"
-            name="email"
-            className={`form-control ${errors.email ? "is-invalid" : ""}`}
-          />
-          {errors.email && (
-            <div className="invalid-feedback">Email is required</div>
-          )}
-        </div>
-        <div className="mb-3">
-          {uploadedImg && (
-            <div className="text-center">
-              <img
-                src={uploadedImg}
-                alt="Uploaded"
-                style={{
-                  width: "100px",
-                  height: "100%",
-                  objectFit: "cover",
-                  borderRadius: "50%",
-                }}
-              />
+    <div className="container my-5">
+      <div className="row">
+        <div
+          className="col-md-12 col-10 mx-auto px-4 py-5 rounded-3"
+          style={{ backgroundColor: "rgb(38,70,83)" }}
+        >
+          {error && (
+            <div className="alert alert-danger text-center" role="alert">
+              {error}
             </div>
           )}
-          <label htmlFor="imgUrl" className="form-label blog-label">
-            Upload Image:
-          </label>
-          <div>
-            <Dropzone onDrop={onDrop} accept="image/*">
-              {({ getRootProps, getInputProps }) => (
-                <div className="dropzone-container" {...getRootProps()}>
-                  <input {...getInputProps()} id="imgUrl" />
-                  <p className="dropzone-text">
-                    Drag and drop an image here, or click to select an image
-                  </p>
+          <form onSubmit={handleSubmit(onFormSubmit)}>
+            <div className="mb-3">
+              <label htmlFor="name" className="form-label">
+                Name
+              </label>
+              <input
+                {...register("name", { required: true })}
+                type="text"
+                name="name"
+                className={`form-control ${errors.name ? "is-invalid" : ""}`}
+              />
+              {errors.name && (
+                <div className="invalid-feedback">*Name is required</div>
+              )}
+            </div>
+            <div className="mb-3">
+              <label htmlFor="email" className="form-label">
+                Email
+              </label>
+              <input
+                {...register("email", { required: true })}
+                type="email"
+                name="email"
+                className={`form-control ${errors.email ? "is-invalid" : ""}`}
+              />
+              {errors.email && (
+                <div className="invalid-feedback">*Email is required</div>
+              )}
+            </div>
+            <div className="mb-3">
+              {uploadedImg && (
+                <div className="text-center">
+                  <img
+                    src={uploadedImg}
+                    alt="Uploaded"
+                    style={{
+                      width: "100px",
+                      height: "100%",
+                      objectFit: "cover",
+                      borderRadius: "50%",
+                    }}
+                  />
                 </div>
               )}
-            </Dropzone>
-          </div>
-        </div>
-        <div className="mb-3">
-          <label htmlFor="password" className="form-label">
-            Password
-          </label>
-          <input
-            {...register("password", {
-              required: true,
-              minLength: 8,
-            })}
-            type="password"
-            name="password"
-            className={`form-control ${errors.password ? "is-invalid" : ""}`}
-          />
-          {errors.password && (
-            <div className="invalid-feedback">
-              Password must be at least 8 characters long
+              <label htmlFor="imgUrl" className="form-label blog-label">
+                Upload Image:
+              </label>
+              <div>
+                <Dropzone onDrop={onDrop} accept="image/*">
+                  {({ getRootProps, getInputProps }) => (
+                    <div className="dropzone-container" {...getRootProps()}>
+                      <input {...getInputProps()} id="imgUrl" />
+                      <p className="dropzone-text">
+                        Drag and drop an image here, or click to select an image
+                      </p>
+                    </div>
+                  )}
+                </Dropzone>
+              </div>
             </div>
-          )}
-        </div>
-        <div className="mb-3">
-          <label htmlFor="passwordConfirm" className="form-label">
-            Confirm Password
-          </label>
-          <input
-            {...register("passwordConfirm", {
-              required: "Password confirmation is required",
-              validate: (value) =>
-                value === password || "Passwords do not match",
-            })}
-            type="password"
-            name="passwordConfirm"
-            className={`form-control ${
-              errors.passwordConfirm ? "is-invalid" : ""
-            }`}
-          />
-          {errors.passwordConfirm && (
-            <div className="invalid-feedback">
-              {errors.passwordConfirm.message}
+            <div className="mb-3">
+              <label htmlFor="password" className="form-label">
+                Password
+              </label>
+              <input
+                {...register("password", {
+                  required: true,
+                  minLength: 8,
+                })}
+                type="password"
+                name="password"
+                className={`form-control ${
+                  errors.password ? "is-invalid" : ""
+                }`}
+              />
+              {errors.password && (
+                <div className="invalid-feedback">
+                  *Password must be at least 8 characters long
+                </div>
+              )}
             </div>
-          )}
+            <div className="mb-3">
+              <label htmlFor="passwordConfirm" className="form-label">
+                Confirm Password
+              </label>
+              <input
+                {...register("passwordConfirm", {
+                  required: "Password confirmation is required",
+                  validate: (value) =>
+                    value === password || "Passwords do not match",
+                })}
+                type="password"
+                name="passwordConfirm"
+                className={`form-control ${
+                  errors.passwordConfirm ? "is-invalid" : ""
+                }`}
+              />
+              {errors.passwordConfirm && (
+                <div className="invalid-feedback">
+                  *{errors.passwordConfirm.message}
+                </div>
+              )}
+            </div>
+            <div className="d-flex justify-content-center align-items-center gap-3">
+              <button type="submit" className="btn login-btn">
+                Register with Email
+              </button>
+              <button
+                type="button"
+                className="btn login-btn"
+                onClick={() => googleLogin()}
+              >
+                Register with Google
+              </button>
+            </div>
+          </form>
+          <p className="text-center mt-2">
+            Already have an account?{" "}
+            <Link to="/login" style={{ color: "var(--third-color)" }}>
+              Log in here
+            </Link>
+            .
+          </p>
         </div>
-        <div className="d-flex justify-content-center align-items-center gap-3">
-          <button type="submit" className="btn ">
-            Register with Email
-          </button>
-          <button type="button" className="btn" onClick={() => googleLogin()}>
-            Register with Google
-          </button>
-        </div>
-      </form>
-      <p className="text-center mt-2">
-        Already have an account?{" "}
-        <Link to="/login" style={{ color: "var(--third-color)" }}>
-          Log in here
-        </Link>
-        .
-      </p>
+      </div>
     </div>
   );
 };

@@ -4,6 +4,7 @@ import axios from "axios";
 import GlobalContext from "../../contexts/Global-Context";
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import "./login.scss";
 
 const Login = () => {
   const { setUser } = useContext(GlobalContext);
@@ -25,7 +26,6 @@ const Login = () => {
       localStorage.setItem("token", res.data.token);
       setUser(res.data.data.user);
       navigate("/");
-
     } catch (error) {
       setError(error.response.data.message);
     }
@@ -66,60 +66,70 @@ const Login = () => {
     onError: handleError,
   });
   return (
-    <div
-      className="container my-5 px-4 py-5 rounded-3"
-      style={{ backgroundColor: "rgb(38,70,83)" }}
-    >
-      {error && (
-        <div className="alert alert-danger text-center" role="alert">
-          {error}
-        </div>
-      )}
-      <form onSubmit={handleSubmit(onFormSubmit)}>
-        <div className="mb-3">
-          <label htmlFor="email" className="form-label">
-            Email
-          </label>
-          <input
-            {...register("email", { required: true })}
-            type="email"
-            name="email"
-            className={`form-control ${errors.email ? "is-invalid" : ""}`}
-          />
-          {errors.email && (
-            <div className="invalid-feedback">Email is required</div>
+    <div className="container my-5">
+      <div className="row">
+        <div
+          className="col-md-12 col-10 mx-auto px-4 py-5 rounded-3"
+          style={{ backgroundColor: "rgb(38,70,83)" }}
+        >
+          {error && (
+            <div className="alert alert-danger text-center" role="alert">
+              {error}
+            </div>
           )}
+          <form onSubmit={handleSubmit(onFormSubmit)}>
+            <div className="mb-3">
+              <label htmlFor="email" className="form-label">
+                Email
+              </label>
+              <input
+                {...register("email", { required: true })}
+                type="email"
+                name="email"
+                className={`form-control ${errors.email ? "is-invalid" : ""}`}
+              />
+              {errors.email && (
+                <div className="invalid-feedback">Email is required</div>
+              )}
+            </div>
+            <div className="mb-3">
+              <label htmlFor="password" className="form-label">
+                Password
+              </label>
+              <input
+                {...register("password", { required: true })}
+                type="password"
+                name="password"
+                className={`form-control ${
+                  errors.password ? "is-invalid" : ""
+                }`}
+              />
+              {errors.password && (
+                <div className="invalid-feedback">Password is required</div>
+              )}
+            </div>
+            <div className="d-flex justify-content-center align-items-center gap-3">
+              <button type="submit" className="btn login-btn">
+                Login with email
+              </button>
+              <button
+                type="button"
+                className="btn login-btn"
+                onClick={() => login()}
+              >
+                Login with Google
+              </button>
+            </div>
+          </form>
+          <p className="text-center mt-2">
+            Do not have an account?{" "}
+            <Link to="/registration" style={{ color: "var(--third-color)" }}>
+              Registration here
+            </Link>
+            .
+          </p>
         </div>
-        <div className="mb-3">
-          <label htmlFor="password" className="form-label">
-            Password
-          </label>
-          <input
-            {...register("password", { required: true })}
-            type="password"
-            name="password"
-            className={`form-control ${errors.password ? "is-invalid" : ""}`}
-          />
-          {errors.password && (
-            <div className="invalid-feedback">Password is required</div>
-          )}
-        </div>
-        <div className="d-flex justify-content-center align-items-center gap-3">
-          <button type="submit" className="btn ">
-            Login with email
-          </button>
-          <button type="button" className="btn " onClick={() => login()}>
-            Login with Google
-          </button>
-        </div>
-      </form>
-      <p className="text-center mt-2">
-        Do not have an account?{" "}
-        <Link to="/registration" style={{ color: "var(--third-color)" }}>
-          Registration here
-        </Link>
-        .
-      </p>
+      </div>
     </div>
   );
 };
