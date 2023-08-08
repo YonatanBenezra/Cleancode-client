@@ -18,9 +18,10 @@ import BlackUser from "../../assets/darkUser.png";
 import WhiteUser from "../../assets/whiteUser.png";
 import BlackLogout from "../../assets/darkLogout.png";
 import WhiteLogout from "../../assets/whiteLogout.png";
+import menuBurger from "../../assets/list-symbol-of-three-items-with-dots.png";
 
 // Context
-import { useContext } from "react";
+import React, { useContext, useState } from "react";
 import GlobalContext from "../../contexts/Global-Context";
 
 // Components
@@ -68,66 +69,83 @@ const SideBar = () => {
     setUser({});
     navigate(`/`);
   };
+  const [sidebar, setSidebar] = useState(false);
 
   return (
-    <div className={`sidebar ${isCollapsed}`}>
-      <div className="position-relative">
-        <div className="sidebar-collapse" onClick={toggleSidebar}>
-          {isCollapsed ? (
-            <i className="fa-solid fa-less-than"></i>
+    <React.Fragment>
+      <div
+        className="d-md-none d-block menu-burger"
+        onClick={() => setSidebar(true)}
+      >
+        <img src={menuBurger} alt="Menu Burger" />
+      </div>
+      <div
+        className={`sidebar ${isCollapsed} ${sidebar ? "activeSidebar" : ""}`}
+      >
+        <div className="position-relative">
+          {!sidebar ? (
+            <div className="sidebar-collapse" onClick={toggleSidebar}>
+              {isCollapsed ? (
+                <i className="fa-solid fa-less-than"></i>
+              ) : (
+                <i className="fa-solid fa-greater-than"></i>
+              )}
+            </div>
           ) : (
-            <i className="fa-solid fa-greater-than"></i>
+            <div className="sidebar-collapse" onClick={() => setSidebar(false)}>
+              X
+            </div>
           )}
         </div>
-      </div>
-      <ThemeButton />
-      {user._id && (
-        <div className="text-center mt-5">
-          <img src={user.photo} alt={user.name} className="profile-img" />
-          <h5 className="profile-title mt-2">
-            <span className="name">{user.name.split(" ")[0]}</span>
-          </h5>
-        </div>
-      )}
-
-      <div className="sidebar-navlinks">
-        {navLinks.map(({ name, path }) => (
-          <div className="borderXwidth" key={path}>
-            {name === "Logout" ? (
-              <div onClick={handleLogout}>
-                <div className="sidebar-navlink">
-                  <img
-                    src={isDarkMode ? icons[name].dark : icons[name].light}
-                    alt={name}
-                    className="sidebar-navlink-icon"
-                  />
-                  {isCollapsed && (
-                    <div className="sidebar-navlink-text">
-                      <span>{name}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            ) : (
-              <NavLink to={path}>
-                <div className="sidebar-navlink">
-                  <img
-                    src={isDarkMode ? icons[name].dark : icons[name].light}
-                    alt={name}
-                    className="sidebar-navlink-icon"
-                  />
-                  {isCollapsed && (
-                    <div className="sidebar-navlink-text">
-                      <span>{name}</span>
-                    </div>
-                  )}
-                </div>
-              </NavLink>
-            )}
+        <ThemeButton />
+        {user._id && (
+          <div className="text-center mt-5">
+            <img src={user.photo} alt={user.name} className="profile-img" />
+            <h5 className="profile-title mt-2">
+              <span className="name">{user.name.split(" ")[0]}</span>
+            </h5>
           </div>
-        ))}
+        )}
+
+        <div className="sidebar-navlinks">
+          {navLinks.map(({ name, path }) => (
+            <div className="borderXwidth" key={path}>
+              {name === "Logout" ? (
+                <div onClick={handleLogout}>
+                  <div className="sidebar-navlink">
+                    <img
+                      src={isDarkMode ? icons[name].dark : icons[name].light}
+                      alt={name}
+                      className="sidebar-navlink-icon"
+                    />
+                    {isCollapsed && (
+                      <div className="sidebar-navlink-text">
+                        <span>{name}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <NavLink to={path}>
+                  <div className="sidebar-navlink">
+                    <img
+                      src={isDarkMode ? icons[name].dark : icons[name].light}
+                      alt={name}
+                      className="sidebar-navlink-icon"
+                    />
+                    {isCollapsed && (
+                      <div className="sidebar-navlink-text">
+                        <span>{name}</span>
+                      </div>
+                    )}
+                  </div>
+                </NavLink>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+    </React.Fragment>
   );
 };
 

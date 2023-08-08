@@ -280,19 +280,21 @@ const ExerciseDetails = () => {
         "loading"
       ) : language === "javascript" ? (
         <React.Fragment>
-          <span>{exercise?.description}</span>
+          <span className="exercise-description">{exercise?.description}</span>
           <p>{exercise?.question}</p>
           {parsedCode && (
-            <CodeEditor
-              height={window.innerWidth > 768 ? "50vh" : "70vh"}
-              code={parsedCode}
-              answers={exercise?.answers}
-              selectedLanguage={language}
-              onChange={(newValue) => setState({ js: newValue })}
-            />
+            <div className="d-flex justify-content-center">
+              <CodeEditor
+                height={window.innerWidth > 768 ? "50vh" : "70vh"}
+                code={parsedCode}
+                answers={exercise?.answers}
+                selectedLanguage={language}
+                onChange={(newValue) => setState({ js: newValue })}
+              />
+            </div>
           )}
           <div
-            className={`output-window ${
+            className={`output-window mx-auto ${
               submittedAnswer.isCorrect !== undefined
                 ? submittedAnswer.isCorrect
                   ? "success"

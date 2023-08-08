@@ -55,7 +55,7 @@
 .editors-container {
   display: flex;
   position: relative;
-  overflow-x: hidden; 
+  overflow-x: hidden;
 }
 
 .editor {
@@ -117,4 +117,19 @@
 /* .see-more */
 .see-more {
   font-size: 14px;
+}
+
+.exercise-description {
+  display: block;
+  text-align: center;
+  color: var(--third-color);
+  font-size: 22px;
+  text-transform: capitalize;
+  padding: 20px;
+}
+
+@media screen and (max-width: 768px) {
+  .exercise-description {
+    font-size: 16px;
+  }
 }
