@@ -86,10 +86,12 @@ const ExerciseDetails = () => {
   };
   const { exercise, parsedCode } = useExercise(exercises, topic, exerciseNum);
   // Custom hook
+  const MIN_EDITOR_WIDTH = -90;
+
   const useResizer = (containerRef, resizerRef) => {
     const [isResizing, setIsResizing] = useState(false);
-    const [topEditorHeight, setTopEditorHeight] = useState("50vh");
-    const [bottomEditorHeight, setBottomEditorHeight] = useState("50vh");
+    const [leftEditorWidth, setLeftEditorWidth] = useState("50%");
+    const [rightEditorWidth, setRightEditorWidth] = useState("50%");
 
     const handleMouseDown = () => setIsResizing(true);
     const handleMouseUp = useCallback(() => setIsResizing(false), []);
@@ -98,13 +100,21 @@ const ExerciseDetails = () => {
       (e) => {
         if (!isResizing) return;
         const containerRect = containerRef.current.getBoundingClientRect();
-        const newHeightTop = e.clientY - containerRect.top;
-        const newHeightBottom = containerRect.bottom - e.clientY;
-        resizerRef.current.style.top = `${newHeightTop}px`;
-        setTopEditorHeight(`${newHeightTop}px`);
-        setBottomEditorHeight(`${newHeightBottom}px`);
+        const newWidthLeft = e.clientX - containerRect.left - 135;
+        const newWidthRight = containerRect.right - e.clientX - 135;
+
+        // This will prevent editors from becoming too narrow
+        if (
+          newWidthLeft < MIN_EDITOR_WIDTH ||
+          newWidthRight < MIN_EDITOR_WIDTH
+        ) {
+          return;
+        }
+
+        setLeftEditorWidth(`${newWidthLeft}px`);
+        setRightEditorWidth(`${newWidthRight}px`);
       },
-      [isResizing, containerRef, resizerRef]
+      [isResizing, containerRef]
     );
 
     useEffect(() => {
@@ -117,9 +127,10 @@ const ExerciseDetails = () => {
       };
     }, [handleMouseMove, handleMouseUp]);
 
-    return { handleMouseDown, topEditorHeight, bottomEditorHeight }; // return both heights
+    return { handleMouseDown, leftEditorWidth, rightEditorWidth };
   };
-  const { handleMouseDown, topEditorHeight, bottomEditorHeight } = useResizer(
+
+  const { handleMouseDown, leftEditorWidth, rightEditorWidth } = useResizer(
     containerRef,
     resizerRef
   );
@@ -405,27 +416,37 @@ const ExerciseDetails = () => {
               </div>
             ) : (
               <React.Fragment>
-                <h2 className="panel-label">HTML</h2>
-                <CodeEditor
-                  selectedLanguage="html"
-                  code={state.html}
-                  answers={exercise?.answers}
-                  onChange={(newValue) => setState({ html: newValue })}
-                  height={topEditorHeight}
-                />
-                <div
-                  className="resizer"
-                  ref={resizerRef}
-                  onMouseDown={handleMouseDown}
-                ></div>
-                <h2 className="panel-label">CSS</h2>
-                <CodeEditor
-                  selectedLanguage="css"
-                  code={state.css}
-                  answers={exercise?.answers}
-                  onChange={(newValue) => setState({ css: newValue })}
-                  height={bottomEditorHeight}
-                />
+                <div className="editors-container" ref={containerRef}>
+                  <div
+                    className="editor"
+                    style={{ width: `${leftEditorWidth}` }}
+                  >
+                    <h2 className="panel-label">HTML</h2>
+                    <CodeEditor
+                      selectedLanguage="html"
+                      code={state.html}
+                      answers={exercise?.answers}
+                      onChange={(newValue) => setState({ html: newValue })}
+                    />
+                  </div>
+                  <div
+                    className="resizer"
+                    ref={resizerRef}
+                    onMouseDown={handleMouseDown}
+                  ></div>
+                  <div
+                    className="editor"
+                    style={{ width: `${rightEditorWidth}` }}
+                  >
+                    <h2 className="panel-label">CSS</h2>
+                    <CodeEditor
+                      selectedLanguage="css"
+                      code={state.css}
+                      answers={exercise?.answers}
+                      onChange={(newValue) => setState({ css: newValue })}
+                    />
+                  </div>
+                </div>
               </React.Fragment>
             )}
           </div>
