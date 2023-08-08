@@ -120,10 +120,34 @@
   width: 20px;
 }
 
-@media only screen and (max-width: 576px) {
-  .sidebar.true {
+.menu-burger {
+  position: fixed;
+  left: 5%;
+  top: 3%;
+  cursor: pointer;
+
+}
+
+.menu-burger img {
+  height: 50px;
+}
+
+
+
+@media only screen and (max-width: 768px) {
+  .sidebar {
     position: fixed;
-    z-index: 99;
+    transform: translateX(-145px);
+    z-index: 100;
   }
 
+}
+
+.sidebar {
+  background-color: var(--sidebar-color);
+
+}
+
+.activeSidebar {
+  transform: translateX(0px);
 }
