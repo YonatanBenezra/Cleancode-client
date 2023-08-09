@@ -16,6 +16,8 @@ html {
   --success-color: #198754;
   --error-color: #dc4c64;
   --sidebar-color: #fff;
+  --modal-background-color: #e9c46a;
+  --modal-span-color: #264653;
 }
 
 [data-theme="dark"] {
@@ -34,9 +36,10 @@ html {
   --success-color: #198754;
   --error-color: #dc4c64;
   --editor-color: #ffffff;
-  --sidebar-color: #264653
+  --sidebar-color: #264653;
+  --modal-background-color: #264653;
+  --modal-span-color: #e9c46a;
 }
-
 * {
   margin: 0;
   padding: 0;
@@ -75,7 +78,7 @@ label {
 }
 
 .content-container {
-  width: 100%;
+  flex: 1;
   min-height: 100vh;
   background-color: var(--secondary-color);
 }
@@ -86,4 +89,23 @@ label {
     scrollbar-width: thin;
     scrollbar-color: var(--third-color) var(--secondary-color);
   }
+}
+.modal-content {
+  background: var(--modal-background-color);
+}
+
+.modal-content .span {
+  font-weight: 500;
+  color: var(--modal-span-color);
+  font-size: 22px;
+
+  @media only screen and (max-width: 768px) {
+    font-size: 18px;
+  }
+}
+
+.modal-content .modal-btn {
+  color: #264653;
+  padding: 4px 8px;
+  border-radius: 10px;
 }
