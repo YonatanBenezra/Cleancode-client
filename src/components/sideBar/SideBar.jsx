@@ -92,7 +92,13 @@ const SideBar = () => {
               )}
             </div>
           ) : (
-            <div className="sidebar-collapse" onClick={() => setSidebar(false)}>
+            <div
+              className="sidebar-collapse"
+              onClick={() => {
+                setIsCollapsed(true);
+                setSidebar(false);
+              }}
+            >
               X
             </div>
           )}
