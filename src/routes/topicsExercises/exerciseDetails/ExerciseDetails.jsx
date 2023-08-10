@@ -179,6 +179,10 @@ const ExerciseDetails = () => {
         return prevTime - 1;
       });
     }, 1000);
+    const modal = new window.bootstrap.Modal(
+      document.getElementById("feedbackModal"),
+      {}
+    );
     let content = `Ensure you adopt the following structure to assess and provide feedback on the user's response:
       {
         isCorrect: Boolean,
@@ -205,7 +209,8 @@ const ExerciseDetails = () => {
         state.css.trim()
       )
     ) {
-      return setSubmittedAnswer({ isCorrect: false, score: 0 });
+      setSubmittedAnswer({ isCorrect: false, score: 0 });
+      return modal.show();
     }
 
     setLoading(true);
@@ -251,10 +256,6 @@ const ExerciseDetails = () => {
 
       setSubmittedAnswer(result);
 
-      const modal = new window.bootstrap.Modal(
-        document.getElementById("feedbackModal"),
-        {}
-      );
       modal.show();
     } catch (error) {
       alert("Please try after 30 seconds");
@@ -281,13 +282,10 @@ const ExerciseDetails = () => {
           {language === "javascript" ? (
             <div className="editor js-editor">
               <h2 className="panel-label">{exercise?.description}</h2>
-              <button
-                className="btn mb-4"
-                data-bs-toggle="modal"
-                data-bs-target="#descriptionModal"
-              >
-                Read Description
-              </button>
+
+              <div className="description">
+                <p className="m-0">{exercise?.code}</p>
+              </div>
               <CodeEditor
                 code={state.js}
                 answers={exercise?.answers}
@@ -307,7 +305,7 @@ const ExerciseDetails = () => {
                 >
                   {loading ? "Loading..." : "Run Code"}
                   {remainingTime > 0 && (
-                    <p>*{remainingTime} seconds remaining for next run</p>
+                    <p>*{remainingTime} seconds until next run.</p>
                   )}
                 </button>
                 <button className="btn" onClick={handleNextClick}>
@@ -325,7 +323,10 @@ const ExerciseDetails = () => {
             </div>
           ) : (
             <React.Fragment>
-              <h2 className="panel-label">{exercise?.description}</h2>
+              <h2 className="panel-label mt-3">{exercise?.description}</h2>
+              <div className="description mx-auto">
+                <p className="m-0">{exercise?.code}</p>
+              </div>
               <div className="d-flex my-4 gap-4 justify-content-center">
                 <button className="btn" disabled={!Number(exerciseNum)}>
                   <Link to={`/${language}/${topic}/${+exerciseNum - 1}`}>
@@ -390,18 +391,26 @@ const ExerciseDetails = () => {
           )}
         </div>
       ) : (
-        <p>Loading...</p>
+        <div className="text-center spinner">
+          <div
+            className="spinner-border"
+            role="status"
+            style={{ width: "60px", height: "60px", color: "#e9c46a" }}
+          >
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
       )}
       {language !== "javascript" && (
         <div className="preview-container">
           <PreviewPane html={state.previewHtml} css={state.previewCss} />
         </div>
       )}
-      <DescriptionModal
+
+      <FeedbackModal
+        submittedAnswer={submittedAnswer}
         title={exercise?.description}
-        description={exercise?.code}
       />
-      <FeedbackModal submittedAnswer={submittedAnswer} />
     </div>
   );
 };

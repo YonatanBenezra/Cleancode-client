@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-const FeedbackModal = ({ submittedAnswer }) => {
+const FeedbackModal = ({ submittedAnswer, title }) => {
   const { isCorrect, score, hints, badPractices, bestPractices, tips } =
     submittedAnswer;
 
@@ -9,7 +9,9 @@ const FeedbackModal = ({ submittedAnswer }) => {
       <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">Modal title</h5>
+            <h5 className="modal-title" style={{ textTransform: "capitalize" }}>
+              {title}
+            </h5>
             <button
               type="button"
               className="btn-close"
@@ -48,11 +50,6 @@ const FeedbackModal = ({ submittedAnswer }) => {
               </p>
             )}
           </div>
-          <div className="modal-footer">
-            <button type="button" className="modal-btn">
-              Next Exercise
-            </button>
-          </div>
         </div>
       </div>
     </div>
@@ -60,6 +57,7 @@ const FeedbackModal = ({ submittedAnswer }) => {
 };
 
 FeedbackModal.propTypes = {
+  title: PropTypes.string,
   submittedAnswer: PropTypes.shape({
     isCorrect: PropTypes.bool,
     score: PropTypes.number,
