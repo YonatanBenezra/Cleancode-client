@@ -8,62 +8,30 @@ import React, {
 } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
-import Modal from "react-modal";
-
+import PropTypes from "prop-types";
 import GlobalContext from "../../../contexts/Global-Context";
 import CodeEditor from "../../../components/codeEditor/CodeEditor";
 import PreviewPane from "../../../components/previewPane/PreviewPane";
 import "./exercise-details.scss";
-import DescriptionModal from "../../../components/modals/DescriptionModal";
 import FeedbackModal from "../../../components/modals/FeedbackModal";
-
-const useModal = () => {
-  const [modalIsOpen, setIsOpen] = useState(false);
-
-  const openModal = () => setIsOpen(true);
-  const closeModal = () => setIsOpen(false);
-
-  return { modalIsOpen, openModal, closeModal };
-};
 
 const ExerciseDetails = () => {
   const { language, topic, exerciseNum } = useParams();
   const { exercises, setUser, user } = useContext(GlobalContext);
   const [remainingTime, setRemainingTime] = useState(0);
 
-  const {
-    modalIsOpen: modalIsOpen1,
-    openModal: openModal1,
-    closeModal: closeModal1,
-  } = useModal();
-  const {
-    modalIsOpen: modalIsOpen2,
-    openModal: openModal2,
-    closeModal: closeModal2,
-  } = useModal();
-
   const [showImage, setShowImage] = useState(false);
   const [loading, setLoading] = useState(false);
   const [submittedAnswer, setSubmittedAnswer] = useState({});
   const containerRef = useRef(null);
   const resizerRef = useRef(null);
+  const MIN_EDITOR_WIDTH = -90;
 
   const [state, setState] = useReducer(
     (prevState, newState) => ({ ...prevState, ...newState }),
     { html: "", css: "", js: "", previewHtml: "", previewCss: "" }
   );
 
-  const customStyles = {
-    content: {
-      top: "50%",
-      left: "50%",
-      right: "auto",
-      bottom: "auto",
-      marginRight: "-50%",
-      transform: "translate(-50%, -50%)",
-      width: "30%",
-    },
-  };
   // Custom hook
   const useExercise = (exercises, topic, exerciseNum) => {
     let topicExercises = [];
@@ -80,10 +48,8 @@ const ExerciseDetails = () => {
     return exercise;
   };
   const exercise = useExercise(exercises, topic, exerciseNum);
-  // Custom hook
-  const MIN_EDITOR_WIDTH = -90;
-
-  const useResizer = (containerRef, resizerRef) => {
+  // Editor resizer
+  const useResizer = (containerRef) => {
     const [isResizing, setIsResizing] = useState(false);
     const [leftEditorWidth, setLeftEditorWidth] = useState("50%");
     const [rightEditorWidth, setRightEditorWidth] = useState("50%");
@@ -98,13 +64,8 @@ const ExerciseDetails = () => {
         const newWidthLeft = e.clientX - containerRect.left - 135;
         const newWidthRight = containerRect.right - e.clientX - 135;
 
-        // This will prevent editors from becoming too narrow
-        if (
-          newWidthLeft < MIN_EDITOR_WIDTH ||
-          newWidthRight < MIN_EDITOR_WIDTH
-        ) {
+        if (newWidthLeft < MIN_EDITOR_WIDTH || newWidthRight < MIN_EDITOR_WIDTH)
           return;
-        }
 
         setLeftEditorWidth(`${newWidthLeft}px`);
         setRightEditorWidth(`${newWidthRight}px`);
@@ -125,10 +86,8 @@ const ExerciseDetails = () => {
     return { handleMouseDown, leftEditorWidth, rightEditorWidth };
   };
 
-  const { handleMouseDown, leftEditorWidth, rightEditorWidth } = useResizer(
-    containerRef,
-    resizerRef
-  );
+  const { handleMouseDown, leftEditorWidth, rightEditorWidth } =
+    useResizer(containerRef);
   // Helper function to parse input
   const parseInput = (input) => {
     const lines = input.split("\n");
@@ -263,17 +222,7 @@ const ExerciseDetails = () => {
       setLoading(false);
     }
   };
-  const exercisesLength = exercises.filter(
-    (exercise) =>
-      exercise.topic.language.name === language && exercise.topic.name === topic
-  ).length;
 
-  const handleNextClick = () => {
-    if (exercisesLength <= Number(exerciseNum) + 1)
-      alert(
-        `You have mastered ${topic}, please select another topic to continue`
-      );
-  };
   // Render JSX
   return (
     <div className="exercise-details-container">
@@ -281,10 +230,10 @@ const ExerciseDetails = () => {
         <div className="editors-container" ref={containerRef}>
           {language === "javascript" ? (
             <div className="editor js-editor">
-              <h2 className="panel-label">{exercise?.description}</h2>
+              <h2 className="panel-label">{exercise?.name}</h2>
 
               <div className="description">
-                <p className="m-0">{exercise?.code}</p>
+                <p className="m-0">{exercise?.description}</p>
               </div>
               <CodeEditor
                 code={state.js}
@@ -292,101 +241,69 @@ const ExerciseDetails = () => {
                 selectedLanguage="javascript"
                 onChange={(newValue) => setState({ js: newValue })}
               />
-              <div className="d-flex my-4 gap-4">
-                <button className="btn" disabled={!Number(exerciseNum)}>
-                  <Link to={`/${language}/${topic}/${+exerciseNum - 1}`}>
-                    <i className="fa-solid fa-backward"></i>
-                  </Link>
-                </button>
-                <button
-                  onClick={handleSubmitValue}
-                  disabled={loading || remainingTime > 0}
-                  className="btn"
-                >
-                  {loading ? "Loading..." : "Run Code"}
-                  {remainingTime > 0 && (
-                    <p>*{remainingTime} seconds until next run.</p>
-                  )}
-                </button>
-                <button className="btn" onClick={handleNextClick}>
-                  <Link
-                    to={
-                      exercisesLength <= Number(exerciseNum) + 1
-                        ? `/${language}`
-                        : `/${language}/${topic}/${+exerciseNum + 1}`
-                    }
-                  >
-                    <i className="fa-solid fa-forward"></i>
-                  </Link>
-                </button>
-              </div>
+              <Buttons
+                handleSubmitValue={handleSubmitValue}
+                loading={loading}
+                remainingTime={remainingTime}
+                text="Run Code"
+              />
             </div>
           ) : (
             <React.Fragment>
-              <h2 className="panel-label mt-3">{exercise?.description}</h2>
+              <h2 className="panel-label mt-3">{exercise?.name}</h2>
               <div className="description mx-auto">
-                <p className="m-0">{exercise?.code}</p>
+                <p className="m-0">{exercise?.description}</p>
               </div>
-              <div className="d-flex my-4 gap-4 justify-content-center">
-                <button className="btn" disabled={!Number(exerciseNum)}>
-                  <Link to={`/${language}/${topic}/${+exerciseNum - 1}`}>
-                    <i className="fa-solid fa-backward"></i>
-                  </Link>
-                </button>
+              <Buttons
+                handleSubmitValue={handleSubmitValue}
+                loading={loading}
+                remainingTime={remainingTime}
+                text="Show Feedback"
+              />
+              <div className="text-center">
                 <button
-                  onClick={handleSubmitValue}
-                  disabled={loading || remainingTime > 0}
                   className="btn"
+                  onClick={() => setShowImage((prev) => !prev)}
                 >
-                  {loading ? "Loading..." : "Show feedback"}
-                  {remainingTime > 0 && (
-                    <p>*{remainingTime} seconds remaining for next run</p>
-                  )}
+                  Show Demo Image
                 </button>
-                <button className="btn" onClick={handleNextClick}>
-                  <Link
-                    to={
-                      exercisesLength <= Number(exerciseNum) + 1
-                        ? `/${language}`
-                        : `/${language}/${topic}/${+exerciseNum + 1}`
-                    }
+              </div>
+              {showImage ? (
+                <img src={exercise.imageUrl} className="demo-img" />
+              ) : (
+                <div className="html-css-editors-container">
+                  <div
+                    className="editor html-css-editor"
+                    style={{ width: `${leftEditorWidth}` }}
                   >
-                    <i className="fa-solid fa-forward"></i>
-                  </Link>
-                </button>
-              </div>
-              <div className="html-css-editors-container">
-                <div
-                  className="editor html-css-editor"
-                  style={{ width: `${leftEditorWidth}` }}
-                >
-                  <h2 className="panel-label">HTML</h2>
+                    <h2 className="panel-label">HTML</h2>
 
-                  <CodeEditor
-                    selectedLanguage="html"
-                    code={state.html}
-                    answers={exercise?.answers}
-                    onChange={(newValue) => setState({ html: newValue })}
-                  />
+                    <CodeEditor
+                      selectedLanguage="html"
+                      code={state.html}
+                      answers={exercise?.answers}
+                      onChange={(newValue) => setState({ html: newValue })}
+                    />
+                  </div>
+                  <div
+                    className="resizer"
+                    ref={resizerRef}
+                    onMouseDown={handleMouseDown}
+                  ></div>
+                  <div
+                    className="editor html-css-editor"
+                    style={{ width: `${rightEditorWidth}` }}
+                  >
+                    <h2 className="panel-label">CSS</h2>
+                    <CodeEditor
+                      selectedLanguage="css"
+                      code={state.css}
+                      answers={exercise?.answers}
+                      onChange={(newValue) => setState({ css: newValue })}
+                    />
+                  </div>
                 </div>
-                <div
-                  className="resizer"
-                  ref={resizerRef}
-                  onMouseDown={handleMouseDown}
-                ></div>
-                <div
-                  className="editor html-css-editor"
-                  style={{ width: `${rightEditorWidth}` }}
-                >
-                  <h2 className="panel-label">CSS</h2>
-                  <CodeEditor
-                    selectedLanguage="css"
-                    code={state.css}
-                    answers={exercise?.answers}
-                    onChange={(newValue) => setState({ css: newValue })}
-                  />
-                </div>
-              </div>
+              )}
             </React.Fragment>
           )}
         </div>
@@ -407,12 +324,59 @@ const ExerciseDetails = () => {
         </div>
       )}
 
-      <FeedbackModal
-        submittedAnswer={submittedAnswer}
-        title={exercise?.description}
-      />
+      <FeedbackModal submittedAnswer={submittedAnswer} title={exercise?.name} />
+    </div>
+  );
+};
+const Buttons = ({ text, handleSubmitValue, loading, remainingTime }) => {
+  const { language, topic, exerciseNum } = useParams();
+  const { exercises } = useContext(GlobalContext);
+
+  const exercisesLength = exercises.filter(
+    (exercise) =>
+      exercise.topic.language.name === language && exercise.topic.name === topic
+  ).length;
+
+  const handleNextClick = () => {
+    if (exercisesLength <= Number(exerciseNum) + 1)
+      alert(
+        `You have mastered ${topic}, please select another topic to continue`
+      );
+  };
+  return (
+    <div className="d-flex my-4 gap-4 justify-content-center">
+      <button className="btn" disabled={!Number(exerciseNum)}>
+        <Link to={`/${language}/${topic}/${+exerciseNum - 1}`}>
+          <i className="fa-solid fa-backward"></i>
+        </Link>
+      </button>
+      <button
+        onClick={handleSubmitValue}
+        disabled={loading || remainingTime > 0}
+        className="btn"
+      >
+        {loading ? "Loading..." : text}
+        {remainingTime > 0 && <p>*{remainingTime} seconds until next run.</p>}
+      </button>
+      <button className="btn" onClick={handleNextClick}>
+        <Link
+          to={
+            exercisesLength <= Number(exerciseNum) + 1
+              ? `/${language}`
+              : `/${language}/${topic}/${+exerciseNum + 1}`
+          }
+        >
+          <i className="fa-solid fa-forward"></i>
+        </Link>
+      </button>
     </div>
   );
 };
 
+Buttons.propTypes = {
+  text: PropTypes.string,
+  handleSubmitValue: PropTypes.func,
+  loading: PropTypes.bool,
+  remainingTime: PropTypes.number,
+};
 export default ExerciseDetails;

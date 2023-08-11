@@ -30,7 +30,7 @@ const TopicExercises = () => {
             }`}
             key={exercise.path}
           >
-            {index + 1}.<span>{exercise.name}</span>
+            {index + 1}.
           </NavLink>
           <span
             className={
@@ -39,7 +39,7 @@ const TopicExercises = () => {
                 : "topic-description-mobile"
             }
           >
-            {exercise.description}
+            {exercise.name}
           </span>
           {index !== topicExercises.length - 1 && (
             <div className="topic-line"></div>

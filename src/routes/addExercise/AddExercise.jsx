@@ -127,6 +127,20 @@ const AddExercise = () => {
                   </div>
                 )}
                 <div className="add-exercise-form-group">
+                  <label className="add-exercise-label">Name</label>
+                  <textarea
+                    className="add-exercise-input"
+                    {...register("name", { required: true })}
+                  />
+                  <span className="add-exercise-input-bottom-border"></span>
+                </div>
+                {errors.name && (
+                  <div className="add-exercise-error">
+                    This field is required
+                  </div>
+                )}
+
+                <div className="add-exercise-form-group">
                   <label className="add-exercise-label">Description</label>
                   <textarea
                     className="add-exercise-input"
@@ -139,34 +153,6 @@ const AddExercise = () => {
                     This field is required
                   </div>
                 )}
-
-                <div className="add-exercise-form-group">
-                  <label className="add-exercise-label">Code</label>
-                  <textarea
-                    className="add-exercise-input"
-                    {...register("code", { required: true })}
-                  />
-                  <span className="add-exercise-input-bottom-border"></span>
-                </div>
-                {errors.code && (
-                  <div className="add-exercise-error">
-                    This field is required
-                  </div>
-                )}
-
-                {/* <div className="add-exercise-form-group">
-                  <label className="add-exercise-label">Answer</label>
-                  <textarea
-                    className="add-exercise-input"
-                    {...register("answer", { required: true })}
-                  />
-                  <span className="add-exercise-input-bottom-border"></span>
-                </div>
-                {errors.answer && (
-                  <div className="add-exercise-error">
-                    This field is required
-                  </div>
-                )} */}
 
                 <div className="add-exercise-form-group">
                   <label className="add-exercise-label">Difficulty</label>
@@ -202,7 +188,7 @@ const AddExercise = () => {
                   {step > 1 && (
                     <button
                       type="button"
-                      className="add-exercise-button"
+                      className="btn me-3"
                       onClick={() => handleBack()}
                     >
                       Back
@@ -210,7 +196,7 @@ const AddExercise = () => {
                   )}
                   <button
                     type={step === 2 ? "submit" : "button"}
-                    className="add-exercise-button"
+                    className="btn"
                     onClick={() => step === 1 && handleNext()}
                   >
                     {step === 2 ? "Submit" : "Next"}
