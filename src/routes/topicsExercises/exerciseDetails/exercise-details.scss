@@ -91,3 +91,12 @@
   justify-content: center;
   align-items: center;
 }
+.demo-img {
+  width: 80%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 5px;
+  margin: 25px auto;
+  display: block;
+  border: 2px solid var(--third-color);
+}
