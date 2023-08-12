@@ -16,6 +16,9 @@ html {
   --success-color: #198754;
   --error-color: #dc4c64;
   --sidebar-color: #fff;
+  --modal-background-color: #e9c46a;
+  --modal-span-color: #264653;
+
 }
 
 [data-theme="dark"] {
@@ -34,7 +37,10 @@ html {
   --success-color: #198754;
   --error-color: #dc4c64;
   --editor-color: #ffffff;
-  --sidebar-color: #264653
+  --sidebar-color: #264653;
+  --modal-background-color: #264653;
+  --modal-span-color: #e9c46a;
+
 }
 
 * {
