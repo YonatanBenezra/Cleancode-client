@@ -8,60 +8,30 @@ import React, {
 } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
-import Modal from "react-modal";
-
+import PropTypes from "prop-types";
 import GlobalContext from "../../../contexts/Global-Context";
 import CodeEditor from "../../../components/codeEditor/CodeEditor";
 import PreviewPane from "../../../components/previewPane/PreviewPane";
 import "./exercise-details.scss";
-
-const useModal = () => {
-  const [modalIsOpen, setIsOpen] = useState(false);
-
-  const openModal = () => setIsOpen(true);
-  const closeModal = () => setIsOpen(false);
-
-  return { modalIsOpen, openModal, closeModal };
-};
+import FeedbackModal from "../../../components/modals/FeedbackModal";
 
 const ExerciseDetails = () => {
   const { language, topic, exerciseNum } = useParams();
   const { exercises, setUser, user } = useContext(GlobalContext);
   const [remainingTime, setRemainingTime] = useState(0);
 
-  const {
-    modalIsOpen: modalIsOpen1,
-    openModal: openModal1,
-    closeModal: closeModal1,
-  } = useModal();
-  const {
-    modalIsOpen: modalIsOpen2,
-    openModal: openModal2,
-    closeModal: closeModal2,
-  } = useModal();
-
   const [showImage, setShowImage] = useState(false);
   const [loading, setLoading] = useState(false);
   const [submittedAnswer, setSubmittedAnswer] = useState({});
   const containerRef = useRef(null);
   const resizerRef = useRef(null);
+  const MIN_EDITOR_WIDTH = -90;
 
   const [state, setState] = useReducer(
     (prevState, newState) => ({ ...prevState, ...newState }),
     { html: "", css: "", js: "", previewHtml: "", previewCss: "" }
   );
 
-  const customStyles = {
-    content: {
-      top: "50%",
-      left: "50%",
-      right: "auto",
-      bottom: "auto",
-      marginRight: "-50%",
-      transform: "translate(-50%, -50%)",
-      width: "30%",
-    },
-  };
   // Custom hook
   const useExercise = (exercises, topic, exerciseNum) => {
     let topicExercises = [];
@@ -75,20 +45,11 @@ const ExerciseDetails = () => {
       exercise = topicExercises[exerciseNum];
     }
 
-    let parsedCode = exercise?.code
-      ? exercise.code
-          .split("-")
-          .map((code) => code + "\n")
-          .join("")
-      : null;
-
-    return { exercise, parsedCode };
+    return exercise;
   };
-  const { exercise, parsedCode } = useExercise(exercises, topic, exerciseNum);
-  // Custom hook
-  const MIN_EDITOR_WIDTH = -90;
-
-  const useResizer = (containerRef, resizerRef) => {
+  const exercise = useExercise(exercises, topic, exerciseNum);
+  // Editor resizer
+  const useResizer = (containerRef) => {
     const [isResizing, setIsResizing] = useState(false);
     const [leftEditorWidth, setLeftEditorWidth] = useState("50%");
     const [rightEditorWidth, setRightEditorWidth] = useState("50%");
@@ -103,13 +64,8 @@ const ExerciseDetails = () => {
         const newWidthLeft = e.clientX - containerRect.left - 135;
         const newWidthRight = containerRect.right - e.clientX - 135;
 
-        // This will prevent editors from becoming too narrow
-        if (
-          newWidthLeft < MIN_EDITOR_WIDTH ||
-          newWidthRight < MIN_EDITOR_WIDTH
-        ) {
+        if (newWidthLeft < MIN_EDITOR_WIDTH || newWidthRight < MIN_EDITOR_WIDTH)
           return;
-        }
 
         setLeftEditorWidth(`${newWidthLeft}px`);
         setRightEditorWidth(`${newWidthRight}px`);
@@ -130,10 +86,8 @@ const ExerciseDetails = () => {
     return { handleMouseDown, leftEditorWidth, rightEditorWidth };
   };
 
-  const { handleMouseDown, leftEditorWidth, rightEditorWidth } = useResizer(
-    containerRef,
-    resizerRef
-  );
+  const { handleMouseDown, leftEditorWidth, rightEditorWidth } =
+    useResizer(containerRef);
   // Helper function to parse input
   const parseInput = (input) => {
     const lines = input.split("\n");
@@ -184,6 +138,10 @@ const ExerciseDetails = () => {
         return prevTime - 1;
       });
     }, 1000);
+    const modal = new window.bootstrap.Modal(
+      document.getElementById("feedbackModal"),
+      {}
+    );
     let content = `Ensure you adopt the following structure to assess and provide feedback on the user's response:
       {
         isCorrect: Boolean,
@@ -200,7 +158,7 @@ const ExerciseDetails = () => {
         parseInput(state.js).code
       }.`;
     } else {
-      content += `\nQuestion: ${parsedCode}.\nHTML: ${state.html}\nCSS: ${state.css}\n`;
+      content += `\nQuestion: ${state.js}.\nHTML: ${state.html}\nCSS: ${state.css}\n`;
     }
 
     if (
@@ -210,7 +168,8 @@ const ExerciseDetails = () => {
         state.css.trim()
       )
     ) {
-      return setSubmittedAnswer({ isCorrect: false, score: 0 });
+      setSubmittedAnswer({ isCorrect: false, score: 0 });
+      return modal.show();
     }
 
     setLoading(true);
@@ -255,173 +214,70 @@ const ExerciseDetails = () => {
       }
 
       setSubmittedAnswer(result);
-      if (!(language === "javascript")) openModal2();
+
+      modal.show();
     } catch (error) {
       alert("Please try after 30 seconds");
     } finally {
       setLoading(false);
     }
   };
-  const exercisesLength = exercises.filter(
-    (exercise) =>
-      exercise.topic.language.name === language && exercise.topic.name === topic
-  ).length;
 
-  const handleNextClick = () => {
-    if (exercisesLength <= Number(exerciseNum) + 1)
-      alert(
-        `You have mastered ${topic}, please select another topic to continue`
-      );
-  };
   // Render JSX
   return (
     <div className="exercise-details-container">
-      {exercise === null ? (
-        "loading"
-      ) : language === "javascript" ? (
-        <React.Fragment>
-          <span className="exercise-description">{exercise?.description}</span>
-          <p>{exercise?.question}</p>
-          {parsedCode && (
-            <div className="d-flex justify-content-center">
+      {exercise ? (
+        <div className="editors-container" ref={containerRef}>
+          {language === "javascript" ? (
+            <div className="editor js-editor">
+              <h2 className="panel-label">{exercise?.name}</h2>
+
+              <div className="description">
+                <p className="m-0">{exercise?.description}</p>
+              </div>
               <CodeEditor
-                height={window.innerWidth > 768 ? "50vh" : "70vh"}
-                code={parsedCode}
+                code={state.js}
                 answers={exercise?.answers}
-                selectedLanguage={language}
+                selectedLanguage="javascript"
                 onChange={(newValue) => setState({ js: newValue })}
               />
+              <Buttons
+                handleSubmitValue={handleSubmitValue}
+                loading={loading}
+                remainingTime={remainingTime}
+                text="Run Code"
+              />
             </div>
-          )}
-          <div
-            className={`output-window mx-auto ${
-              submittedAnswer.isCorrect !== undefined
-                ? submittedAnswer.isCorrect
-                  ? "success"
-                  : "error"
-                : ""
-            }`}
-          >
-            <div className="btn-msg-container">
-              <button
-                onClick={handleSubmitValue}
-                disabled={loading || remainingTime > 0}
-                className="btn"
-                style={{ marginTop: "15px" }}
-              >
-                {loading ? "Loading..." : "Run"}
-              </button>
-              {remainingTime > 0 && (
-                <p>*{remainingTime} seconds remaining for next run</p>
-              )}
-              {submittedAnswer.isCorrect !== undefined && (
-                <span className="output-message">
-                  {submittedAnswer.isCorrect
-                    ? "Amazing, great job"
-                    : submittedAnswer.feedback}
-                </span>
-              )}
-            </div>
-            <h3>Output / Console</h3>
-            <hr className="horizontal-line" />
-            <div className="output-window__content">
-              {submittedAnswer && submittedAnswer.isCorrect !== undefined && (
-                <div>
-                  <p>
-                    Your answer was{" "}
-                    <code>
-                      {submittedAnswer.isCorrect ? "Correct" : "Wrong"}
-                    </code>
-                    . Its score is: {submittedAnswer.score}
-                  </p>
-                  {submittedAnswer.hints && (
-                    <p>Hints: {submittedAnswer.hints}</p>
-                  )}
-                  {submittedAnswer.badPractices && (
-                    <p>Bad Practices: {submittedAnswer.badPractices}</p>
-                  )}
-                  {submittedAnswer.bestPractices && (
-                    <p>Best Practices: {submittedAnswer.bestPractices}</p>
-                  )}
-                  {submittedAnswer.tips && <p>Tips: {submittedAnswer.tips}</p>}
-                </div>
-              )}
-            </div>
-            <a href={`/javascript/${topic}/${Number() + 1}`}>Next Exercise</a>
-          </div>
-        </React.Fragment>
-      ) : (
-        <div
-          className="html-css-editor-container editor-container"
-          ref={containerRef}
-        >
-          <div className="html-css-editor">
-            <div style={{ textAlign: "center" }}>
-              <h3>{exercise?.description}</h3>
-              <p>
-                {parsedCode?.slice(0, 60)}...
-                <button className="btn see-more" onClick={openModal1}>
-                  See More
-                </button>
-              </p>
-              <button
-                onClick={() => setShowImage((prev) => !prev)}
-                className="btn next-link"
-              >
-                {showImage ? "Show Code" : "Show Image"}
-              </button>
-
-              <button
-                onClick={handleSubmitValue}
-                disabled={loading || remainingTime > 0}
-                className="btn"
-                style={{ marginLeft: "20px" }}
-              >
-                {loading ? "Loading..." : "Run"}
-              </button>
-              {!!Number(exerciseNum) && (
-                <Link
-                  className="btn"
-                  style={{ marginLeft: "20px" }}
-                  to={`/${language}/${topic}/${+exerciseNum - 1}`}
-                >
-                  Prev
-                </Link>
-              )}
-              {
-                <Link
-                  className="btn"
-                  style={{ marginLeft: "20px" }}
-                  to={
-                    exercisesLength <= Number(exerciseNum) + 1
-                      ? `/${language}`
-                      : `/${language}/${topic}/${+exerciseNum + 1}`
-                  }
-                  onClick={handleNextClick}
-                >
-                  Next
-                </Link>
-              }
-              {remainingTime > 0 && (
-                <p>*{remainingTime} seconds remaining for next run</p>
-              )}
-            </div>
-            {showImage ? (
-              <div className="app-container" style={{ textAlign: "center" }}>
-                <img
-                  src={exercise.imageUrl}
-                  alt="code"
-                  style={{ margin: "20px", width: "80%", borderRadius: "5px" }}
-                />
+          ) : (
+            <React.Fragment>
+              <h2 className="panel-label mt-3">{exercise?.name}</h2>
+              <div className="description mx-auto">
+                <p className="m-0">{exercise?.description}</p>
               </div>
-            ) : (
-              <React.Fragment>
-                <div className="editors-container" ref={containerRef}>
+              <Buttons
+                handleSubmitValue={handleSubmitValue}
+                loading={loading}
+                remainingTime={remainingTime}
+                text="Show Feedback"
+              />
+              <div className="text-center">
+                <button
+                  className="btn"
+                  onClick={() => setShowImage((prev) => !prev)}
+                >
+                  Show Demo Image
+                </button>
+              </div>
+              {showImage ? (
+                <img src={exercise.imageUrl} className="demo-img" />
+              ) : (
+                <div className="html-css-editors-container">
                   <div
-                    className="editor"
+                    className="editor html-css-editor"
                     style={{ width: `${leftEditorWidth}` }}
                   >
                     <h2 className="panel-label">HTML</h2>
+
                     <CodeEditor
                       selectedLanguage="html"
                       code={state.html}
@@ -435,7 +291,7 @@ const ExerciseDetails = () => {
                     onMouseDown={handleMouseDown}
                   ></div>
                   <div
-                    className="editor"
+                    className="editor html-css-editor"
                     style={{ width: `${rightEditorWidth}` }}
                   >
                     <h2 className="panel-label">CSS</h2>
@@ -447,52 +303,80 @@ const ExerciseDetails = () => {
                     />
                   </div>
                 </div>
-              </React.Fragment>
-            )}
-          </div>
-          <div className="preview-container">
-            <PreviewPane html={state.previewHtml} css={state.previewCss} />
+              )}
+            </React.Fragment>
+          )}
+        </div>
+      ) : (
+        <div className="text-center spinner">
+          <div
+            className="spinner-border"
+            role="status"
+            style={{ width: "60px", height: "60px", color: "#e9c46a" }}
+          >
+            <span className="visually-hidden">Loading...</span>
           </div>
         </div>
       )}
-
-      {/* Render Modal for JavaScript */}
-      <Modal
-        isOpen={modalIsOpen1}
-        onRequestClose={closeModal1}
-        style={customStyles}
-        contentLabel="Example Modal"
-      >
-        <button onClick={closeModal1}>close</button>
-        <h4 className="modal-content">{parsedCode}</h4>
-      </Modal>
-
-      {/* Render Modal for HTML/CSS */}
-      <Modal
-        isOpen={modalIsOpen2}
-        onRequestClose={closeModal2}
-        style={customStyles}
-        contentLabel="Example Modal"
-      >
-        <button onClick={closeModal2}>close</button>
-        <div className="modal-content">
-          <p>
-            Your answer was{" "}
-            <code>{submittedAnswer.isCorrect ? "Correct" : "Wrong"}</code>. Its
-            score is: {submittedAnswer.score}
-          </p>
-          {submittedAnswer.hints && <p>Hints: {submittedAnswer.hints}</p>}
-          {submittedAnswer.badPractices && (
-            <p>Bad Practices: {submittedAnswer.badPractices}</p>
-          )}
-          {submittedAnswer.bestPractices && (
-            <p>Best Practices: {submittedAnswer.bestPractices}</p>
-          )}
-          {submittedAnswer.tips && <p>Tips: {submittedAnswer.tips}</p>}
+      {language !== "javascript" && (
+        <div className="preview-container">
+          <PreviewPane html={state.previewHtml} css={state.previewCss} />
         </div>
-      </Modal>
+      )}
+
+      <FeedbackModal submittedAnswer={submittedAnswer} title={exercise?.name} />
+    </div>
+  );
+};
+const Buttons = ({ text, handleSubmitValue, loading, remainingTime }) => {
+  const { language, topic, exerciseNum } = useParams();
+  const { exercises } = useContext(GlobalContext);
+
+  const exercisesLength = exercises.filter(
+    (exercise) =>
+      exercise.topic.language.name === language && exercise.topic.name === topic
+  ).length;
+
+  const handleNextClick = () => {
+    if (exercisesLength <= Number(exerciseNum) + 1)
+      alert(
+        `You have mastered ${topic}, please select another topic to continue`
+      );
+  };
+  return (
+    <div className="d-flex my-4 gap-4 justify-content-center">
+      <button className="btn" disabled={!Number(exerciseNum)}>
+        <Link to={`/${language}/${topic}/${+exerciseNum - 1}`}>
+          <i className="fa-solid fa-backward"></i>
+        </Link>
+      </button>
+      <button
+        onClick={handleSubmitValue}
+        disabled={loading || remainingTime > 0}
+        className="btn"
+      >
+        {loading ? "Loading..." : text}
+        {remainingTime > 0 && <p>*{remainingTime} seconds until next run.</p>}
+      </button>
+      <button className="btn" onClick={handleNextClick}>
+        <Link
+          to={
+            exercisesLength <= Number(exerciseNum) + 1
+              ? `/${language}`
+              : `/${language}/${topic}/${+exerciseNum + 1}`
+          }
+        >
+          <i className="fa-solid fa-forward"></i>
+        </Link>
+      </button>
     </div>
   );
 };
 
+Buttons.propTypes = {
+  text: PropTypes.string,
+  handleSubmitValue: PropTypes.func,
+  loading: PropTypes.bool,
+  remainingTime: PropTypes.number,
+};
 export default ExerciseDetails;
