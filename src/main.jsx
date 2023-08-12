@@ -20,6 +20,7 @@ import BlogDetails from "./routes/blogDetails.jsx/BlogDetails";
 import Login from "./routes/login/Login";
 import Registration from "./routes/registration/Registration";
 import Profile from "./routes/profile/Profile";
+import Dashboard from "./routes/dashboard/Dashboard";
 
 Modal.setAppElement(document.getElementById("root"));
 
@@ -34,6 +35,7 @@ createRoot(document.getElementById("root")).render(
           <Routes>
             <Route path="/" element={<App />}>
               <Route index element={<Home />} />
+              <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/login" element={<Login />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/registration" element={<Registration />} />

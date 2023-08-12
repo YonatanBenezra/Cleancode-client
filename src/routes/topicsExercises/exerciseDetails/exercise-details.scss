@@ -100,3 +100,14 @@
   display: block;
   border: 2px solid var(--third-color);
 }
+.html-css-editor {
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  opacity: 1;
+}
+
+.html-css-editor.minimized {
+  max-height: 0;
+  opacity: 0;
+  padding: 0;
+  overflow-x: hidden;
+}

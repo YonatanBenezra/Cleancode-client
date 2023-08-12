@@ -18,6 +18,8 @@ import BlackUser from "../../assets/darkUser.png";
 import WhiteUser from "../../assets/whiteUser.png";
 import BlackLogout from "../../assets/darkLogout.png";
 import WhiteLogout from "../../assets/whiteLogout.png";
+import BlackDashboard from "../../assets/darkDashboard.png";
+import WhiteDashboard from "../../assets/lightDashboard.png";
 import menuBurger from "../../assets/list-symbol-of-three-items-with-dots.png";
 
 // Context
@@ -38,6 +40,7 @@ const icons = {
   Login: { dark: WhiteLogin, light: BlackLogin },
   Logout: { dark: WhiteLogout, light: BlackLogout },
   Profile: { dark: WhiteUser, light: BlackUser },
+  Dashboard: { dark: WhiteDashboard, light: BlackDashboard },
 };
 
 const SideBar = () => {
@@ -52,6 +55,9 @@ const SideBar = () => {
     { name: "JS", path: "/javascript" },
     { name: "Add", path: "/add-exercise" },
   ];
+  if (user.role === "admin") {
+    navLinks.unshift({ name: "Dashboard", path: "/dashboard" });
+  }
   if (user._id) {
     navLinks.push(
       { name: "Profile", path: "/profile" },
