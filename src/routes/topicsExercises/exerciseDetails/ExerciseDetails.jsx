@@ -51,18 +51,21 @@ const ExerciseDetails = () => {
   // Editor resizer
   const useResizer = (containerRef) => {
     const [isResizing, setIsResizing] = useState(false);
-    const [leftEditorWidth, setLeftEditorWidth] = useState("50%");
-    const [rightEditorWidth, setRightEditorWidth] = useState("50%");
+    const [leftEditorWidth, setLeftEditorWidth] = useState("0");
+    const [rightEditorWidth, setRightEditorWidth] = useState("0");
+
+    const RESIZE_OFFSET = 135; // or any other appropriate name and value
 
     const handleMouseDown = () => setIsResizing(true);
+
     const handleMouseUp = useCallback(() => setIsResizing(false), []);
 
     const handleMouseMove = useCallback(
       (e) => {
         if (!isResizing) return;
         const containerRect = containerRef.current.getBoundingClientRect();
-        const newWidthLeft = e.clientX - containerRect.left - 135;
-        const newWidthRight = containerRect.right - e.clientX - 135;
+        const newWidthLeft = e.clientX - containerRect.left - RESIZE_OFFSET;
+        const newWidthRight = containerRect.right - e.clientX - RESIZE_OFFSET;
 
         if (newWidthLeft < MIN_EDITOR_WIDTH || newWidthRight < MIN_EDITOR_WIDTH)
           return;
@@ -222,10 +225,38 @@ const ExerciseDetails = () => {
       setLoading(false);
     }
   };
-
+  const [collapsedHtmlEditor, setCollapsedHtmlEditor] = useState(false);
+  const [collapsedCssEditor, setCollapsedCssEditor] = useState(false);
   // Render JSX
   return (
     <div className="exercise-details-container">
+      <button
+        className="minimize-button"
+        onClick={() => {
+          if (!collapsedHtmlEditor) {
+            setCollapsedHtmlEditor(true);
+            setCollapsedCssEditor(false);
+          } else {
+            setCollapsedHtmlEditor(!collapsedHtmlEditor);
+          }
+        }}
+      >
+        {collapsedHtmlEditor ? "Maximize" : "Minimize"}
+      </button>
+      <button
+        className="minimize-button"
+        onClick={() => {
+          if (!collapsedCssEditor) {
+            setCollapsedCssEditor(true);
+            setCollapsedHtmlEditor(false);
+          } else {
+            setCollapsedCssEditor(!collapsedCssEditor);
+          }
+        }}
+      >
+        {collapsedCssEditor ? "Maximize" : "Minimize"}
+      </button>
+
       {exercise ? (
         <div className="editors-container" ref={containerRef}>
           {language === "javascript" ? (
@@ -260,7 +291,7 @@ const ExerciseDetails = () => {
                 remainingTime={remainingTime}
                 text="Show Feedback"
               />
-              <div className="text-center">
+              <div className="text-center mb-5">
                 <button
                   className="btn"
                   onClick={() => setShowImage((prev) => !prev)}
@@ -269,15 +300,22 @@ const ExerciseDetails = () => {
                 </button>
               </div>
               {showImage ? (
-                <img src={exercise.imageUrl} className="demo-img" />
+                <img
+                  src={exercise.imageUrl}
+                  className="demo-img"
+                  alt="Demo for Exercise"
+                />
               ) : (
                 <div className="html-css-editors-container">
                   <div
-                    className="editor html-css-editor"
-                    style={{ width: `${leftEditorWidth}` }}
+                    className={`editor html-css-editor ${
+                      collapsedHtmlEditor ? "minimized" : ""
+                    }`}
+                    style={{
+                      width: `${collapsedCssEditor ? "100%" : leftEditorWidth}`,
+                    }}
                   >
                     <h2 className="panel-label">HTML</h2>
-
                     <CodeEditor
                       selectedLanguage="html"
                       code={state.html}
@@ -285,14 +323,23 @@ const ExerciseDetails = () => {
                       onChange={(newValue) => setState({ html: newValue })}
                     />
                   </div>
+                  {!collapsedHtmlEditor && !collapsedCssEditor && (
+                    <div
+                      className="resizer"
+                      ref={resizerRef}
+                      onMouseDown={handleMouseDown}
+                    ></div>
+                  )}
+
                   <div
-                    className="resizer"
-                    ref={resizerRef}
-                    onMouseDown={handleMouseDown}
-                  ></div>
-                  <div
-                    className="editor html-css-editor"
-                    style={{ width: `${rightEditorWidth}` }}
+                    className={`editor html-css-editor ${
+                      collapsedCssEditor ? "minimized" : ""
+                    }`}
+                    style={{
+                      width: `${
+                        collapsedHtmlEditor ? "100%" : rightEditorWidth
+                      }`,
+                    }}
                   >
                     <h2 className="panel-label">CSS</h2>
                     <CodeEditor

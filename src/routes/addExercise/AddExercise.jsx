@@ -8,7 +8,7 @@ import Dropzone from "react-dropzone";
 import LanguageList from "../../components/languageList/LanguageList";
 
 const AddExercise = () => {
-  const { languages, topics } = useContext(GlobalContext);
+  const { languages, topics, user } = useContext(GlobalContext);
   const [step, setStep] = useState(1);
   const [selectedLanguage, setSelectedLanguage] = useState(null);
   const [submitted, setSubmitted] = useState(false);
@@ -32,8 +32,10 @@ const AddExercise = () => {
     clearErrors,
     reset,
   } = useForm();
+
   const onSubmit = async (data) => {
     try {
+      if (user.role === "admin") data.approved = true;
       data.language = selectedLanguage;
       data.imageUrl = uploadedImage;
       await axios.post(`${import.meta.env.VITE_API_URL}/api/exercises`, data);

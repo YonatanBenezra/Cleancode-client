@@ -5,7 +5,7 @@ import GlobalContext from "../../contexts/Global-Context";
 import { htmlSuggestions, cssSuggestions } from "../../utils/suggestions";
 import "./code-editor.scss";
 
-const CodeEditor = ({ selectedLanguage, code, onChange, height }) => {
+const CodeEditor = ({ selectedLanguage, code, onChange, width, height }) => {
   // useState hooks
   const [value, setValue] = useState(code || "");
   const [editorInstance, setEditorInstance] = useState(null);
@@ -99,7 +99,7 @@ const CodeEditor = ({ selectedLanguage, code, onChange, height }) => {
     <React.Fragment>
       <Editor
         height={height || "50vh"}
-        width={selectedLanguage === "javascript" ? "90%" : "100%"}
+        width={width || "100%"}
         language={selectedLanguage}
         value={value}
         theme={isDarkMode ? "vs-dark" : "light"}
@@ -145,6 +145,7 @@ CodeEditor.propTypes = {
   code: PropTypes.string,
   onChange: PropTypes.func,
   height: PropTypes.string,
+  width: PropTypes.string,
 };
 
 export default CodeEditor;
