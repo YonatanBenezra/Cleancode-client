@@ -75,22 +75,25 @@ const AddExercise = () => {
   };
 
   return (
-    <div className="add-exercise-container">
+    <div className="container">
       {errorMessage && <div className="error">{errorMessage}</div>}
       {submitted ? (
         <Success setSubmitted={setSubmitted} />
       ) : (
         <React.Fragment>
-          <span className="add-exercise-header">Add Exercise</span>
           <form onSubmit={handleSubmit(onSubmit)}>
             {step === 1 ? (
               <LanguageList handleNext={handleNext} />
             ) : (
-              <div className="add-exercise-step-two">
-                <div className="add-exercise-form-group">
-                  <label className="add-exercise-label">Topic</label>
+              <div className="">
+                <h1 className="pt-5 blog-title">Add Exercise</h1>
+
+                <div className="mb-3">
+                  <label htmlFor="topic" className="form-label blog-label">
+                    Topic:
+                  </label>
                   <select
-                    className="add-exercise-select"
+                    className="form-select"
                     {...register("topic", { required: true })}
                   >
                     <option value="">Select a topic</option>
@@ -107,25 +110,31 @@ const AddExercise = () => {
                   </div>
                 )}
 
-                <Dropzone onDrop={onDrop} accept="image/*">
-                  {({ getRootProps, getInputProps }) => (
-                    <div className="dropzone-container" {...getRootProps()}>
-                      <input {...getInputProps()} />
-                      <p className="dropzone-text">
-                        Drag and drop an image here, or click to select an image
-                      </p>
+                <div className="mb-3">
+                  <label htmlFor="imgUrl" className="form-label blog-label">
+                    Upload Image:
+                  </label>
+                  <Dropzone onDrop={onDrop} accept="image/*">
+                    {({ getRootProps, getInputProps }) => (
+                      <div className="dropzone-container" {...getRootProps()}>
+                        <input {...getInputProps()} />
+                        <p className="dropzone-text">
+                          Drag and drop an image here, or click to select an
+                          image
+                        </p>
+                      </div>
+                    )}
+                  </Dropzone>
+                  {uploadedImage && (
+                    <div className="image-preview-container">
+                      <img
+                        src={uploadedImage}
+                        alt="Uploaded"
+                        className="image-preview"
+                      />
                     </div>
                   )}
-                </Dropzone>
-                {uploadedImage && (
-                  <div className="image-preview-container">
-                    <img
-                      src={uploadedImage}
-                      alt="Uploaded"
-                      className="image-preview"
-                    />
-                  </div>
-                )}
+                </div>
                 <div className="add-exercise-form-group">
                   <label className="add-exercise-label">Name</label>
                   <textarea
