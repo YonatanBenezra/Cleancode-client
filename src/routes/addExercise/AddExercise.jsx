@@ -103,97 +103,97 @@ const AddExercise = () => {
                       </option>
                     ))}
                   </select>
+                  {errors.topic && (
+                    <div className="add-exercise-error">*Topic is required</div>
+                  )}
                 </div>
-                {errors.topic && (
-                  <div className="add-exercise-error">
-                    This field is required
-                  </div>
-                )}
 
                 <div className="mb-3">
                   <label htmlFor="imgUrl" className="form-label blog-label">
-                    Upload Image:
+                    Upload Demo Image:
                   </label>
-                  <Dropzone onDrop={onDrop} accept="image/*">
-                    {({ getRootProps, getInputProps }) => (
-                      <div className="dropzone-container" {...getRootProps()}>
-                        <input {...getInputProps()} />
-                        <p className="dropzone-text">
-                          Drag and drop an image here, or click to select an
-                          image
-                        </p>
+                  <div>
+                    <Dropzone onDrop={onDrop} accept="image/*">
+                      {({ getRootProps, getInputProps }) => (
+                        <div className="dropzone-container" {...getRootProps()}>
+                          <input {...getInputProps()} />
+                          <p className="dropzone-text">
+                            Drag and drop an image here, or click to select an
+                            image
+                          </p>
+                        </div>
+                      )}
+                    </Dropzone>
+                    {uploadedImage && (
+                      <div className="image-preview-container">
+                        <img
+                          src={uploadedImage}
+                          alt="Uploaded"
+                          className="image-preview"
+                        />
                       </div>
                     )}
-                  </Dropzone>
-                  {uploadedImage && (
-                    <div className="image-preview-container">
-                      <img
-                        src={uploadedImage}
-                        alt="Uploaded"
-                        className="image-preview"
-                      />
-                    </div>
-                  )}
+                  </div>
                 </div>
-                <div className="add-exercise-form-group">
-                  <label className="add-exercise-label">Name</label>
-                  <textarea
-                    className="add-exercise-input"
+                <div className="mb-3">
+                  <label className="form-label blog-label">Name:</label>
+                  <input
+                    className="form-control"
                     {...register("name", { required: true })}
                   />
                   <span className="add-exercise-input-bottom-border"></span>
-                </div>
-                {errors.name && (
-                  <div className="add-exercise-error">
-                    This field is required
-                  </div>
-                )}
 
-                <div className="add-exercise-form-group">
-                  <label className="add-exercise-label">Description</label>
+                  {errors.name && (
+                    <div className="add-exercise-error">*Name is required</div>
+                  )}
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label blog-label">Description:</label>
                   <textarea
-                    className="add-exercise-input"
+                    className="form-control"
+                    rows="8"
                     {...register("description", { required: true })}
                   />
-                  <span className="add-exercise-input-bottom-border"></span>
+                  {/* <span className="add-exercise-input-bottom-border"></span> */}
+                  {errors.description && (
+                    <div className="add-exercise-error">
+                      *Description is required
+                    </div>
+                  )}
                 </div>
-                {errors.description && (
-                  <div className="add-exercise-error">
-                    This field is required
-                  </div>
-                )}
 
-                <div className="add-exercise-form-group">
-                  <label className="add-exercise-label">Difficulty</label>
+                <div className="mb-3">
+                  <label className="form-label blog-label">Difficulty:</label>
                   <input
-                    className="add-exercise-input"
+                    className="form-control"
                     {...register("difficulty", { required: true })}
                     type="number"
                   />
-                  <span className="add-exercise-input-bottom-border"></span>
+                  {/* <span className="add-exercise-input-bottom-border"></span> */}
+                  {errors.difficulty && (
+                    <div className="add-exercise-error">
+                      *Difficulty level is required
+                    </div>
+                  )}
                 </div>
-                {errors.difficulty && (
-                  <div className="add-exercise-error">
-                    This field is required
-                  </div>
-                )}
 
-                <div className="add-exercise-form-group">
-                  <label className="add-exercise-label">Position</label>
+                <div className="mb-3">
+                  <label className="form-label blog-label">Position:</label>
                   <input
-                    className="add-exercise-input"
+                    className="form-control"
                     {...register("position", { required: true })}
                     type="number"
                   />
-                  <span className="add-exercise-input-bottom-border"></span>
+                  {/* <span className="add-exercise-input-bottom-border"></span> */}
+                  {errors.position && (
+                    <div className="add-exercise-error">
+                      *Position is required
+                    </div>
+                  )}
                 </div>
-                {errors.position && (
-                  <div className="add-exercise-error">
-                    This field is required
-                  </div>
-                )}
 
-                <div className="add-exercise-buttons">
+                <div className="text-center pb-5">
                   {step > 1 && (
                     <button
                       type="button"
