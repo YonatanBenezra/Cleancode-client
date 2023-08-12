@@ -77,22 +77,25 @@ const AddExercise = () => {
   };
 
   return (
-    <div className="add-exercise-container">
+    <div className="container">
       {errorMessage && <div className="error">{errorMessage}</div>}
       {submitted ? (
         <Success setSubmitted={setSubmitted} />
       ) : (
         <React.Fragment>
-          <span className="add-exercise-header">Add Exercise</span>
           <form onSubmit={handleSubmit(onSubmit)}>
             {step === 1 ? (
               <LanguageList handleNext={handleNext} />
             ) : (
-              <div className="add-exercise-step-two">
-                <div className="add-exercise-form-group">
-                  <label className="add-exercise-label">Topic</label>
+              <div className="">
+                <h1 className="pt-5 blog-title">Add Exercise</h1>
+
+                <div className="mb-3">
+                  <label htmlFor="topic" className="form-label blog-label">
+                    Topic:
+                  </label>
                   <select
-                    className="add-exercise-select"
+                    className="form-select"
                     {...register("topic", { required: true })}
                   >
                     <option value="">Select a topic</option>
@@ -102,91 +105,97 @@ const AddExercise = () => {
                       </option>
                     ))}
                   </select>
-                </div>
-                {errors.topic && (
-                  <div className="add-exercise-error">
-                    This field is required
-                  </div>
-                )}
-
-                <Dropzone onDrop={onDrop} accept="image/*">
-                  {({ getRootProps, getInputProps }) => (
-                    <div className="dropzone-container" {...getRootProps()}>
-                      <input {...getInputProps()} />
-                      <p className="dropzone-text">
-                        Drag and drop an image here, or click to select an image
-                      </p>
-                    </div>
+                  {errors.topic && (
+                    <div className="add-exercise-error">*Topic is required</div>
                   )}
-                </Dropzone>
-                {uploadedImage && (
-                  <div className="image-preview-container">
-                    <img
-                      src={uploadedImage}
-                      alt="Uploaded"
-                      className="image-preview"
-                    />
+                </div>
+
+                <div className="mb-3">
+                  <label htmlFor="imgUrl" className="form-label blog-label">
+                    Upload Demo Image:
+                  </label>
+                  <div>
+                    <Dropzone onDrop={onDrop} accept="image/*">
+                      {({ getRootProps, getInputProps }) => (
+                        <div className="dropzone-container" {...getRootProps()}>
+                          <input {...getInputProps()} />
+                          <p className="dropzone-text">
+                            Drag and drop an image here, or click to select an
+                            image
+                          </p>
+                        </div>
+                      )}
+                    </Dropzone>
+                    {uploadedImage && (
+                      <div className="image-preview-container">
+                        <img
+                          src={uploadedImage}
+                          alt="Uploaded"
+                          className="image-preview"
+                        />
+                      </div>
+                    )}
                   </div>
-                )}
-                <div className="add-exercise-form-group">
-                  <label className="add-exercise-label">Name</label>
-                  <textarea
-                    className="add-exercise-input"
+                </div>
+                <div className="mb-3">
+                  <label className="form-label blog-label">Name:</label>
+                  <input
+                    className="form-control"
                     {...register("name", { required: true })}
                   />
                   <span className="add-exercise-input-bottom-border"></span>
-                </div>
-                {errors.name && (
-                  <div className="add-exercise-error">
-                    This field is required
-                  </div>
-                )}
 
-                <div className="add-exercise-form-group">
-                  <label className="add-exercise-label">Description</label>
+                  {errors.name && (
+                    <div className="add-exercise-error">*Name is required</div>
+                  )}
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label blog-label">Description:</label>
                   <textarea
-                    className="add-exercise-input"
+                    className="form-control"
+                    rows="8"
                     {...register("description", { required: true })}
                   />
-                  <span className="add-exercise-input-bottom-border"></span>
+                  {/* <span className="add-exercise-input-bottom-border"></span> */}
+                  {errors.description && (
+                    <div className="add-exercise-error">
+                      *Description is required
+                    </div>
+                  )}
                 </div>
-                {errors.description && (
-                  <div className="add-exercise-error">
-                    This field is required
-                  </div>
-                )}
 
-                <div className="add-exercise-form-group">
-                  <label className="add-exercise-label">Difficulty</label>
+                <div className="mb-3">
+                  <label className="form-label blog-label">Difficulty:</label>
                   <input
-                    className="add-exercise-input"
+                    className="form-control"
                     {...register("difficulty", { required: true })}
                     type="number"
                   />
-                  <span className="add-exercise-input-bottom-border"></span>
+                  {/* <span className="add-exercise-input-bottom-border"></span> */}
+                  {errors.difficulty && (
+                    <div className="add-exercise-error">
+                      *Difficulty level is required
+                    </div>
+                  )}
                 </div>
-                {errors.difficulty && (
-                  <div className="add-exercise-error">
-                    This field is required
-                  </div>
-                )}
 
-                <div className="add-exercise-form-group">
-                  <label className="add-exercise-label">Position</label>
+                <div className="mb-3">
+                  <label className="form-label blog-label">Position:</label>
                   <input
-                    className="add-exercise-input"
+                    className="form-control"
                     {...register("position", { required: true })}
                     type="number"
                   />
-                  <span className="add-exercise-input-bottom-border"></span>
+                  {/* <span className="add-exercise-input-bottom-border"></span> */}
+                  {errors.position && (
+                    <div className="add-exercise-error">
+                      *Position is required
+                    </div>
+                  )}
                 </div>
-                {errors.position && (
-                  <div className="add-exercise-error">
-                    This field is required
-                  </div>
-                )}
 
-                <div className="add-exercise-buttons">
+                <div className="text-center pb-5">
                   {step > 1 && (
                     <button
                       type="button"

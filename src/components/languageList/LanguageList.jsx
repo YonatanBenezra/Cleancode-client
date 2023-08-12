@@ -14,7 +14,7 @@ const LanguageList = ({ handleNext }) => {
   }, [languages]);
   return (
     <div className="add-exercise-step">
-      <h3>Select a language:</h3>
+      <h1 className="pt-5 blog-title">Select a language:</h1>
       <div className="add-exercise-languages">
         {sortedLanguages.map((language, index) => (
           <span
