@@ -156,12 +156,12 @@ const ExerciseDetails = () => {
       }.
       The score should express how closely the user's response aligns with the desired answer, represented on a scale from 0 to 100. Additionally, consider providing hints that guide the user towards the correct answer, outline any bad practices they may have employed, and propose best practices they should adhere to. Supply tips aimed at improving their overall coding skills. It's critical not to reveal the correct answer within the feedback.`;
 
-    if (language === "javascript") {
-      content += `\nQuestion: ${parseInput(state.js).question}.\nJS: ${
-        parseInput(state.js).code
-      }.`;
+    if (language === "javascript" || language === "python") {
+      content += `\nQuestion: ${exercise?.description}.\n${
+        language[0].toUpperCase() + language.slice(1)
+      }: ${parseInput(state.js).code}.`;
     } else {
-      content += `\nQuestion: ${state.js}.\nHTML: ${state.html}\nCSS: ${state.css}\n`;
+      content += `\nQuestion: ${exercise?.description}.\nHTML: ${state.html}\nCSS: ${state.css}\n`;
     }
 
     if (
@@ -232,7 +232,7 @@ const ExerciseDetails = () => {
     <div className="exercise-details-container">
       {exercise ? (
         <div className="editors-container" ref={containerRef}>
-          {language === "javascript" ? (
+          {language === "javascript" || language === "python" ? (
             <div className="editor js-editor">
               <h2 className="panel-label">{exercise?.name}</h2>
 

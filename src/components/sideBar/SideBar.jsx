@@ -20,6 +20,8 @@ import BlackLogout from "../../assets/darkLogout.png";
 import WhiteLogout from "../../assets/whiteLogout.png";
 import BlackDashboard from "../../assets/darkDashboard.png";
 import WhiteDashboard from "../../assets/lightDashboard.png";
+import WhitePython from "../../assets/whitePython.png";
+import BlackPython from "../../assets/darkPython.png";
 import menuBurger from "../../assets/list-symbol-of-three-items-with-dots.png";
 
 // Context
@@ -41,6 +43,7 @@ const icons = {
   Logout: { dark: WhiteLogout, light: BlackLogout },
   Profile: { dark: WhiteUser, light: BlackUser },
   Dashboard: { dark: WhiteDashboard, light: BlackDashboard },
+  PY: { dark: WhitePython, light: BlackPython },
 };
 
 const SideBar = () => {
@@ -53,6 +56,7 @@ const SideBar = () => {
     { name: "HTML", path: "/html" },
     { name: "CSS", path: "/css" },
     { name: "JS", path: "/javascript" },
+    { name: "PY", path: "/python" },
     { name: "Add", path: "/add-exercise" },
   ];
   if (user.role === "admin") {

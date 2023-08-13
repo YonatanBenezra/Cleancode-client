@@ -4,12 +4,14 @@ import GlobalContext from "../../../contexts/Global-Context";
 import "./topic-exercises.scss";
 
 const TopicExercises = () => {
-  const { topic } = useParams();
+  const { topic, language } = useParams();
   const { exercises, user } = useContext(GlobalContext);
   let topicExercises = [];
   if (exercises) {
     topicExercises = exercises.filter(
-      (exercise) => exercise.topic.name === topic
+      (exercise) =>
+        exercise.topic.name === topic &&
+        exercise.topic.language.name === language
     );
     topicExercises.sort((a, b) => (a.position > b.position ? 1 : -1));
   }
