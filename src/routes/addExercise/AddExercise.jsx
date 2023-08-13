@@ -14,7 +14,6 @@ const AddExercise = () => {
   const [submitted, setSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [sortedTopics, setSortedTopics] = useState([]);
-
   useEffect(() => {
     if (languages && topics) {
       setSortedTopics(
