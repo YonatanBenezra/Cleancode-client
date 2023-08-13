@@ -1,0 +1,19 @@
+.modal-content {
+  background: var(--modal-background-color);
+}
+
+.modal-content .span {
+  font-weight: 500;
+  color: var(--modal-span-color);
+  font-size: 22px;
+
+  @media only screen and (max-width: 768px) {
+    font-size: 18px;
+  }
+}
+
+.modal-content .modal-btn {
+  color: #264653;
+  padding: 4px 8px;
+  border-radius: 10px;
+}
