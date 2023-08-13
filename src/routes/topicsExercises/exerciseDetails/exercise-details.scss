@@ -1,9 +1,11 @@
 .html-css-editors-container {
   display: flex;
 }
+
 .html-css-editor {
   flex-grow: 2;
 }
+
 .js-editor {
   margin-top: 80px;
   display: flex;
@@ -11,23 +13,28 @@
   flex-direction: column;
   align-items: center;
 }
+
 .editor div {
   border-radius: 10px;
 }
+
 .panel-label {
   color: var(--third-color);
   font-weight: 400;
   margin-bottom: 20px;
   text-transform: capitalize;
   text-align: center;
+
   @media screen and (max-width: 992px) {
     font-size: 20px;
   }
 }
+
 .preview-container {
   background: #fff;
   height: 50vh;
 }
+
 .resizer {
   flex-shrink: 0;
   width: 10px;
@@ -35,6 +42,7 @@
   cursor: ew-resize;
   border-radius: 10px;
 }
+
 /* .btn */
 .btn {
   font-size: 18px;
@@ -64,10 +72,12 @@
   color: var(--third-color);
   border: 1px solid var(--third-color);
 }
+
 /* .see-more */
 .see-more {
   font-size: 14px;
 }
+
 .description {
   border: 1px solid var(--third-color);
   border-radius: 10px;
@@ -79,18 +89,21 @@
   width: 50%;
   margin-top: 40px;
 }
+
 @media screen and (max-width: 768px) {
   .description {
     padding: 10px 15px;
     width: 80%;
   }
 }
+
 .spinner {
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 .demo-img {
   width: 80%;
   height: auto;
@@ -100,6 +113,7 @@
   display: block;
   border: 2px solid var(--third-color);
 }
+
 .html-css-editor {
   transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
   opacity: 1;
@@ -110,4 +124,11 @@
   opacity: 0;
   padding: 0;
   overflow-x: hidden;
+}
+
+.maximize-minimize-btn {
+  border-radius: 2px;
+  padding: 3px 6px;
+  font-size: 20px;
+
 }

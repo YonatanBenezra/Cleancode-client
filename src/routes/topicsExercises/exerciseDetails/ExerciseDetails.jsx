@@ -230,33 +230,6 @@ const ExerciseDetails = () => {
   // Render JSX
   return (
     <div className="exercise-details-container">
-      <button
-        className="minimize-button"
-        onClick={() => {
-          if (!collapsedHtmlEditor) {
-            setCollapsedHtmlEditor(true);
-            setCollapsedCssEditor(false);
-          } else {
-            setCollapsedHtmlEditor(!collapsedHtmlEditor);
-          }
-        }}
-      >
-        {collapsedHtmlEditor ? "Maximize" : "Minimize"}
-      </button>
-      <button
-        className="minimize-button"
-        onClick={() => {
-          if (!collapsedCssEditor) {
-            setCollapsedCssEditor(true);
-            setCollapsedHtmlEditor(false);
-          } else {
-            setCollapsedCssEditor(!collapsedCssEditor);
-          }
-        }}
-      >
-        {collapsedCssEditor ? "Maximize" : "Minimize"}
-      </button>
-
       {exercise ? (
         <div className="editors-container" ref={containerRef}>
           {language === "javascript" ? (
@@ -291,12 +264,70 @@ const ExerciseDetails = () => {
                 remainingTime={remainingTime}
                 text="Show Feedback"
               />
-              <div className="text-center mb-5">
+              <div className="d-flex justify-content-center align-items-center gap-3 mb-5">
+                <button
+                  className="minimize-button btn maximize-minimize-btn"
+                  onClick={() => {
+                    if (!collapsedHtmlEditor) {
+                      setCollapsedHtmlEditor(true);
+                      setCollapsedCssEditor(false);
+                    } else {
+                      setCollapsedHtmlEditor(!collapsedHtmlEditor);
+                    }
+                  }}
+                >
+                  {collapsedHtmlEditor ? (
+                    <span className="d-flex justify-content-center align-items-center gap-2">
+                      <i
+                        className="fa-brands fa-html5"
+                        style={{ color: "#f06529" }}
+                      ></i>{" "}
+                      <i className="fa-solid fa-maximize"></i>
+                    </span>
+                  ) : (
+                    <span className="d-flex justify-content-center align-items-center gap-2">
+                      <i
+                        className="fa-brands fa-html5"
+                        style={{ color: "#f06529" }}
+                      ></i>{" "}
+                      <i className="fa-solid fa-minimize"></i>
+                    </span>
+                  )}
+                </button>
                 <button
                   className="btn"
                   onClick={() => setShowImage((prev) => !prev)}
                 >
                   Show Demo Image
+                </button>
+                <button
+                  className="minimize-button btn maximize-minimize-btn"
+                  onClick={() => {
+                    if (!collapsedCssEditor) {
+                      setCollapsedCssEditor(true);
+                      setCollapsedHtmlEditor(false);
+                    } else {
+                      setCollapsedCssEditor(!collapsedCssEditor);
+                    }
+                  }}
+                >
+                  {collapsedCssEditor ? (
+                    <span className="d-flex justify-content-center align-items-center gap-2">
+                      <i
+                        className="fa-brands fa-css3-alt"
+                        style={{ color: "#2965f1" }}
+                      ></i>{" "}
+                      <i className="fa-solid fa-maximize"></i>
+                    </span>
+                  ) : (
+                    <span className="d-flex justify-content-center align-items-center gap-2">
+                      <i
+                        className="fa-brands fa-css3-alt"
+                        style={{ color: "#2965f1" }}
+                      ></i>{" "}
+                      <i className="fa-solid fa-minimize"></i>
+                    </span>
+                  )}
                 </button>
               </div>
               {showImage ? (
