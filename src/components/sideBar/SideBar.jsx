@@ -57,13 +57,13 @@ const SideBar = () => {
     { name: "CSS", path: "/css" },
     { name: "JS", path: "/javascript" },
     { name: "PY", path: "/python" },
+    { name: "Add", path: "/add-exercise" },
   ];
   if (user.role === "admin") {
     navLinks.unshift({ name: "Dashboard", path: "/dashboard" });
   }
   if (user._id) {
     navLinks.push(
-      { name: "Add", path: "/add-exercise" },
       { name: "Profile", path: "/profile" },
       { name: "Logout", path: "/logout" }
     );
