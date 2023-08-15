@@ -47,14 +47,7 @@ createRoot(document.getElementById("root")).render(
               <Route path="/login" element={<Login />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/registration" element={<Registration />} />
-              <Route
-                path="/add-exercise"
-                element={
-                  <AdminRoute>
-                    <AddExercise />
-                  </AdminRoute>
-                }
-              />
+              <Route path="/add-exercise" element={<AddExercise />} />
               <Route path="/get-started" element={<GetStarted />} />
               <Route
                 path="/add-blog"

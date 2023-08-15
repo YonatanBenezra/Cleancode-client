@@ -31,10 +31,12 @@ const App = () => {
               },
             }
           );
-          setUser(response.data.data.data);
+          setUser({ ...response.data.data.data, loaded: true });
         } catch (error) {
           console.error("Error fetching user data:", error);
         }
+      } else {
+        setUser({ loaded: true });
       }
     })();
   }, [setUser, token]);

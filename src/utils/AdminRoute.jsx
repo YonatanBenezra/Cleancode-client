@@ -7,6 +7,7 @@ function AdminRoute({ children }) {
   const { user } = useContext(GlobalContext);
   const location = useLocation();
 
+  if (!user.loaded) return null;
   if (user.role === "admin") {
     return children;
   }
