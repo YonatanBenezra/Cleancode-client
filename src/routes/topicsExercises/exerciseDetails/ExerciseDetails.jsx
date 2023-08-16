@@ -131,7 +131,7 @@ const ExerciseDetails = () => {
 
   // Handle form submission
   const handleSubmitValue = async () => {
-    setRemainingTime(30);
+    setRemainingTime(20);
     const countdown = setInterval(() => {
       setRemainingTime((prevTime) => {
         if (prevTime <= 1) {
@@ -220,7 +220,7 @@ const ExerciseDetails = () => {
 
       modal.show();
     } catch (error) {
-      alert("Please try after 30 seconds");
+      alert("Please try after 20 seconds");
     } finally {
       setLoading(false);
     }
