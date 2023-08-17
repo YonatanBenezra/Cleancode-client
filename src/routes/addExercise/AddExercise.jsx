@@ -36,7 +36,7 @@ const AddExercise = () => {
     try {
       if (user.role === "admin") data.approved = true;
       data.language = selectedLanguage;
-      data.imageUrl = uploadedImage;
+      data.imgUrl = uploadedImage;
       await axios.post(`${import.meta.env.VITE_API_URL}/api/exercises`, data);
       setSubmitted(true);
       reset();
@@ -68,8 +68,8 @@ const AddExercise = () => {
         "https://api.cloudinary.com/v1_1/djkdk03mf/image/upload",
         formData
       );
-      const imageUrl = response.data.secure_url;
-      setUploadedImage(imageUrl);
+      const imgUrl = response.data.secure_url;
+      setUploadedImage(imgUrl);
     } catch (error) {
       console.error("Error uploading image:", error);
     }

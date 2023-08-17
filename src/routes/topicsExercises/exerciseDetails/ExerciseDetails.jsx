@@ -266,7 +266,7 @@ const ExerciseDetails = () => {
               />
               <div className="d-flex justify-content-center align-items-center gap-3 mb-5">
                 <button
-                  className="minimize-button btn maximize-minimize-btn"
+                  className="btn maximize-minimize-btn"
                   onClick={() => {
                     if (!collapsedHtmlEditor) {
                       setCollapsedHtmlEditor(true);
@@ -301,7 +301,7 @@ const ExerciseDetails = () => {
                   Show Demo Image
                 </button>
                 <button
-                  className="minimize-button btn maximize-minimize-btn"
+                  className="btn maximize-minimize-btn"
                   onClick={() => {
                     if (!collapsedCssEditor) {
                       setCollapsedCssEditor(true);
@@ -332,7 +332,7 @@ const ExerciseDetails = () => {
               </div>
               {showImage ? (
                 <img
-                  src={exercise.imageUrl}
+                  src={exercise.imgUrl}
                   className="demo-img"
                   alt="Demo for Exercise"
                 />
