@@ -37,9 +37,9 @@ function AddBlog() {
         "https://api.cloudinary.com/v1_1/djkdk03mf/image/upload",
         formData
       );
-      const imageUrl = response.data.secure_url;
-      setValue("imgUrl", imageUrl);
-      setUploadedImg(imageUrl);
+      const imgUrl = response.data.secure_url;
+      setValue("imgUrl", imgUrl);
+      setUploadedImg(imgUrl);
       trigger("imgUrl");
     } catch (error) {
       console.error("Error uploading image:", error);

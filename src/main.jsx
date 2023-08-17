@@ -22,6 +22,7 @@ import Registration from "./routes/registration/Registration";
 import Profile from "./routes/profile/Profile";
 import Dashboard from "./routes/dashboard/Dashboard";
 import AdminRoute from "./utils/AdminRoute";
+import EditExercise from "./routes/addExercise/EditExercise";
 
 Modal.setAppElement(document.getElementById("root"));
 
@@ -44,10 +45,26 @@ createRoot(document.getElementById("root")).render(
                   </AdminRoute>
                 }
               />
+              <Route
+                path="/edit-exercise/:exerciseId"
+                element={
+                  <AdminRoute>
+                    <EditExercise />
+                  </AdminRoute>
+                }
+              />
               <Route path="/login" element={<Login />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/registration" element={<Registration />} />
               <Route path="/add-exercise" element={<AddExercise />} />
+              <Route
+                path="/edit-exercise/:exerciseId"
+                element={
+                  <AdminRoute>
+                    <EditExercise />
+                  </AdminRoute>
+                }
+              />
               <Route path="/get-started" element={<GetStarted />} />
               <Route
                 path="/add-blog"
