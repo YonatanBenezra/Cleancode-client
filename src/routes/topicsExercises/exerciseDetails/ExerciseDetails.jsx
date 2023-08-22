@@ -39,7 +39,10 @@ const ExerciseDetails = () => {
 
     if (exercises) {
       topicExercises = exercises.filter(
-        (exercise) => exercise.topic.name === topic
+        (exercise) =>
+          exercise.topic.name === topic &&
+          exercise.topic.language.name === language &&
+          exercise.approved
       );
       topicExercises.sort((a, b) => (a.position > b.position ? 1 : -1));
       exercise = topicExercises[exerciseNum];
@@ -412,7 +415,9 @@ const Buttons = ({ text, handleSubmitValue, loading, remainingTime }) => {
 
   const exercisesLength = exercises.filter(
     (exercise) =>
-      exercise.topic.language.name === language && exercise.topic.name === topic
+      exercise.topic.name === topic &&
+      exercise.topic.language.name === language &&
+      exercise.approved
   ).length;
 
   const handleNextClick = () => {
