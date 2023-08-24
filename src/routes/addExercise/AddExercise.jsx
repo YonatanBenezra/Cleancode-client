@@ -34,7 +34,13 @@ const AddExercise = () => {
 
   const onSubmit = async (data) => {
     try {
-      if (user.role === "admin") data.approved = true;
+      if (user.role === "admin") {
+        data.approved = true;
+      } else {
+        data.approved = false;
+        data.position = 0;
+        data.difficulty = 0;
+      }
       data.language = selectedLanguage;
       data.imgUrl = uploadedImage;
       await axios.post(`${import.meta.env.VITE_API_URL}/api/exercises`, data);
@@ -156,7 +162,6 @@ const AddExercise = () => {
                     rows="8"
                     {...register("description", { required: true })}
                   />
-                  {/* <span className="add-exercise-input-bottom-border"></span> */}
                   {errors.description && (
                     <div className="add-exercise-error">
                       *Description is required
@@ -164,35 +169,39 @@ const AddExercise = () => {
                   )}
                 </div>
 
-                <div className="mb-3">
-                  <label className="form-label blog-label">Difficulty:</label>
-                  <input
-                    className="form-control"
-                    {...register("difficulty", { required: true })}
-                    type="number"
-                  />
-                  {/* <span className="add-exercise-input-bottom-border"></span> */}
-                  {errors.difficulty && (
-                    <div className="add-exercise-error">
-                      *Difficulty level is required
+                {user.role === "admin" && (
+                  <React.Fragment>
+                    <div className="mb-3">
+                      <label className="form-label blog-label">
+                        Difficulty:
+                      </label>
+                      <input
+                        className="form-control"
+                        {...register("difficulty", { required: true })}
+                        type="number"
+                      />
+                      {errors.difficulty && (
+                        <div className="add-exercise-error">
+                          *Difficulty level is required
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
 
-                <div className="mb-3">
-                  <label className="form-label blog-label">Position:</label>
-                  <input
-                    className="form-control"
-                    {...register("position", { required: true })}
-                    type="number"
-                  />
-                  {/* <span className="add-exercise-input-bottom-border"></span> */}
-                  {errors.position && (
-                    <div className="add-exercise-error">
-                      *Position is required
+                    <div className="mb-3">
+                      <label className="form-label blog-label">Position:</label>
+                      <input
+                        className="form-control"
+                        {...register("position", { required: true })}
+                        type="number"
+                      />
+                      {errors.position && (
+                        <div className="add-exercise-error">
+                          *Position is required
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
+                  </React.Fragment>
+                )}
 
                 <div className="text-center pb-5">
                   {step > 1 && (

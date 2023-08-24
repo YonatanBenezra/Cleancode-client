@@ -6,6 +6,7 @@ import React, {
   useCallback,
   useReducer,
 } from "react";
+import Confetti from "react-confetti";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import PropTypes from "prop-types";
@@ -19,7 +20,7 @@ const ExerciseDetails = () => {
   const { language, topic, exerciseNum } = useParams();
   const { exercises, setUser, user } = useContext(GlobalContext);
   const [remainingTime, setRemainingTime] = useState(0);
-
+  const [showConfetti, setShowConfetti] = useState(false);
   const [showImage, setShowImage] = useState(false);
   const [loading, setLoading] = useState(false);
   const [submittedAnswer, setSubmittedAnswer] = useState({});
@@ -218,6 +219,7 @@ const ExerciseDetails = () => {
         );
         setUser(res.data.data.user);
       }
+      if (result.isCorrect) setShowConfetti(true);
 
       setSubmittedAnswer(result);
 
@@ -405,7 +407,10 @@ const ExerciseDetails = () => {
         </div>
       )}
 
-      <FeedbackModal submittedAnswer={submittedAnswer} title={exercise?.name} />
+      <FeedbackModal submittedAnswer={submittedAnswer} title={exercise?.name} setShowConfetti={setShowConfetti}/>
+      {showConfetti && (
+        <Confetti width={window.innerWidth} height={window.innerHeight} />
+      )}
     </div>
   );
 };

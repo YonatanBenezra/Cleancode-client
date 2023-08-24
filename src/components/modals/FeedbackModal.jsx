@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-const FeedbackModal = ({ submittedAnswer, title }) => {
+const FeedbackModal = ({ submittedAnswer, title, setShowConfetti }) => {
   const { isCorrect, score, hints, badPractices, bestPractices, tips } =
     submittedAnswer;
 
@@ -17,6 +17,7 @@ const FeedbackModal = ({ submittedAnswer, title }) => {
               className="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
+              onClick={() => setShowConfetti(false)}
             ></button>
           </div>
           <div className="modal-body">
@@ -66,6 +67,7 @@ FeedbackModal.propTypes = {
     bestPractices: PropTypes.string,
     tips: PropTypes.string,
   }),
+  setShowConfetti: PropTypes.func,
 };
 
 export default FeedbackModal;
