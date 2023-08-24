@@ -23,7 +23,7 @@ const Success = ({ setSubmitted }) => {
           <NavLink to="/add-exercise" onClick={() => setSubmitted(false)}>
             <button className="btn">Add another exercise</button>
           </NavLink>
-          <NavLink to="/home">
+          <NavLink to="/">
             <button className="btn">Home</button>
           </NavLink>
         </div>
