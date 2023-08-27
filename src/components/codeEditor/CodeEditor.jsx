@@ -99,7 +99,7 @@ const CodeEditor = ({ selectedLanguage, code, onChange, width, height }) => {
     <React.Fragment>
       <Editor
         height={height || "50vh"}
-        width={width || "100%"}
+        width={width || "80%"}
         language={selectedLanguage}
         value={value}
         theme={isDarkMode ? "vs-dark" : "light"}

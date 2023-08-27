@@ -90,10 +90,14 @@ const ExerciseDetails = () => {
       };
     }, [handleMouseMove, handleMouseUp]);
 
-    return { handleMouseDown, leftEditorWidth, rightEditorWidth };
+    const reset = useCallback(() => {
+      setLeftEditorWidth("0");
+      setRightEditorWidth(0);
+    }, []);
+    return { handleMouseDown, leftEditorWidth, rightEditorWidth, reset };
   };
 
-  const { handleMouseDown, leftEditorWidth, rightEditorWidth } =
+  const { handleMouseDown, leftEditorWidth, rightEditorWidth, reset } =
     useResizer(containerRef);
   // Helper function to parse input
   const parseInput = (input) => {
@@ -247,7 +251,7 @@ const ExerciseDetails = () => {
               <CodeEditor
                 code={state.js}
                 answers={exercise?.answers}
-                selectedLanguage="javascript"
+                selectedLanguage={language}
                 onChange={(newValue) => setState({ js: newValue })}
               />
               <Buttons
@@ -276,6 +280,7 @@ const ExerciseDetails = () => {
                     if (!collapsedHtmlEditor) {
                       setCollapsedHtmlEditor(true);
                       setCollapsedCssEditor(false);
+                      reset();
                     } else {
                       setCollapsedHtmlEditor(!collapsedHtmlEditor);
                     }
@@ -311,6 +316,7 @@ const ExerciseDetails = () => {
                     if (!collapsedCssEditor) {
                       setCollapsedCssEditor(true);
                       setCollapsedHtmlEditor(false);
+                      reset();
                     } else {
                       setCollapsedCssEditor(!collapsedCssEditor);
                     }
@@ -357,6 +363,7 @@ const ExerciseDetails = () => {
                       code={state.html}
                       answers={exercise?.answers}
                       onChange={(newValue) => setState({ html: newValue })}
+                      width="100%"
                     />
                   </div>
                   {!collapsedHtmlEditor && !collapsedCssEditor && (
@@ -383,6 +390,7 @@ const ExerciseDetails = () => {
                       code={state.css}
                       answers={exercise?.answers}
                       onChange={(newValue) => setState({ css: newValue })}
+                      width="100%"
                     />
                   </div>
                 </div>
@@ -407,7 +415,11 @@ const ExerciseDetails = () => {
         </div>
       )}
 
-      <FeedbackModal submittedAnswer={submittedAnswer} title={exercise?.name} setShowConfetti={setShowConfetti}/>
+      <FeedbackModal
+        submittedAnswer={submittedAnswer}
+        title={exercise?.name}
+        setShowConfetti={setShowConfetti}
+      />
       {showConfetti && (
         <Confetti width={window.innerWidth} height={window.innerHeight} />
       )}
