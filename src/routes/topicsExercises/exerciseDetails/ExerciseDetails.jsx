@@ -401,13 +401,18 @@ const ExerciseDetails = () => {
           </div>
         </div>
       )}
-      {language !== "javascript" && (
+
+      {language !== "javascript" && language !== "python" && (
         <div className="preview-container">
           <PreviewPane html={state.previewHtml} css={state.previewCss} />
         </div>
       )}
 
-      <FeedbackModal submittedAnswer={submittedAnswer} title={exercise?.name} setShowConfetti={setShowConfetti}/>
+      <FeedbackModal
+        submittedAnswer={submittedAnswer}
+        title={exercise?.name}
+        setShowConfetti={setShowConfetti}
+      />
       {showConfetti && (
         <Confetti width={window.innerWidth} height={window.innerHeight} />
       )}
