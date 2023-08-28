@@ -85,8 +85,8 @@
   font-weight: bolder;
   margin-top: 15px;
   opacity: 0;
-  animation: appear 1s ease-in-out forwards;
-  animation-delay: 3s;
+  animation: appear 0.5s ease-in-out forwards;
+  animation-delay: 1s;
 }
 
 .topic-description-mobile {
@@ -95,6 +95,6 @@
   font-weight: bolder;
   margin: 1rem;
   opacity: 0;
-  animation: appear 1s ease-in-out forwards;
-  animation-delay: 1.5s;
+  animation: appear 0.5s ease-in-out forwards;
+  animation-delay: 1s;
 }
