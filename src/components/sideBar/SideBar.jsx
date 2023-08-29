@@ -23,6 +23,8 @@ import WhiteDashboard from "../../assets/lightDashboard.png";
 import WhitePython from "../../assets/whitePython.png";
 import BlackPython from "../../assets/darkPython.png";
 import menuBurger from "../../assets/list-symbol-of-three-items-with-dots.png";
+import WhiteBlog from "../../assets/whiteBlog.png";
+import DarkBlog from "../../assets/darkBlog.png";
 
 // Context
 import React, { useContext, useState } from "react";
@@ -44,6 +46,7 @@ const icons = {
   Profile: { dark: WhiteUser, light: BlackUser },
   Dashboard: { dark: WhiteDashboard, light: BlackDashboard },
   PY: { dark: WhitePython, light: BlackPython },
+  Blog: { dark: WhiteBlog, light: DarkBlog },
 };
 
 const SideBar = () => {
@@ -58,6 +61,7 @@ const SideBar = () => {
     { name: "JS", path: "/javascript" },
     { name: "PY", path: "/python" },
     { name: "Add", path: "/add-exercise" },
+    { name: "Blog", path: "/blogs" },
   ];
   if (user.role === "admin") {
     navLinks.unshift({ name: "Dashboard", path: "/dashboard" });
