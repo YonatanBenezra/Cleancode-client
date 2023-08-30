@@ -121,8 +121,9 @@ const SideBar = () => {
         {user._id && (
           <div className="text-center mt-5">
             <img src={user.photo} alt={user.name} className="profile-img" />
-            <h5 className="profile-title mt-2">
-              <span className="name">{user.name.split(" ")[0]}</span>
+            <h5 className="profile-title mt-2 d-flex justify-content-center">
+              <span className="name">{user.name.split(" ")[0]} </span>
+              <span className="strike">{user.codeStrike}</span>
             </h5>
           </div>
         )}
