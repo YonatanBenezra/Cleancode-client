@@ -214,6 +214,7 @@ const ExerciseDetails = () => {
           `${import.meta.env.VITE_API_URL}/api/users/updateMe`,
           {
             finishedExercise: exercise._id,
+            lastCodedDate: true,
           },
           {
             headers: {
