@@ -418,7 +418,8 @@ const ExerciseDetails = () => {
           </div>
         </div>
       )}
-      {language !== "javascript" && (
+
+      {language !== "javascript" && language !== "python" && (
         <div className="preview-container">
           <PreviewPane html={state.previewHtml} css={state.previewCss} />
         </div>
