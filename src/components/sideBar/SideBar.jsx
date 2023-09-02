@@ -22,6 +22,8 @@ import BlackDashboard from "../../assets/darkDashboard.png";
 import WhiteDashboard from "../../assets/lightDashboard.png";
 import WhitePython from "../../assets/whitePython.png";
 import BlackPython from "../../assets/darkPython.png";
+import WhiteReact from "../../assets/whiteReact.png";
+import DarkReact from "../../assets/darkReact.png";
 import menuBurger from "../../assets/list-symbol-of-three-items-with-dots.png";
 
 // Context
@@ -44,6 +46,7 @@ const icons = {
   Profile: { dark: WhiteUser, light: BlackUser },
   Dashboard: { dark: WhiteDashboard, light: BlackDashboard },
   PY: { dark: WhitePython, light: BlackPython },
+  React: { dark: WhiteReact, light: DarkReact },
 };
 
 const SideBar = () => {
@@ -57,6 +60,7 @@ const SideBar = () => {
     { name: "CSS", path: "/css" },
     { name: "JS", path: "/javascript" },
     { name: "PY", path: "/python" },
+    { name: "React", path: "/react" },
     { name: "Add", path: "/add-exercise" },
   ];
   if (user.role === "admin") {
