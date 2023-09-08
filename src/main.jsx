@@ -23,6 +23,7 @@ import Profile from "./routes/profile/Profile";
 import Dashboard from "./routes/dashboard/Dashboard";
 import AdminRoute from "./utils/AdminRoute";
 import EditExercise from "./routes/addExercise/EditExercise";
+import Quiz from "./components/quiz/Quiz";
 
 Modal.setAppElement(document.getElementById("root"));
 
@@ -53,6 +54,7 @@ createRoot(document.getElementById("root")).render(
                   </AdminRoute>
                 }
               />
+              <Route path="/quiz" element={<Quiz />} />
               <Route path="/login" element={<Login />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/registration" element={<Registration />} />

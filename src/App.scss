@@ -115,3 +115,12 @@ table {
   text-transform: capitalize;
   overflow: hidden;
 }
+.question-option {
+  padding: 15px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.question-option .form-check-input {
+  margin-left: 0;
+  margin-right: 10px;
+}

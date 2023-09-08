@@ -92,7 +92,7 @@ const AddExercise = () => {
             {step === 1 ? (
               <LanguageList handleNext={handleNext} />
             ) : (
-              <div className="">
+              <div>
                 <h1 className="pt-5 blog-title">Add Exercise</h1>
 
                 <div className="mb-3">
