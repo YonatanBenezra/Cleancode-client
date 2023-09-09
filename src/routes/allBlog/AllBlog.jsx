@@ -100,7 +100,7 @@ const AllBlog = () => {
                       className="blog-content"
                     />
                     <p className="tags">{blog.tags.join(", ")}</p>
-                    <Link className="btn btn-primary" to={`/blog/${blog._id}`}>
+                    <Link className="btn" to={`/blog/${blog._id}`}>
                       Details
                     </Link>
                   </div>
