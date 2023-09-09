@@ -12,7 +12,7 @@ function Statistics({ score, totalQuestions }) {
       <p className="display-5 text-warning mt-4">
         Your Score: {score}/{totalQuestions}
       </p>
-      <button className="btn btn-primary">
+      <button className="btn">
         <PDFDownloadLink
           document={
             <Certificate

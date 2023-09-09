@@ -3,14 +3,14 @@ function Test() {
   return (
     <div>
       <button
-        className="btn btn-primary"
+        className="btn"
         data-bs-toggle="modal"
         data-bs-target="#descriptionModal"
       >
         Click
       </button>
       <button
-        className="btn btn-primary"
+        className="btn"
         data-bs-toggle="modal"
         data-bs-target="#feedbackModal"
       >
