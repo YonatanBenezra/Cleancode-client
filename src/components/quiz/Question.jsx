@@ -3,7 +3,8 @@ import PropTypes from "prop-types";
 function Question({ question, options, selectedAnswer, handleOptionClick }) {
   return (
     <div>
-      <h2>{question}</h2>
+      <h2 className="mb-3">{question}</h2>
+
       {options.map((option, index) => (
         <label
           key={index}
