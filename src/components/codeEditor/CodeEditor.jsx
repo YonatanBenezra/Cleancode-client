@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Editor from "@monaco-editor/react";
 import GlobalContext from "../../contexts/Global-Context";
@@ -6,17 +6,10 @@ import { htmlSuggestions, cssSuggestions } from "../../utils/suggestions";
 import "./code-editor.scss";
 
 const CodeEditor = ({ selectedLanguage, code, onChange, width, height }) => {
-  // useState hooks
-  const [value, setValue] = useState(code || "");
+  const [value, setValue] = useState(code);
   const [editorInstance, setEditorInstance] = useState(null);
-
-  // useContext hooks
   const { isDarkMode } = useContext(GlobalContext);
 
-  // Custom hook
-  const ctrlPress = useKeyPress("Control");
-
-  // Constants
   const options = {
     selectOnLineNumbers: true,
     fontSize: 16,
@@ -32,28 +25,14 @@ const CodeEditor = ({ selectedLanguage, code, onChange, width, height }) => {
     formatOnPaste: true,
   };
 
-  // Event Handlers
   const handleEditorChange = (value) => {
     setValue(value);
     onChange(value);
   };
 
-  const handleMouseWheel = useCallback(
-    (event, monaco) => {
-      if (editorInstance && event.ctrlKey) {
-        event.preventDefault();
-        const zoomIn = event.deltaY < 0;
-        const increment = zoomIn ? 1 : -1;
-        const currentFontSize = editorInstance.getOption(
-          monaco.editor.EditorOption.fontSize
-        );
-        const newFontSize = currentFontSize + increment;
-        editorInstance.updateOptions({ fontSize: newFontSize });
-      }
-    },
-    [editorInstance]
-  );
-
+  useEffect(() => {
+    setValue(code);
+  }, [code]);
   const handleEditorDidMount = (editor, monaco) => {
     setEditorInstance(editor);
     editor.focus();
@@ -73,33 +52,36 @@ const CodeEditor = ({ selectedLanguage, code, onChange, width, height }) => {
         };
       },
     });
-
-    editor
-      .getDomNode()
-      .addEventListener("wheel", (event) => handleMouseWheel(event, monaco));
   };
 
   useEffect(() => {
     if (editorInstance) {
-      editorInstance
-        .getDomNode()
-        .addEventListener("wheel", (event) => handleMouseWheel(event, monaco));
-    }
-    return () => {
-      if (editorInstance) {
-        editorInstance
-          .getDomNode()
-          .removeEventListener("wheel", handleMouseWheel);
-      }
-    };
-  }, [editorInstance, ctrlPress, handleMouseWheel]);
+      const handleMouseWheel = (event) => {
+        if (event.ctrlKey) {
+          event.preventDefault();
+          const zoomIn = event.deltaY < 0;
+          const increment = zoomIn ? 1 : -1;
+          const currentFontSize = editorInstance.getOption(
+            monaco.editor.EditorOption.fontSize
+          );
+          const newFontSize = currentFontSize + increment;
+          editorInstance.updateOptions({ fontSize: newFontSize });
+        }
+      };
+      const domNode = editorInstance.getDomNode();
+      domNode.addEventListener("wheel", handleMouseWheel);
 
-  // Component Render
+      return () => {
+        domNode.removeEventListener("wheel", handleMouseWheel);
+      };
+    }
+  }, [editorInstance]);
+
   return (
     <React.Fragment>
       <Editor
         height={height || "50vh"}
-        width={width || "80%"}
+        width={width || "100%"}
         language={selectedLanguage}
         value={value}
         theme={isDarkMode ? "vs-dark" : "light"}
@@ -110,35 +92,6 @@ const CodeEditor = ({ selectedLanguage, code, onChange, width, height }) => {
     </React.Fragment>
   );
 };
-
-// Custom Hook outside of the component
-function useKeyPress(targetKey) {
-  const [keyPressed, setKeyPressed] = useState(false);
-
-  useEffect(() => {
-    function downHandler({ key }) {
-      if (key === targetKey) {
-        setKeyPressed(true);
-      }
-    }
-
-    const upHandler = ({ key }) => {
-      if (key === targetKey) {
-        setKeyPressed(false);
-      }
-    };
-
-    window.addEventListener("keydown", downHandler);
-    window.addEventListener("keyup", upHandler);
-
-    return () => {
-      window.removeEventListener("keydown", downHandler);
-      window.removeEventListener("keyup", upHandler);
-    };
-  }, [targetKey]);
-
-  return keyPressed;
-}
 
 CodeEditor.propTypes = {
   selectedLanguage: PropTypes.string,

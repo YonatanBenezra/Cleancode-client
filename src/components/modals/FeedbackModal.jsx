@@ -77,16 +77,16 @@ const FeedbackModal = ({ submittedAnswer, title, setShowConfetti }) => {
 };
 
 FeedbackModal.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   submittedAnswer: PropTypes.shape({
-    isCorrect: PropTypes.bool.isRequired,
+    isCorrect: PropTypes.bool,
     score: PropTypes.number,
     hints: PropTypes.string,
     badPractices: PropTypes.string,
     bestPractices: PropTypes.string,
     tips: PropTypes.string,
   }).isRequired,
-  setShowConfetti: PropTypes.func.isRequired,
+  setShowConfetti: PropTypes.func,
 };
 
 export default FeedbackModal;
