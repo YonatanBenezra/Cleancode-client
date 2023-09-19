@@ -54,7 +54,7 @@ createRoot(document.getElementById("root")).render(
                   </AdminRoute>
                 }
               />
-              <Route path="/quiz" element={<Quiz />} />
+              <Route path="/quizzes" element={<Quiz />} />
               <Route path="/login" element={<Login />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/registration" element={<Registration />} />

@@ -27,7 +27,8 @@ import DarkReact from "../../assets/darkReact.png";
 import menuBurger from "../../assets/list-symbol-of-three-items-with-dots.png";
 import WhiteBlog from "../../assets/whiteBlog.png";
 import DarkBlog from "../../assets/darkBlog.png";
-
+import DarkQuiz from "../../assets/darkQuiz.png";
+import WhiteQuiz from "../../assets/whiteQuiz.png";
 // Context
 import React, { useContext, useState } from "react";
 import GlobalContext from "../../contexts/Global-Context";
@@ -50,7 +51,7 @@ const icons = {
   PY: { dark: WhitePython, light: BlackPython },
   React: { dark: WhiteReact, light: DarkReact },
   Blog: { dark: WhiteBlog, light: DarkBlog },
-
+  Quiz: { dark: WhiteQuiz, light: DarkQuiz },
 };
 
 const SideBar = () => {
@@ -73,6 +74,7 @@ const SideBar = () => {
   }
   if (user._id) {
     navLinks.push(
+      { name: "Quiz", path: "/quizzes" },
       { name: "Profile", path: "/profile" },
       { name: "Logout", path: "/logout" }
     );
