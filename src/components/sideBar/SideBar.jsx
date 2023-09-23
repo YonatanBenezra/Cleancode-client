@@ -66,6 +66,7 @@ const SideBar = () => {
     { name: "JS", path: "/javascript" },
     { name: "PY", path: "/python" },
     { name: "React", path: "/react" },
+    { name: "Quiz", path: "/quizzes" },
     { name: "Add", path: "/add-exercise" },
     { name: "Blog", path: "/blogs" },
   ];
@@ -74,7 +75,6 @@ const SideBar = () => {
   }
   if (user._id) {
     navLinks.push(
-      { name: "Quiz", path: "/quizzes" },
       { name: "Profile", path: "/profile" },
       { name: "Logout", path: "/logout" }
     );
