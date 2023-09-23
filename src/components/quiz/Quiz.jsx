@@ -18,47 +18,110 @@ const initialState = {
   code: "",
   submitting: false,
   error: null,
+  currentMark: 0,
+  currentPosition: 0,
+  userAnswers: [],
 };
+
+function updateAnswerInArray(answers, position, newValue) {
+  const updatedAnswers = [...answers];
+  updatedAnswers[position] = newValue;
+  return updatedAnswers;
+}
+
+function getNextQuestionDetails(state, increment = 1) {
+  const nextQuestionIndex = state.currentQuestion + increment;
+  const nextQuestion = state.questions[nextQuestionIndex];
+
+  // Ensure we provide default values in case properties are undefined.
+  return {
+    time: nextQuestion?.time || 0,
+    currentMark: nextQuestion?.marks || 0,
+    currentPosition: nextQuestion?.position || nextQuestionIndex + 1,
+  };
+}
 
 function reducer(state, action) {
   switch (action.type) {
-    case "FETCH_QUESTIONS_START":
-      return { ...state, loading: true, error: null };
-    case "FETCH_QUESTIONS_SUCCESS":
+    case "SELECT_ANSWER": {
       return {
         ...state,
-        questions: action.payload,
-        time: action.payload[state.currentQuestion].time,
-        loading: false,
+        selectedAnswer: action.payload,
+        userAnswers: updateAnswerInArray(
+          state.userAnswers,
+          state.currentQuestion,
+          action.payload
+        ),
       };
-    case "FETCH_QUESTIONS_ERROR":
-      return { ...state, loading: false, error: action.payload };
-    case "SELECT_ANSWER":
-      return { ...state, selectedAnswer: action.payload };
+    }
+
     case "UPDATE_CODE":
       return { ...state, code: action.payload };
+
     case "SUBMIT_CODE_START":
       return { ...state, submitting: true };
-    case "SUBMIT_CODE_SUCCESS":
+
+    case "SUBMIT_CODE_SUCCESS": {
       return {
         ...state,
         submitting: false,
-        score: action.payload.isCorrect ? state.score + 1 : state.score,
+        userAnswers: updateAnswerInArray(
+          state.userAnswers,
+          state.currentQuestion,
+          state.code
+        ),
+        score: action.payload.isCorrect
+          ? state.score + state.currentMark
+          : state.score,
       };
+    }
+
     case "SUBMIT_CODE_ERROR":
       return { ...state, submitting: false, error: action.payload };
-    case "NEXT_QUESTION":
+
+    case "NEXT_QUESTION": {
+      if (state.currentQuestion + 1 >= state.questions.length) {
+        return {
+          ...state,
+          showStatistics: true,
+        };
+      }
       return {
         ...state,
         currentQuestion: state.currentQuestion + 1,
         selectedAnswer: null,
-        time: state.questions[state.currentQuestion + 1].time,
         code: "",
+        ...getNextQuestionDetails(state),
       };
+    }
+
+    case "INCREMENT_SCORE_BY_MARK":
+      return {
+        ...state,
+        score: state.score + action.payload,
+      };
+
+    case "FETCH_QUESTIONS_START":
+      return { ...state, loading: true, error: null };
+
+    case "FETCH_QUESTIONS_SUCCESS": {
+      return {
+        ...state,
+        questions: action.payload,
+        ...getNextQuestionDetails(state, 0),
+        loading: false,
+      };
+    }
+
+    case "FETCH_QUESTIONS_ERROR":
+      return { ...state, loading: false, error: action.payload };
+
     case "SHOW_STATISTICS":
       return { ...state, showStatistics: true };
+
     case "UPDATE_TIME":
       return { ...state, time: state.time - 1 };
+
     default:
       return state;
   }
@@ -73,11 +136,12 @@ function Quiz() {
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}/api/quizzes`
       );
-      const data = response.data.data.data;
-      const filteredQuestions = data.filter((quiz) => quiz.language === id);
+      let data = response.data.data.data;
+      data = data.filter((quiz) => quiz.language._id === id);
+      data.sort((a, b) => a.position - b.position);
       dispatch({
         type: "FETCH_QUESTIONS_SUCCESS",
-        payload: filteredQuestions,
+        payload: data,
       });
     } catch (error) {
       console.error("An error occurred:", error);
@@ -92,7 +156,10 @@ function Quiz() {
       currentQ.type !== "coding" &&
       state.selectedAnswer === currentQ.correctAnswer
     ) {
-      dispatch({ type: "INCREMENT_SCORE" });
+      dispatch({
+        type: "INCREMENT_SCORE_BY_MARK",
+        payload: currentQ.marks,
+      });
     }
 
     if (state.currentQuestion + 1 < state.questions.length) {
@@ -139,7 +206,7 @@ function Quiz() {
 
   const handleSubmitCode = async () => {
     dispatch({ type: "SUBMIT_CODE_START" });
-    let content = `I will provide you with a coding question and its corresponding answer for a thorough evaluation of its correctness. Your response format should adhere to: {isCorrect: Boolean}
+    let content = `I will provide you with a coding question and its corresponding answer for a thorough evaluation of its correctness. Your response format should adhere to: {isCorrect: boolean}
     Question:${currentQ.question},
     Answer:${state.code || "No answer provided"}`;
     try {
@@ -162,7 +229,6 @@ function Quiz() {
           },
         }
       );
-
       const result = Function(
         `"use strict"; return (${response.data.choices[0].message.content});`
       )();
@@ -193,17 +259,20 @@ function Quiz() {
                 <Statistics
                   score={state.score}
                   totalQuestions={state.questions.length}
+                  questions={state.questions}
+                  userAnswers={state.userAnswers}
                 />
               ) : (
                 <React.Fragment>
+                  <h3>Question {state.currentPosition}</h3>
+                  <p className="text-warning">Marks: {state.currentMark}</p>
                   {currentQ.type === "coding" ? (
                     <div>
                       <CodeQuestion
                         initialCode={currentQ.initialCode}
                         onCodeChange={handleCodeChange}
-                        onSubmitCode={handleSubmitCode}
-                        submitting={state.submitting}
                         question={currentQ.question}
+                        language={currentQ.language.name}
                       />
                       <button
                         onClick={handleSubmitCode}

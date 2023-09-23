@@ -21,9 +21,9 @@ import Login from "./routes/login/Login";
 import Registration from "./routes/registration/Registration";
 import Profile from "./routes/profile/Profile";
 import Dashboard from "./routes/dashboard/Dashboard";
-import AdminRoute from "./utils/AdminRoute";
 import EditExercise from "./routes/addExercise/EditExercise";
 import Quiz from "./components/quiz/Quiz";
+import PrivateRoute from "./utils/PrivateRoute";
 
 Modal.setAppElement(document.getElementById("root"));
 
@@ -41,41 +41,56 @@ createRoot(document.getElementById("root")).render(
               <Route
                 path="/dashboard"
                 element={
-                  <AdminRoute>
+                  <PrivateRoute restrictedTo={["admin"]}>
                     <Dashboard />
-                  </AdminRoute>
+                  </PrivateRoute>
                 }
               />
               <Route
                 path="/edit-exercise/:exerciseId"
                 element={
-                  <AdminRoute>
+                  <PrivateRoute restrictedTo={["admin"]}>
                     <EditExercise />
-                  </AdminRoute>
+                  </PrivateRoute>
                 }
               />
-              <Route path="/quizzes" element={<Quiz />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/registration" element={<Registration />} />
-              <Route path="/add-exercise" element={<AddExercise />} />
+              <Route
+                path="/quizzes"
+                element={
+                  <PrivateRoute restrictedTo={["admin", "user"]}>
+                    <Quiz />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <PrivateRoute restrictedTo={["admin", "user"]}>
+                    <Profile />
+                  </PrivateRoute>
+                }
+              />
+
               <Route
                 path="/edit-exercise/:exerciseId"
                 element={
-                  <AdminRoute>
+                  <PrivateRoute restrictedTo={["admin"]}>
                     <EditExercise />
-                  </AdminRoute>
+                  </PrivateRoute>
                 }
               />
-              <Route path="/get-started" element={<GetStarted />} />
               <Route
                 path="/add-blog"
                 element={
-                  <AdminRoute>
+                  <PrivateRoute restrictedTo={["admin"]}>
                     <AddBlog />
-                  </AdminRoute>
+                  </PrivateRoute>
                 }
               />
+              <Route path="/login" element={<Login />} />
+              <Route path="/registration" element={<Registration />} />
+              <Route path="/add-exercise" element={<AddExercise />} />
+              <Route path="/get-started" element={<GetStarted />} />
               <Route path="/blogs" element={<AllBlog />} />
               <Route path="/blog/:blogId" element={<BlogDetails />} />
               <Route path="/:language" element={<Topics />} />
