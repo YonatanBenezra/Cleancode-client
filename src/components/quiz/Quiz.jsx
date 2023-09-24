@@ -23,35 +23,28 @@ const initialState = {
   userAnswers: [],
 };
 
-function updateAnswerInArray(answers, position, newValue) {
-  const updatedAnswers = [...answers];
-  updatedAnswers[position] = newValue;
-  return updatedAnswers;
-}
-
-function getNextQuestionDetails(state, increment = 1) {
-  const nextQuestionIndex = state.currentQuestion + increment;
-  const nextQuestion = state.questions[nextQuestionIndex];
-
-  // Ensure we provide default values in case properties are undefined.
+function getNextQuestionData(state) {
   return {
-    time: nextQuestion?.time || 0,
-    currentMark: nextQuestion?.marks || 0,
-    currentPosition: nextQuestion?.position || nextQuestionIndex + 1,
+    time: state.questions[state.currentQuestion + 1]?.time || 0,
+    currentMark: state.questions[state.currentQuestion + 1]?.marks || 0,
+    currentPosition: state.questions[state.currentQuestion + 1]?.position || 0,
   };
 }
 
 function reducer(state, action) {
   switch (action.type) {
     case "SELECT_ANSWER": {
+      const updatedAnswers = updateUserAnswers(state, {
+        _id: state.questions[state.currentQuestion]._id,
+        answer: action.payload,
+        isCorrect:
+          state.questions[state.currentQuestion].correctAnswer ===
+          action.payload,
+      });
       return {
         ...state,
         selectedAnswer: action.payload,
-        userAnswers: updateAnswerInArray(
-          state.userAnswers,
-          state.currentQuestion,
-          action.payload
-        ),
+        userAnswers: updatedAnswers,
       };
     }
 
@@ -62,14 +55,15 @@ function reducer(state, action) {
       return { ...state, submitting: true };
 
     case "SUBMIT_CODE_SUCCESS": {
+      const updatedAnswers = updateUserAnswers(state, {
+        _id: state.questions[state.currentQuestion]._id,
+        answer: state.code,
+        isCorrect: action.payload.isCorrect,
+      });
       return {
         ...state,
         submitting: false,
-        userAnswers: updateAnswerInArray(
-          state.userAnswers,
-          state.currentQuestion,
-          state.code
-        ),
+        userAnswers: updatedAnswers,
         score: action.payload.isCorrect
           ? state.score + state.currentMark
           : state.score,
@@ -80,18 +74,13 @@ function reducer(state, action) {
       return { ...state, submitting: false, error: action.payload };
 
     case "NEXT_QUESTION": {
-      if (state.currentQuestion + 1 >= state.questions.length) {
-        return {
-          ...state,
-          showStatistics: true,
-        };
-      }
+      const nextData = getNextQuestionData(state);
       return {
         ...state,
         currentQuestion: state.currentQuestion + 1,
         selectedAnswer: null,
         code: "",
-        ...getNextQuestionDetails(state),
+        ...nextData,
       };
     }
 
@@ -105,11 +94,16 @@ function reducer(state, action) {
       return { ...state, loading: true, error: null };
 
     case "FETCH_QUESTIONS_SUCCESS": {
+      const currentData = {
+        time: action.payload[state.currentQuestion]?.time || 0,
+        currentMark: action.payload[state.currentQuestion]?.marks || 0,
+        currentPosition: action.payload[state.currentQuestion]?.position || 0,
+      };
       return {
         ...state,
         questions: action.payload,
-        ...getNextQuestionDetails(state, 0),
         loading: false,
+        ...currentData,
       };
     }
 
@@ -125,6 +119,19 @@ function reducer(state, action) {
     default:
       return state;
   }
+}
+
+function updateUserAnswers(state, newAnswer) {
+  const index = state.userAnswers.findIndex((ans) => ans._id === newAnswer._id);
+  const updatedAnswers = [...state.userAnswers];
+
+  if (index !== -1) {
+    updatedAnswers[index] = newAnswer;
+  } else {
+    updatedAnswers.push(newAnswer);
+  }
+
+  return updatedAnswers;
 }
 
 function Quiz() {
@@ -206,9 +213,14 @@ function Quiz() {
 
   const handleSubmitCode = async () => {
     dispatch({ type: "SUBMIT_CODE_START" });
-    let content = `I will provide you with a coding question and its corresponding answer for a thorough evaluation of its correctness. Your response format should adhere to: {isCorrect: boolean}
+    if (state.code === "") {
+      dispatch({ type: "SUBMIT_CODE_SUCCESS", payload: { isCorrect: false } });
+      nextQuestion();
+      return;
+    }
+    let content = `I will provide you with a coding question and its corresponding answer for a thorough evaluation of its correctness. Your response format should adhere to: {isCorrect: true/false}
     Question:${currentQ.question},
-    Answer:${state.code || "No answer provided"}`;
+    Answer: ${state.code}`;
     try {
       const response = await axios.post(
         "https://api.openai.com/v1/chat/completions",

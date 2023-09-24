@@ -6,6 +6,10 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 
 function Statistics({ score, totalQuestions, questions, userAnswers }) {
   const { user } = useContext(GlobalContext);
+
+  const findUserAnswer = (questionId) =>
+    userAnswers.find((answer) => answer._id === questionId);
+
   return (
     <div className="text-center">
       <h2>Quiz Completed!</h2>
@@ -31,28 +35,28 @@ function Statistics({ score, totalQuestions, questions, userAnswers }) {
         <h4 className="mb-3">Review:</h4>
         <ul className="list-group">
           {questions.map((question, index) => {
-            const isAnswerCorrect =
-              userAnswers[index] === question.correctAnswer;
+            const userAnswerObj = findUserAnswer(question._id);
             return (
               <li key={index} className="list-group-item">
                 <strong>{question.question}</strong>
-                <span className="float-right badge badge-pill badge-primary">
+                <span className="badge badge-pill bg-warning ms-2">
                   {question.marks} {question.marks > 1 ? "marks" : "mark"}
                 </span>
-                <br />
-                <span className="text-muted">Your Answer:</span>
-                {userAnswers[index]}
-                {isAnswerCorrect ? (
-                  <span className="text-success ml-2">✅</span>
-                ) : (
-                  <span className="text-danger ml-2">❌</span>
-                )}
-                <br />
-                {!isAnswerCorrect && (
-                  <>
-                    <span className="text-success">Correct Answer:</span>{" "}
+
+                <p className="text-muted mt-3">
+                  Your Answer: {userAnswerObj.answer}
+                  {userAnswerObj.isCorrect ? (
+                    <span className="text-success ml-2">✅</span>
+                  ) : (
+                    <span className="text-danger ml-2">❌</span>
+                  )}
+                </p>
+
+                {!userAnswerObj.isCorrect && (
+                  <p>
+                    <span className="text-success">Correct Answer: </span>
                     {question.correctAnswer}
-                  </>
+                  </p>
                 )}
               </li>
             );
@@ -66,13 +70,8 @@ function Statistics({ score, totalQuestions, questions, userAnswers }) {
 Statistics.propTypes = {
   score: PropTypes.number.isRequired,
   totalQuestions: PropTypes.number.isRequired,
-  questions: PropTypes.arrayOf(
-    PropTypes.shape({
-      question: PropTypes.string.isRequired,
-      correctAnswer: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-  userAnswers: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  questions: PropTypes.array.isRequired,
+  userAnswers: PropTypes.array.isRequired,
 };
 
 export default Statistics;
