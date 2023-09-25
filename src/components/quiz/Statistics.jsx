@@ -10,18 +10,22 @@ function Statistics({ score, totalQuestions, questions, userAnswers }) {
   const findUserAnswer = (questionId) =>
     userAnswers.find((answer) => answer._id === questionId);
 
+  const totalScore = totalQuestions.reduce(
+    (total, obj) => total + obj.marks,
+    0
+  );
   return (
     <div className="text-center">
       <h2>Quiz Completed!</h2>
       <p className="display-5 text-warning mt-4">
-        Your Score: {score}/{totalQuestions}
+        Your Score: {score}/{totalScore}
       </p>
       <button className="btn">
         <PDFDownloadLink
           document={
             <Certificate
               username={user.name}
-              score={(score / totalQuestions) * 100}
+              score={(score / totalScore) * 100}
             />
           }
           fileName="certificate.pdf"

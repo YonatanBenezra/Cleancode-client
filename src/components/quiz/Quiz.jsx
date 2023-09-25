@@ -218,7 +218,7 @@ function Quiz() {
       nextQuestion();
       return;
     }
-    let content = `I will provide you with a coding question and its corresponding answer for a thorough evaluation of its correctness. Your response format should adhere to: {isCorrect: true/false}
+    let content = `I will provide you with a coding question and its corresponding answer for a thorough evaluation of its correctness. Your response format should adhere to: {isCorrect: true/false}. Don't send any response without this format.
     Question:${currentQ.question},
     Answer: ${state.code}`;
     try {
@@ -270,13 +270,16 @@ function Quiz() {
               {state.showStatistics ? (
                 <Statistics
                   score={state.score}
-                  totalQuestions={state.questions.length}
+                  totalQuestions={state.questions}
                   questions={state.questions}
                   userAnswers={state.userAnswers}
                 />
               ) : (
                 <React.Fragment>
-                  <h3>Question {state.currentPosition}</h3>
+                  <h3>
+                    Question - {state.currentPosition + 1} /{" "}
+                    {state.questions.length}
+                  </h3>
                   <p className="text-warning">Marks: {state.currentMark}</p>
                   {currentQ.type === "coding" ? (
                     <div>
