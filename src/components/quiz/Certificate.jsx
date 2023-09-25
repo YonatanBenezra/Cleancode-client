@@ -1,4 +1,5 @@
 import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
+import PropTypes from "prop-types";
 
 const styles = StyleSheet.create({
   container: {
@@ -48,11 +49,14 @@ const Certificate = ({ username, score }) => (
         <Text style={styles.person}>{username}</Text>
         <Text style={styles.reason}>
           For completing the Javascript Quiz with a score of {score}% on
-          10/10/2019
+          {new Date().toLocaleDateString()}
         </Text>
       </View>
     </Page>
   </Document>
 );
-
+Certificate.propTypes = {
+  username: PropTypes.string.isRequired,
+  score: PropTypes.number.isRequired,
+};
 export default Certificate;
