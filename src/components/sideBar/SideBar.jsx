@@ -29,6 +29,8 @@ import WhiteBlog from "../../assets/whiteBlog.png";
 import DarkBlog from "../../assets/darkBlog.png";
 import DarkQuiz from "../../assets/darkQuiz.png";
 import WhiteQuiz from "../../assets/whiteQuiz.png";
+import WhiteCode from "../../assets/whiteCode.png";
+import DarkCode from "../../assets/darkCode.png";
 // Context
 import React, { useContext, useState } from "react";
 import GlobalContext from "../../contexts/Global-Context";
@@ -52,6 +54,7 @@ const icons = {
   React: { dark: WhiteReact, light: DarkReact },
   Blog: { dark: WhiteBlog, light: DarkBlog },
   Quiz: { dark: WhiteQuiz, light: DarkQuiz },
+  CleanCode: { dark: WhiteCode, light: DarkCode },
 };
 
 const SideBar = () => {
@@ -59,6 +62,7 @@ const SideBar = () => {
 
   const { isCollapsed, setIsCollapsed, isDarkMode, user, setUser } =
     useContext(GlobalContext);
+  const [isCleanCodeExpanded, setIsCleanCodeExpanded] = useState(false);
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "HTML", path: "/html" },
@@ -67,6 +71,7 @@ const SideBar = () => {
     { name: "PY", path: "/python" },
     { name: "React", path: "/react" },
     { name: "Quiz", path: "/quizzes" },
+    { name: "Clean Code", isSubMenu: true },
     { name: "Add", path: "/add-exercise" },
     { name: "Blog", path: "/blogs" },
   ];
@@ -136,9 +141,48 @@ const SideBar = () => {
         )}
 
         <div className="sidebar-navlinks">
-          {navLinks.map(({ name, path }) => (
-            <div className="borderXwidth" key={path}>
-              {name === "Logout" ? (
+          {navLinks.map(({ name, path, isSubMenu }) => (
+            <div className="borderXwidth" key={name}>
+              {isSubMenu ? (
+                <>
+                  <div
+                    className="sidebar-navlink"
+                    onClick={() => setIsCleanCodeExpanded(!isCleanCodeExpanded)}
+                  >
+                    <img
+                      src={
+                        isDarkMode
+                          ? icons["CleanCode"].dark
+                          : icons["CleanCode"].light
+                      }
+                      alt="CleanCode"
+                      className="sidebar-navlink-icon"
+                    />
+                    {isCollapsed && (
+                      <div className="sidebar-navlink-text">
+                        <span>{name}</span>
+                        <span style={{ marginLeft: "5px" }}>
+                          {isCleanCodeExpanded ? "▲" : "▼"}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  {isCleanCodeExpanded && (
+                    <div
+                      className={`sub-menu-items ${
+                        isCleanCodeExpanded ? "isExpanded" : ""
+                      }`}
+                    >
+                      <NavLink to="/clean-code/exercises">
+                        <div className="sidebar-navlink">Exercises</div>
+                      </NavLink>
+                      <NavLink to="/clean-code/best-code">
+                        <div className="sidebar-navlink">Best Code</div>
+                      </NavLink>
+                    </div>
+                  )}
+                </>
+              ) : name === "Logout" ? (
                 <div onClick={handleLogout}>
                   <div className="sidebar-navlink">
                     <img

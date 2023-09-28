@@ -139,6 +139,7 @@
     transform: translateX(-160px);
     z-index: 100;
   }
+
   .sidebar-navlinks {
     overflow: auto;
     height: 60vh;
@@ -152,6 +153,7 @@
 .activeSidebar {
   transform: translateX(0px);
 }
+
 .strike {
   width: 20px;
   height: 20px;
