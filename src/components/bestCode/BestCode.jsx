@@ -56,7 +56,7 @@ const BestCode = () => {
   return (
     <div className="container mt-5">
       <div className="mb-3">
-        <label htmlFor="languageSelect" className="form-label">
+        <label htmlFor="languageSelect" className="form-label display-6">
           Select Language
         </label>
         <select
