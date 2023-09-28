@@ -170,14 +170,18 @@ const SideBar = () => {
                   {isCleanCodeExpanded && (
                     <div
                       className={`sub-menu-items ${
-                        isCleanCodeExpanded ? "isExpanded" : ""
+                        isCleanCodeExpanded ? "is-opened" : ""
                       }`}
                     >
-                      <NavLink to="/clean-code/exercises">
-                        <div className="sidebar-navlink">Exercises</div>
+                      <NavLink to="/get-started">
+                        <div className="sidebar-navlink sub-link">
+                          &#8226; Exercises
+                        </div>
                       </NavLink>
-                      <NavLink to="/clean-code/best-code">
-                        <div className="sidebar-navlink">Best Code</div>
+                      <NavLink to="/best-code">
+                        <div className="sidebar-navlink sub-link">
+                          &#8226; Best Code
+                        </div>
                       </NavLink>
                     </div>
                   )}
