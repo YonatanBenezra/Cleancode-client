@@ -24,6 +24,7 @@ import Dashboard from "./routes/dashboard/Dashboard";
 import EditExercise from "./routes/addExercise/EditExercise";
 import Quiz from "./components/quiz/Quiz";
 import PrivateRoute from "./utils/PrivateRoute";
+import BestCode from "./components/bestCode/BestCode";
 
 Modal.setAppElement(document.getElementById("root"));
 
@@ -87,6 +88,7 @@ createRoot(document.getElementById("root")).render(
                   </PrivateRoute>
                 }
               />
+              <Route path="/best-code" element={<BestCode />} />
               <Route path="/login" element={<Login />} />
               <Route path="/registration" element={<Registration />} />
               <Route path="/add-exercise" element={<AddExercise />} />
