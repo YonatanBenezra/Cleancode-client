@@ -31,6 +31,10 @@ import DarkQuiz from "../../assets/darkQuiz.png";
 import WhiteQuiz from "../../assets/whiteQuiz.png";
 import WhiteCode from "../../assets/whiteCode.png";
 import DarkCode from "../../assets/darkCode.png";
+import DarkExercise from "../../assets/darkExercise.png";
+import WhiteExercise from "../../assets/whiteExercise.png";
+import DarkBestCode from "../../assets/darkBestCode.png";
+import WhiteBestCode from "../../assets/whiteBestCode.png";
 // Context
 import React, { useContext, useState } from "react";
 import GlobalContext from "../../contexts/Global-Context";
@@ -55,6 +59,8 @@ const icons = {
   Blog: { dark: WhiteBlog, light: DarkBlog },
   Quiz: { dark: WhiteQuiz, light: DarkQuiz },
   CleanCode: { dark: WhiteCode, light: DarkCode },
+  Exercise: { dark: WhiteExercise, light: DarkExercise },
+  BestCode: { dark: WhiteBestCode, light: DarkBestCode },
 };
 
 const SideBar = () => {
@@ -174,13 +180,41 @@ const SideBar = () => {
                       }`}
                     >
                       <NavLink to="/get-started">
-                        <div className="sidebar-navlink sub-link">
-                          &#8226; Exercises
+                        <div className="sidebar-navlink">
+                          &#8226;
+                          <img
+                            src={
+                              isDarkMode
+                                ? icons["Exercise"].dark
+                                : icons["Exercise"].light
+                            }
+                            alt="Exercise"
+                            className="sidebar-navlink-icon"
+                          />
+                          {isCollapsed && (
+                            <div className="sidebar-navlink-text sub-link">
+                              Exercise
+                            </div>
+                          )}
                         </div>
                       </NavLink>
                       <NavLink to="/best-code">
-                        <div className="sidebar-navlink sub-link">
-                          &#8226; Best Code
+                        <div className="sidebar-navlink">
+                          &#8226;
+                          <img
+                            src={
+                              isDarkMode
+                                ? icons["BestCode"].dark
+                                : icons["BestCode"].light
+                            }
+                            alt="Exercise"
+                            className="sidebar-navlink-icon"
+                          />
+                          {isCollapsed && (
+                            <div className="sidebar-navlink-text sub-link">
+                              Best Code
+                            </div>
+                          )}
                         </div>
                       </NavLink>
                     </div>

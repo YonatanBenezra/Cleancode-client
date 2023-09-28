@@ -54,7 +54,7 @@ const BestCode = () => {
   };
 
   return (
-    <div className="container mt-5">
+    <div className="container mb-5" style={{ paddingTop: "100px" }}>
       <div className="mb-3">
         <label htmlFor="languageSelect" className="form-label display-6">
           Select Language
