@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
 import CodeEditor from "../codeEditor/CodeEditor";
+import GlobalContext from "../../contexts/Global-Context";
 
 const BestCode = () => {
   const [code, setCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState("javascript"); // State for selected language
+  const [selectedLanguage, setSelectedLanguage] = useState("html");
   const [feedback, setFeedback] = useState(null);
+  const { languages } = useContext(GlobalContext);
 
   const handleSubmitValue = async () => {
     setIsLoading(true);
@@ -63,9 +65,13 @@ const BestCode = () => {
           value={selectedLanguage}
           onChange={(e) => setSelectedLanguage(e.target.value)}
         >
-          <option value="javascript">JavaScript</option>
-          <option value="python">Python</option>
-          <option value="java">Java</option>
+          {languages
+            .sort((a, b) => a.position - b.position)
+            .map((language) => (
+              <option key={language._id} value={language.name}>
+                {language.name}
+              </option>
+            ))}
         </select>
       </div>
 
