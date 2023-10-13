@@ -25,6 +25,8 @@ import EditExercise from "./routes/addExercise/EditExercise";
 import Quiz from "./components/quiz/Quiz";
 import PrivateRoute from "./utils/PrivateRoute";
 import BestCode from "./components/bestCode/BestCode";
+import Payment from "./components/quiz/Payment";
+import QuizList from "./components/quiz/QuizList";
 
 Modal.setAppElement(document.getElementById("root"));
 
@@ -59,7 +61,23 @@ createRoot(document.getElementById("root")).render(
                 path="/quizzes"
                 element={
                   <PrivateRoute restrictedTo={["admin", "user"]}>
+                    <QuizList />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/quizzes/:quizId"
+                element={
+                  <PrivateRoute restrictedTo={["admin", "user"]}>
                     <Quiz />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/payment/:quizId"
+                element={
+                  <PrivateRoute restrictedTo={["admin", "user"]}>
+                    <Payment />
                   </PrivateRoute>
                 }
               />
