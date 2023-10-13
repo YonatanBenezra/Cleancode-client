@@ -1,11 +1,12 @@
-import React, { useReducer, useEffect, useCallback } from "react";
+import React, { useReducer, useEffect, useCallback, useContext } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Question from "./Question";
 import CodeQuestion from "./CodeQuestion";
 import Timer from "./Timer";
 import Statistics from "./Statistics";
-import LanguageList from "../languageList/LanguageList";
 import axios from "axios";
 import Spinner from "../spinner/Spinner";
+import GlobalContext from "../../contexts/Global-Context";
 
 const initialState = {
   questions: [],
@@ -14,6 +15,7 @@ const initialState = {
   score: 0,
   time: 0,
   showStatistics: false,
+  showRules: true,
   loading: false,
   code: "",
   submitting: false,
@@ -113,6 +115,9 @@ function reducer(state, action) {
     case "SHOW_STATISTICS":
       return { ...state, showStatistics: true };
 
+    case "HIDE_RULES":
+      return { ...state, showRules: false };
+
     case "UPDATE_TIME":
       return { ...state, time: state.time - 1 };
 
@@ -136,15 +141,16 @@ function updateUserAnswers(state, newAnswer) {
 
 function Quiz() {
   const [state, dispatch] = useReducer(reducer, initialState);
-
+  const { quizId } = useParams();
+  const { user } = useContext(GlobalContext);
+  const navigate = useNavigate();
   const fetchQuestions = useCallback(async (id) => {
     dispatch({ type: "FETCH_QUESTIONS_START" });
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/quizzes`
+        `${import.meta.env.VITE_API_URL}/api/quizzes/${id}`
       );
       let data = response.data.data.data;
-      data = data.filter((quiz) => quiz.language._id === id);
       data.sort((a, b) => a.position - b.position);
       dispatch({
         type: "FETCH_QUESTIONS_SUCCESS",
@@ -172,13 +178,30 @@ function Quiz() {
     if (state.currentQuestion + 1 < state.questions.length) {
       dispatch({ type: "NEXT_QUESTION" });
     } else {
+      const stats = {
+        user: user._id,
+        quiz: quizId,
+        questionsAnswered: state.userAnswers.map((ans) => ({
+          question: ans._id,
+          selectedOption: ans.answer,
+          isCorrect: ans.isCorrect,
+        })),
+        totalScore: state.score,
+      };
+      axios.post(`${import.meta.env.VITE_API_URL}/api/userQuizzes`, stats);
       dispatch({ type: "SHOW_STATISTICS" });
     }
   }, [
-    currentQ,
+    currentQ?.correctAnswer,
+    currentQ?.marks,
+    currentQ?.type,
+    quizId,
     state.currentQuestion,
     state.questions.length,
+    state.score,
     state.selectedAnswer,
+    state.userAnswers,
+    user._id,
   ]);
 
   useEffect(() => {
@@ -251,15 +274,81 @@ function Quiz() {
       dispatch({ type: "SUBMIT_CODE_ERROR", payload: error });
     }
   };
-
+  const checkToStartQuiz = async (id) => {
+    /*   const response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/api/payments?user=${user._id}&quiz=${id}`
+    );
+    if (response.data.data.data.length === 0) return navigate(`/payment/${id}`); */
+    dispatch({ type: "HIDE_RULES" });
+    fetchQuestions(id);
+  };
   return (
     <React.Fragment>
       {state.loading ? (
         <Spinner />
       ) : state.error ? (
         <div>Error: {state.error.message}</div>
-      ) : state.questions.length === 0 ? (
-        <LanguageList handleNext={fetchQuestions} />
+      ) : state.showRules ? (
+        <div className="container my-5">
+          <div className="row">
+            <div
+              className="col-12 mx-auto px-4 py-5 rounded-3"
+              style={{ backgroundColor: "rgb(38, 70, 83)" }}
+            >
+              <div className="text-center">
+                <h2 className="display-5">Quiz Rules!</h2>
+                <div className="terms-and-conditions">
+                  <ul className="list-group">
+                    <li className="list-group-item">
+                      The quiz consists of 10 questions.
+                    </li>
+                    <li className="list-group-item">
+                      Each question has a unique time limit.
+                    </li>
+                    <li className="list-group-item">
+                      Marks vary from question to question.
+                    </li>
+                    <li className="list-group-item">
+                      Once answered, you cannot revisit previous questions.
+                    </li>
+                    <li className="list-group-item">
+                      Skipping questions is not allowed.
+                    </li>
+                    <li className="list-group-item">
+                      Reloading the page will result in disqualification.
+                    </li>
+                    <li className="list-group-item">
+                      Opening another tab during the quiz will lead to
+                      disqualification.
+                    </li>
+                    <li className="list-group-item">
+                      Using AI assistance or external help will lead to
+                      disqualification.
+                    </li>
+                    <li className="list-group-item">
+                      Post-quiz, your results will be evaluated and verified
+                      within 1-2 days.
+                    </li>
+                    <li className="list-group-item">
+                      If eligible, we will contact you regarding the
+                      certificate.
+                    </li>
+                    <li className="list-group-item">
+                      If not selected for the certificate, repurchasing the quiz
+                      is allowed.
+                    </li>
+                  </ul>
+                  <button
+                    className="btn my-3"
+                    onClick={() => checkToStartQuiz(quizId)}
+                  >
+                    I have thoroughly reviewed the rule, Start{" "}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       ) : (
         <div className="container my-5">
           <div className="row">
@@ -270,7 +359,6 @@ function Quiz() {
               {state.showStatistics ? (
                 <Statistics
                   score={state.score}
-                  totalQuestions={state.questions}
                   questions={state.questions}
                   userAnswers={state.userAnswers}
                 />
@@ -281,7 +369,7 @@ function Quiz() {
                     {state.questions.length}
                   </h3>
                   <p className="text-warning">Marks: {state.currentMark}</p>
-                  {currentQ.type === "coding" ? (
+                  {currentQ.type !== "regular" ? (
                     <div>
                       <CodeQuestion
                         initialCode={currentQ.initialCode}

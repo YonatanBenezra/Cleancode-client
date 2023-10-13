@@ -45,7 +45,7 @@ const Dashboard = () => {
     <div className="container">
       <h2 className="my-5 text-center">Manage Exercises</h2>
       <div className="table-responsive">
-        <table className="table table-striped table-bordered ">
+        <table className="table table-striped table-bordered dashboard-table">
           <thead className="thead-dark">
             <tr>
               <th>Id</th>

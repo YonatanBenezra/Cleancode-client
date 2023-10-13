@@ -1,26 +1,31 @@
 import PropTypes from "prop-types";
-import Certificate from "./Certificate";
-import { useContext } from "react";
+import { useMemo } from "react";
+/* import { PDFDownloadLink } from "@react-pdf/renderer";
 import GlobalContext from "../../contexts/Global-Context";
-import { PDFDownloadLink } from "@react-pdf/renderer";
+import Certificate from "./Certificate"; */
 
-function Statistics({ score, totalQuestions, questions, userAnswers }) {
-  const { user } = useContext(GlobalContext);
+function Statistics({ score, questions, userAnswers }) {
+  /*  const { user } = useContext(GlobalContext); */
 
   const findUserAnswer = (questionId) =>
     userAnswers.find((answer) => answer._id === questionId);
 
-  const totalScore = totalQuestions.reduce(
-    (total, obj) => total + obj.marks,
-    0
+  const totalScore = useMemo(
+    () => questions.reduce((total, obj) => total + obj.marks, 0),
+    [questions]
   );
+
   return (
     <div className="text-center">
       <h2>Quiz Completed!</h2>
+      <p>
+        Thanks for participating! We will review your performance and notify you
+        by email within three days regarding the certificate.
+      </p>
       <p className="display-5 text-warning mt-4">
         Your Score: {score}/{totalScore}
       </p>
-      <button className="btn">
+      {/* <button className="btn">
         <PDFDownloadLink
           document={
             <Certificate
@@ -34,7 +39,7 @@ function Statistics({ score, totalQuestions, questions, userAnswers }) {
             loading ? "Loading document..." : "Download Certificate!"
           }
         </PDFDownloadLink>
-      </button>
+      </button> */}
       <div className="mt-4">
         <h4 className="mb-3">Review:</h4>
         <ul className="list-group">
@@ -73,7 +78,6 @@ function Statistics({ score, totalQuestions, questions, userAnswers }) {
 
 Statistics.propTypes = {
   score: PropTypes.number.isRequired,
-  totalQuestions: PropTypes.number.isRequired,
   questions: PropTypes.array.isRequired,
   userAnswers: PropTypes.array.isRequired,
 };

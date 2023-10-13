@@ -109,7 +109,7 @@ label {
   padding: 4px 8px;
   border-radius: 10px;
 }
-table {
+.dashboard-table {
   border-radius: 5px;
   text-align: center;
   text-transform: capitalize;
@@ -123,4 +123,20 @@ table {
 .question-option .form-check-input {
   margin-left: 0;
   margin-right: 10px;
+}
+
+.StripeElement {
+  box-sizing: border-box;
+  padding: 15px 14px; /* Increased padding for better spacing */
+  border: 1px solid #ced4da;
+  border-radius: 6px; /* A little more rounded */
+  background-color: white;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1); /* Subtle shadow for elevation effect */
+  -webkit-transition: box-shadow 150ms ease, border-color 150ms ease; /* Added border transition */
+  transition: box-shadow 150ms ease, border-color 150ms ease;
+}
+
+.StripeElement--focus {
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.15); /* A bit more pronounced shadow on focus */
+  border-color: #007bff; /* Highlight with a blue border when focused */
 }
