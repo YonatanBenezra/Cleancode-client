@@ -29,7 +29,7 @@ function getNextQuestionData(state) {
   return {
     time: state.questions[state.currentQuestion + 1]?.time || 0,
     currentMark: state.questions[state.currentQuestion + 1]?.marks || 0,
-    currentPosition: state.questions[state.currentQuestion + 1]?.position || 0,
+    currentPosition: state.currentPosition + 1 || 0,
   };
 }
 
@@ -99,7 +99,7 @@ function reducer(state, action) {
       const currentData = {
         time: action.payload[state.currentQuestion]?.time || 0,
         currentMark: action.payload[state.currentQuestion]?.marks || 0,
-        currentPosition: action.payload[state.currentQuestion]?.position || 0,
+        currentPosition: state.currentPosition || 0,
       };
       return {
         ...state,
