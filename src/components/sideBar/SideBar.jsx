@@ -62,15 +62,29 @@ const icons = {
   Exercise: { dark: WhiteExercise, light: DarkExercise },
   BestCode: { dark: WhiteBestCode, light: DarkBestCode },
 };
-
 const SideBar = () => {
   const navigate = useNavigate();
-
   const { isCollapsed, setIsCollapsed, isDarkMode, user, setUser } =
     useContext(GlobalContext);
-  const [isCleanCodeExpanded, setIsCleanCodeExpanded] = useState(false);
-  const navLinks = [
+
+  const toggleSidebar = () => {
+    setIsCollapsed(!isCollapsed);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setUser({});
+    navigate(`/`);
+  };
+
+  const navigationConfig = [
+    {
+      name: "Dashboard",
+      path: "/dashboard",
+      condition: (user) => user.role === "admin",
+    },
     { name: "Home", path: "/" },
+    { name: "Quiz", path: "/quizzes", condition: (user) => user._id },
     { name: "HTML", path: "/html" },
     { name: "CSS", path: "/css" },
     { name: "JS", path: "/javascript" },
@@ -78,43 +92,37 @@ const SideBar = () => {
     { name: "React", path: "/react" },
     { name: "Add", path: "/add-exercise" },
     { name: "Blog", path: "/blogs" },
+    { name: "Profile", path: "/profile", condition: (user) => user._id },
+    {
+      name: "Logout",
+      path: "/logout",
+      condition: (user) => user._id,
+      onClick: handleLogout,
+    },
+    { name: "Login", path: "/login", condition: (user) => !user._id },
   ];
-  if (user.role === "admin") {
-    navLinks.unshift({ name: "Dashboard", path: "/dashboard" });
-  }
-  if (user._id) {
-    navLinks.push(
-      { name: "Quiz", path: "/quizzes" },
-      { name: "Profile", path: "/profile" },
-      { name: "Logout", path: "/logout" }
-    );
-  } else {
-    navLinks.push({ name: "Login", path: "/login" });
-  }
 
-  const toggleSidebar = () => {
-    setIsCollapsed(!isCollapsed);
-  };
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    setUser({});
-    navigate(`/`);
-  };
-  const [sidebar, setSidebar] = useState(false);
+  const navLinks = navigationConfig.filter(
+    (link) => !link.condition || link.condition(user)
+  );
+
+  const [isMobileSidebarActive, setIsMobileSidebarActive] = useState(false);
 
   return (
     <React.Fragment>
       <div
         className="d-md-none d-block menu-burger"
-        onClick={() => setSidebar(true)}
+        onClick={() => setIsMobileSidebarActive(true)}
       >
         <img src={menuBurger} alt="Menu Burger" />
       </div>
       <div
-        className={`sidebar ${isCollapsed} ${sidebar ? "activeSidebar" : ""}`}
+        className={`sidebar ${isCollapsed} ${
+          isMobileSidebarActive ? "activeSidebar" : ""
+        }`}
       >
         <div className="position-relative">
-          {!sidebar ? (
+          {!isMobileSidebarActive ? (
             <div className="sidebar-collapse" onClick={toggleSidebar}>
               {isCollapsed ? (
                 <i className="fa-solid fa-less-than"></i>
@@ -125,10 +133,7 @@ const SideBar = () => {
           ) : (
             <div
               className="sidebar-collapse"
-              onClick={() => {
-                setIsCollapsed(true);
-                setSidebar(false);
-              }}
+              onClick={() => setIsMobileSidebarActive(false)}
             >
               X
             </div>
@@ -144,82 +149,10 @@ const SideBar = () => {
             </h5>
           </div>
         )}
-
         <div className="sidebar-navlinks">
-          {navLinks.map(({ name, path, isSubMenu }) => (
+          {navLinks.map(({ name, path }) => (
             <div className="borderXwidth" key={name}>
-              {isSubMenu ? (
-                <>
-                  <div
-                    className="sidebar-navlink"
-                    onClick={() => setIsCleanCodeExpanded(!isCleanCodeExpanded)}
-                  >
-                    <img
-                      src={
-                        isDarkMode
-                          ? icons["CleanCode"].dark
-                          : icons["CleanCode"].light
-                      }
-                      alt="CleanCode"
-                      className="sidebar-navlink-icon"
-                    />
-                    {isCollapsed && (
-                      <div className="sidebar-navlink-text">
-                        <span>{name}</span>
-                        <span style={{ marginLeft: "5px" }}>
-                          {isCleanCodeExpanded ? "▲" : "▼"}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                  {isCleanCodeExpanded && (
-                    <div
-                      className={`sub-menu-items ${
-                        isCleanCodeExpanded ? "is-opened" : ""
-                      }`}
-                    >
-                      <NavLink to="/get-started">
-                        <div className="sidebar-navlink">
-                          &#8226;
-                          <img
-                            src={
-                              isDarkMode
-                                ? icons["Exercise"].dark
-                                : icons["Exercise"].light
-                            }
-                            alt="Exercise"
-                            className="sidebar-navlink-icon"
-                          />
-                          {isCollapsed && (
-                            <div className="sidebar-navlink-text sub-link">
-                              Exercise
-                            </div>
-                          )}
-                        </div>
-                      </NavLink>
-                      <NavLink to="/best-code">
-                        <div className="sidebar-navlink">
-                          &#8226;
-                          <img
-                            src={
-                              isDarkMode
-                                ? icons["BestCode"].dark
-                                : icons["BestCode"].light
-                            }
-                            alt="Exercise"
-                            className="sidebar-navlink-icon"
-                          />
-                          {isCollapsed && (
-                            <div className="sidebar-navlink-text sub-link">
-                              Best Code
-                            </div>
-                          )}
-                        </div>
-                      </NavLink>
-                    </div>
-                  )}
-                </>
-              ) : name === "Logout" ? (
+              {name === "Logout" ? (
                 <div onClick={handleLogout}>
                   <div className="sidebar-navlink">
                     <img
@@ -257,5 +190,4 @@ const SideBar = () => {
     </React.Fragment>
   );
 };
-
 export default SideBar;
