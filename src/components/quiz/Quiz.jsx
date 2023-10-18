@@ -365,7 +365,7 @@ function Quiz() {
               ) : (
                 <React.Fragment>
                   <h3>
-                    Question - {state.currentPosition + 1} /{" "}
+                    Question - {state.currentPosition} /{" "}
                     {state.questions.length}
                   </h3>
                   <p className="text-warning">Marks: {state.currentMark}</p>
