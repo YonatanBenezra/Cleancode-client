@@ -138,6 +138,18 @@ function updateUserAnswers(state, newAnswer) {
 
   return updatedAnswers;
 }
+function fisherYatesShuffle(array) {
+  const newArray = array.slice();
+  for (let i = newArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArray[i], newArray[j]] = [newArray[j], newArray[i]]; // swap elements
+  }
+  return newArray;
+}
+
+function selectRandom(array, n) {
+  return fisherYatesShuffle(array).slice(0, n);
+}
 
 function Quiz() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -148,13 +160,29 @@ function Quiz() {
     dispatch({ type: "FETCH_QUESTIONS_START" });
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/quizzes/${id}`
+        `${import.meta.env.VITE_API_URL}/api/questions?quiz=${id}`
       );
-      let data = response.data.data.data;
-      data.sort((a, b) => a.position - b.position);
+      let questions = response.data.data.data;
+      questions.sort((a, b) => a.position - b.position);
+
+      // Separate questions by type
+      const regularQuestions = questions.filter((q) => q.type === "regular");
+      const codingQuestions = questions.filter((q) => q.type === "coding");
+      const exerciseQuestions = questions.filter((q) => q.type === "exercise");
+
+      // Randomly select questions
+      const selectedQuestions = [
+        ...selectRandom(regularQuestions, 25),
+        ...selectRandom(codingQuestions, 12),
+        ...selectRandom(exerciseQuestions, 13),
+      ];
+
+      // Shuffle the combined selected questions
+      const shuffledSelectedQuestions = fisherYatesShuffle(selectedQuestions);
+
       dispatch({
         type: "FETCH_QUESTIONS_SUCCESS",
-        payload: data,
+        payload: shuffledSelectedQuestions,
       });
     } catch (error) {
       console.error("An error occurred:", error);
