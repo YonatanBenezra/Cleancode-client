@@ -33,7 +33,6 @@ const Home = () => {
       <NavLink to="/get-started" className="hero-button">
         Get started
       </NavLink>
-      <div id="container-f1a05f63016536eb9941bcfe94f17bae"></div>
     </section>
   );
 };
