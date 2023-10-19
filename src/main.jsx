@@ -27,6 +27,7 @@ import PrivateRoute from "./utils/PrivateRoute";
 import BestCode from "./components/bestCode/BestCode";
 import Payment from "./components/quiz/Payment";
 import QuizList from "./components/quiz/QuizList";
+import Adds from "./routes/adds/Adds";
 
 Modal.setAppElement(document.getElementById("root"));
 
@@ -106,6 +107,7 @@ createRoot(document.getElementById("root")).render(
                   </PrivateRoute>
                 }
               />
+              <Route path="/adds" element={<Adds />} />
               <Route path="/best-code" element={<BestCode />} />
               <Route path="/login" element={<Login />} />
               <Route path="/registration" element={<Registration />} />
