@@ -1,49 +1,79 @@
-import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
-import CheckoutForm from "../../utils/CheckoutForm";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const Payment = () => {
   const { quizId } = useParams();
-  const stripePromise = loadStripe("YOUR_STRIPE_PUBLIC_KEY");
+  const [quiz, setQuiz] = useState({});
+  const [isLoading, setIsLoading] = useState(false); // Add loading state
+
+  useEffect(() => {
+    (async () => {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/quizzes/${quizId}`
+      );
+      setQuiz(response.data.data.data);
+    })();
+  }, [quizId]);
+
+  const handlePayment = async () => {
+    try {
+      setIsLoading(true); // Set loading state to true
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/payments`,
+        {
+          quiz: quizId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      const { links } = response.data;
+      const approvalLink = links.find((link) => link.rel === "approve");
+
+      if (approvalLink) {
+        window.location.href = approvalLink.href;
+      }
+    } catch (error) {
+      console.error("Error creating payment", error);
+    } finally {
+      setIsLoading(false); // Set loading state back to false after the request is complete
+    }
+  };
 
   return (
-    <div className="container py-5">
-      <div
-        className="payment-section card p-4 my-4"
-        style={{ backgroundColor: "rgb(38,70,83)" }}
-      >
-        <h2 className="text-center display-5 text-white">Quiz Purchase</h2>
-        <p className="text-center text-white">
-          Unlock and take the quiz of your choice! Complete the payment process
-          below.
-        </p>
-        <Elements stripe={stripePromise}>
-          <CheckoutForm />
-        </Elements>
+    <div className="card mx-auto mt-5" style={{ maxWidth: "500px" }}>
+      <div className="card-header text-center bg-primary text-white">
+        <h4>Complete Your Purchase</h4>
       </div>
-
-      <div className="terms-and-conditions">
-        <h3 className="mb-3 text-center">Terms and Conditions</h3>
-        <ul className="list-group">
-          <li className="list-group-item">
-            All sales are final and non-refundable.
-          </li>
-          <li className="list-group-item">
-            Once a quiz is purchased, you'll have access to it indefinitely.
-          </li>
-          <li className="list-group-item">
-            We respect your privacy and do not share your payment details with
-            third parties.
-          </li>
-          <li className="list-group-item">
-            For any payment related issues, please contact our support team.
-          </li>
-          <li className="list-group-item">
-            By making a payment, you agree to our full terms and conditions and
-            privacy policy (link to full T&Cs and privacy policy).
-          </li>
-        </ul>
+      <div className="card-body">
+        <form>
+          <h3>{quiz.description}</h3>
+          <div className="mb-3">
+            <label htmlFor="amount" className="form-label">
+              Amount
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="amount"
+              placeholder="$3.00"
+              readOnly
+            />
+          </div>
+          <button
+            type="button"
+            className="btn btn-primary w-100"
+            onClick={handlePayment}
+            disabled={isLoading} 
+          >
+            {isLoading ? "Loading..." : "Pay with PayPal"} 
+          </button>
+        </form>
       </div>
     </div>
   );

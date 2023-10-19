@@ -6,7 +6,7 @@ function CodeQuestion({ question, initialCode, onCodeChange, language }) {
     <div>
       <h2 className="mb-3">{question}</h2>
       <CodeEditor
-        selectedLanguage={language}
+        selectedLanguage={language === "react" ? "javascript" : language}
         code={initialCode}
         onChange={onCodeChange}
       />
