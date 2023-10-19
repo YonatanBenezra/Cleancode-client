@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import GlobalContext from "./contexts/Global-Context";
 import "./App.scss";
 import axios from "axios";
-import WelcomeModal from "./components/modals/welcomeModal";
+import WelcomeModal from "./components/modals/WelcomeModal";
 const App = () => {
   const { isCollapsed, setIsCollapsed, setUser } = useContext(GlobalContext);
   useEffect(() => {
