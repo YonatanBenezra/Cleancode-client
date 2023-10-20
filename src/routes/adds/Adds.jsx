@@ -11,7 +11,7 @@ const Adds = () => {
   `,
         }}
       />
-      <h2>Native</h2>
+      <h2>Hi</h2>
       <div id="container-f1a05f63016536eb9941bcfe94f17bae"></div>
     </div>
   );
