@@ -2,6 +2,30 @@ import React, { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 
 const Adds = () => {
+  useEffect(() => {
+    // Define the script settings
+    window.atOptions = {
+      key: "c721be1582bda356d78a40848af09f44",
+      format: "iframe",
+      height: 250,
+      width: 300,
+      params: {},
+    };
+
+    // Create the script element
+    const scriptElement = document.createElement("script");
+    scriptElement.type = "text/javascript";
+    scriptElement.src =
+      "//www.profitablecreativeformat.com/c721be1582bda356d78a40848af09f44/invoke.js";
+
+    // Append the script to the document
+    document.body.appendChild(scriptElement);
+
+    // Cleanup function to remove script on component unmount
+    return () => {
+      document.body.removeChild(scriptElement);
+    };
+  }, []);
   return (
     <div>
       <Helmet>
