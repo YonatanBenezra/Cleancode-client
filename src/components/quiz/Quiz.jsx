@@ -21,7 +21,7 @@ const initialState = {
   submitting: false,
   error: null,
   currentMark: 0,
-  currentPosition: 0,
+  currentPosition: 1,
   userAnswers: [],
 };
 
