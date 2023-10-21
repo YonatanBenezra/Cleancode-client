@@ -1,5 +1,5 @@
 import React, { useReducer, useEffect, useCallback, useContext } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {  useParams } from "react-router-dom";
 import Question from "./Question";
 import CodeQuestion from "./CodeQuestion";
 import Timer from "./Timer";
@@ -155,7 +155,6 @@ function Quiz() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { quizId } = useParams();
   const { user } = useContext(GlobalContext);
-  const navigate = useNavigate();
   const fetchQuestions = useCallback(async (id) => {
     dispatch({ type: "FETCH_QUESTIONS_START" });
     try {
