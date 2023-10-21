@@ -27,108 +27,119 @@ import PrivateRoute from "./utils/PrivateRoute";
 import BestCode from "./components/bestCode/BestCode";
 import Payment from "./components/quiz/Payment";
 import QuizList from "./components/quiz/QuizList";
-import Adds from "./routes/adds/Adds";
 import { HelmetProvider } from "react-helmet-async";
+import Success from "./routes/success/Success";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 Modal.setAppElement(document.getElementById("root"));
 
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <HelmetProvider>
-      <GlobalProvider>
-        <GoogleOAuthProvider
-          clientId={import.meta.env.VITE_APP_GOOGLE_LOGIN_CLIENT_ID}
-        >
-          <BrowserRouter>
-            <ScrollToTop />
-            <Routes>
-              <Route path="/" element={<App />}>
-                <Route index element={<Home />} />
-                <Route
-                  path="/dashboard"
-                  element={
-                    <PrivateRoute restrictedTo={["admin"]}>
-                      <Dashboard />
-                    </PrivateRoute>
-                  }
-                />
-                <Route
-                  path="/edit-exercise/:exerciseId"
-                  element={
-                    <PrivateRoute restrictedTo={["admin"]}>
-                      <EditExercise />
-                    </PrivateRoute>
-                  }
-                />
-                <Route
-                  path="/quizzes"
-                  element={
-                    <PrivateRoute restrictedTo={["admin", "user"]}>
-                      <QuizList />
-                    </PrivateRoute>
-                  }
-                />
-                <Route
-                  path="/quizzes/:quizId"
-                  element={
-                    <PrivateRoute restrictedTo={["admin", "user"]}>
-                      <Quiz />
-                    </PrivateRoute>
-                  }
-                />
-                <Route
-                  path="/payment/:quizId"
-                  element={
-                    <PrivateRoute restrictedTo={["admin", "user"]}>
-                      <Payment />
-                    </PrivateRoute>
-                  }
-                />
-                <Route
-                  path="/profile"
-                  element={
-                    <PrivateRoute restrictedTo={["admin", "user"]}>
-                      <Profile />
-                    </PrivateRoute>
-                  }
-                />
+    <PayPalScriptProvider
+      options={{
+        clientId:
+          "ASwzvZ0KbaaDnwoJvkvh-2ji4bPpJINa5Ywr21vdEPkcdKCHHc0-MOww_rgDW7KesBt1toR56G2HpGYL",
+      }}
+    >
+      <HelmetProvider>
+        <GlobalProvider>
+          <GoogleOAuthProvider
+            clientId={import.meta.env.VITE_APP_GOOGLE_LOGIN_CLIENT_ID}
+          >
+            <BrowserRouter>
+              <ScrollToTop />
+              <Routes>
+                <Route path="/" element={<App />}>
+                  <Route index element={<Home />} />
+                  <Route
+                    path="/dashboard"
+                    element={
+                      <PrivateRoute restrictedTo={["admin"]}>
+                        <Dashboard />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="/edit-exercise/:exerciseId"
+                    element={
+                      <PrivateRoute restrictedTo={["admin"]}>
+                        <EditExercise />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="/quizzes"
+                    element={
+                      <PrivateRoute restrictedTo={["admin", "user"]}>
+                        <QuizList />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="/quizzes/:quizId"
+                    element={
+                      <PrivateRoute restrictedTo={["admin", "user"]}>
+                        <Quiz />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="/payment/:quizId"
+                    element={
+                      <PrivateRoute restrictedTo={["admin", "user"]}>
+                        <Payment />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="/profile"
+                    element={
+                      <PrivateRoute restrictedTo={["admin", "user"]}>
+                        <Profile />
+                      </PrivateRoute>
+                    }
+                  />
 
-                <Route
-                  path="/edit-exercise/:exerciseId"
-                  element={
-                    <PrivateRoute restrictedTo={["admin"]}>
-                      <EditExercise />
-                    </PrivateRoute>
-                  }
-                />
-                <Route
-                  path="/add-blog"
-                  element={
-                    <PrivateRoute restrictedTo={["admin"]}>
-                      <AddBlog />
-                    </PrivateRoute>
-                  }
-                />
-                <Route path="/adds" element={<Adds />} />
-                <Route path="/best-code" element={<BestCode />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/registration" element={<Registration />} />
-                <Route path="/add-exercise" element={<AddExercise />} />
-                <Route path="/get-started" element={<GetStarted />} />
-                <Route path="/blogs" element={<AllBlog />} />
-                <Route path="/blog/:blogId" element={<BlogDetails />} />
-                <Route path="/:language" element={<Topics />} />
-                <Route path="/:language/:topic" element={<TopicExercises />} />
-                <Route
-                  path="/:language/:topic/:exerciseNum"
-                  element={<ExerciseDetails />}
-                />
-                <Route path="*" element={<ErrorPage />} />
-              </Route>
-            </Routes>
-          </BrowserRouter>
-        </GoogleOAuthProvider>
-      </GlobalProvider>
-    </HelmetProvider>
+                  <Route
+                    path="/edit-exercise/:exerciseId"
+                    element={
+                      <PrivateRoute restrictedTo={["admin"]}>
+                        <EditExercise />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="/add-blog"
+                    element={
+                      <PrivateRoute restrictedTo={["admin"]}>
+                        <AddBlog />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route path="/success" element={<Success />} />
+                  <Route path="/best-code" element={<BestCode />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/registration" element={<Registration />} />
+                  <Route path="/add-exercise" element={<AddExercise />} />
+                  <Route path="/get-started" element={<GetStarted />} />
+                  <Route path="/blogs" element={<AllBlog />} />
+                  <Route path="/blog/:blogId" element={<BlogDetails />} />
+                  <Route path="/:language" element={<Topics />} />
+                  <Route
+                    path="/:language/:topic"
+                    element={<TopicExercises />}
+                  />
+                  <Route
+                    path="/:language/:topic/:exerciseNum"
+                    element={<ExerciseDetails />}
+                  />
+                  <Route path="*" element={<ErrorPage />} />
+                </Route>
+              </Routes>
+            </BrowserRouter>
+          </GoogleOAuthProvider>
+        </GlobalProvider>
+      </HelmetProvider>
+    </PayPalScriptProvider>
   </React.StrictMode>
 );

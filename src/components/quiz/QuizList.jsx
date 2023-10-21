@@ -21,18 +21,19 @@ const QuizList = () => {
   }, []);
 
   const handleClick = async (id) => {
-    /*     const response = await axios.get(
+    const response = await axios.get(
       `${import.meta.env.VITE_API_URL}/api/payments?user=${
         user._id
-      }&quiz=${id}`,
+      }&quiz=${id}&accessGranted=${true}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       }
     );
+    console.log(response.data);
 
-    if (response.data.data.data.length === 0) return navigate(`/payment/${id}`); */
+    if (response.data.data.data.length === 0) return navigate(`/payment/${id}`);
     navigate(`/quizzes/${id}`);
   };
   return (
