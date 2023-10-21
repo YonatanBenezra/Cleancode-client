@@ -46,7 +46,10 @@ function AddBlog() {
     }
   };
   const onSubmit = async (data) => {
-    await axios.post(`${import.meta.env.VITE_API_URL}/api/blogs`, data);
+    await axios.post(`${import.meta.env.VITE_API_URL}/api/blogs`, data, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+
     reset();
     alert("Blog post created successfully!");
   };
