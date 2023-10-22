@@ -1,12 +1,12 @@
-import React, { useReducer, useEffect, useCallback, useContext } from "react";
-import {  useParams } from "react-router-dom";
+import React, { useReducer, useEffect, useCallback, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Question from "./Question";
 import CodeQuestion from "./CodeQuestion";
 import Timer from "./Timer";
 import Statistics from "./Statistics";
 import axios from "axios";
 import Spinner from "../spinner/Spinner";
-import GlobalContext from "../../contexts/Global-Context";
+import Swal from "sweetalert2";
 
 const initialState = {
   questions: [],
@@ -154,12 +154,40 @@ function selectRandom(array, n) {
 function Quiz() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { quizId } = useParams();
-  const { user } = useContext(GlobalContext);
+  const [user, setUser] = useState({});
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/users/me`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        setUser(response.data.data.data);
+      } catch (error) {
+        console.error("There was an error fetching user data:", error);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [quizId]);
+
   const fetchQuestions = useCallback(async (id) => {
     dispatch({ type: "FETCH_QUESTIONS_START" });
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/questions?quiz=${id}`
+        `${import.meta.env.VITE_API_URL}/api/questions?quiz=${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
       );
       let questions = response.data.data.data;
       questions.sort((a, b) => a.position - b.position);
@@ -186,6 +214,7 @@ function Quiz() {
     } catch (error) {
       console.error("An error occurred:", error);
       dispatch({ type: "FETCH_QUESTIONS_ERROR", payload: error });
+      return error.response.data;
     }
   }, []);
 
@@ -302,19 +331,29 @@ function Quiz() {
     }
   };
   const checkToStartQuiz = async (id) => {
-    /*   const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/api/payments?user=${user._id}&quiz=${id}`
-    );
-    if (response.data.data.data.length === 0) return navigate(`/payment/${id}`); */
     dispatch({ type: "HIDE_RULES" });
-    fetchQuestions(id);
+    const { accessGranted } = await fetchQuestions(id);
+    if (!accessGranted)
+      Swal.fire(
+        "Trial has ended!",
+        "Your trial has ended. Unlock full access to the quiz by making a purchase now!",
+        "info"
+      ).then(() => {
+        navigate(`/payment/${quizId}`);
+      });
   };
+  const trialsRemaining =
+    user.trialQuizInfo?.find((quiz) => quiz.quiz === quizId)?.trialsRemaining ??
+    3;
+
   return (
     <React.Fragment>
-      {state.loading ? (
+      {state.loading || loading ? (
         <Spinner />
       ) : state.error ? (
-        <div>Error: {state.error.message}</div>
+        <h2 className="display-5 text-center my-5">
+          Error: {state.error.response.data.message}
+        </h2>
       ) : state.showRules ? (
         <div className="container my-5">
           <div className="row">
@@ -324,6 +363,9 @@ function Quiz() {
             >
               <div className="text-center">
                 <h2 className="display-5">Quiz Rules!</h2>
+                <h4 className="my-3 text-warning">
+                  You have {trialsRemaining} trials remaining!{" "}
+                </h4>
                 <div className="terms-and-conditions">
                   <ul className="list-group">
                     <li className="list-group-item">
