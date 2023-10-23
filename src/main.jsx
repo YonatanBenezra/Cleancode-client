@@ -30,6 +30,7 @@ import QuizList from "./components/quiz/QuizList";
 import { HelmetProvider } from "react-helmet-async";
 import Success from "./routes/success/Success";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import AdsPage from "./routes/adsPage/AdsPage";
 
 Modal.setAppElement(document.getElementById("root"));
 
@@ -133,6 +134,7 @@ createRoot(document.getElementById("root")).render(
                     path="/:language/:topic/:exerciseNum"
                     element={<ExerciseDetails />}
                   />
+                  <Route path="/ads" element={<AdsPage />} />
                   <Route path="*" element={<ErrorPage />} />
                 </Route>
               </Routes>
