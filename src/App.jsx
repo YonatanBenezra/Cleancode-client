@@ -54,7 +54,7 @@ const App = () => {
       <SideBar />
       <div className="content-container">
         <Outlet />
-        <WelcomeModal handleClose={handleClose} show={show} />
+        {/* <WelcomeModal handleClose={handleClose} show={show} /> */}
       </div>
     </div>
   );
