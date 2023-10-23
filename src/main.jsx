@@ -38,8 +38,7 @@ createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <PayPalScriptProvider
       options={{
-        clientId:
-          "ASwzvZ0KbaaDnwoJvkvh-2ji4bPpJINa5Ywr21vdEPkcdKCHHc0-MOww_rgDW7KesBt1toR56G2HpGYL",
+        clientId: import.meta.env.VITE_PAYPAL_CLIENT_ID,
       }}
     >
       <HelmetProvider>

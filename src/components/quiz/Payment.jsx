@@ -18,7 +18,12 @@ const useFetchQuiz = (quizId) => {
     (async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/quizzes/${quizId}`
+          `${import.meta.env.VITE_API_URL}/api/quizzes/${quizId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
         );
         setQuiz(response.data.data.data);
       } catch (err) {
