@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./blog-details.scss";
 import { useParams } from "react-router-dom"; // Assuming you're using React Router for handling routes
 import axios from "axios"; // Assuming you use Axios for API requests
+import Spinner from "../../components/spinner/Spinner";
 
 const BlogDetails = () => {
   const { blogId } = useParams(); // Get the blog blogId from the URL
@@ -20,7 +21,7 @@ const BlogDetails = () => {
   };
 
   if (!blog) {
-    return <div>Loading...</div>;
+    return <Spinner />;
   }
 
   return (
@@ -37,6 +38,8 @@ const BlogDetails = () => {
           <p className="detailed-tags ms-2">Tags: {blog.tags.join(", ")}</p>
         </div>
       </div>
+
+      <div id="container-f1a05f63016536eb9941bcfe94f17bae"></div>
     </div>
   );
 };

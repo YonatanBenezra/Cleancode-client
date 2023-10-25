@@ -27,8 +27,9 @@ function AdsPage() {
 
   return (
     <>
-      <h2>Adds</h2>
+      <h2>Update</h2>
       <div id="adsterra-ad-container"></div>
+      <div id="container-f1a05f63016536eb9941bcfe94f17bae"></div>
     </>
   );
 }
