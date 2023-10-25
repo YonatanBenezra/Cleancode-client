@@ -1,21 +1,36 @@
-import { useEffect } from 'react';
+import React, { useEffect } from "react";
 
 function AdsPage() {
   useEffect(() => {
-    const scriptElement = document.createElement("script");
-    const lastScript = document.scripts[document.scripts.length - 1];
-    scriptElement.settings = {};
-    scriptElement.src =
-      "//alarming-rule.com/bmXZVps.doG/lj0JYnWYdxipY/Ws5NuxZ/XOIq/GevmC9GugZWUelfkbPfTAQD4BOtTxkp5ZMXTVk/ttNXDAgb5UOmTHkJy/MjA-";
-    lastScript.parentNode.insertBefore(scriptElement, lastScript);
+    const script = document.createElement("script");
+    script.type = "text/javascript";
 
-    // Optional: Cleanup function to remove the script when component unmounts
-    return () => {
-      scriptElement.remove();
+    // Set the Adsterra options
+    window.atOptions = {
+      key: "c721be1582bda356d78a40848af09f44",
+      format: "iframe",
+      height: 250,
+      width: 300,
+      params: {},
     };
-  }, []); // Empty dependency array ensures this runs once when the component mounts and then cleans up when it unmounts
 
-  return null; // This component doesn't render anything visible
+    script.src =
+      "//www.highcpmcreativeformat.com/c721be1582bda356d78a40848af09f44/invoke.js";
+
+    document.body.appendChild(script);
+
+    // Cleanup on component unmount
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  return (
+    <>
+      <h2>Adds</h2>
+      <div id="adsterra-ad-container"></div>
+    </>
+  );
 }
 
 export default AdsPage;
