@@ -425,6 +425,8 @@ const ExerciseDetails = () => {
         </div>
       )}
 
+      <div id="container-f1a05f63016536eb9941bcfe94f17bae"></div>
+
       <FeedbackModal
         submittedAnswer={submittedAnswer}
         title={exercise?.name}

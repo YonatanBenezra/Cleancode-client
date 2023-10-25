@@ -60,9 +60,10 @@ const Profile = () => {
           </p>
         ))}
       </div>
-      <Link to="/get-started" className="hero-button mx-auto mt-4">
+      <Link to="/get-started" className="hero-button mx-auto my-4">
         Practice More
       </Link>
+      <div id="container-f1a05f63016536eb9941bcfe94f17bae"></div>
     </div>
   );
 };
