@@ -211,6 +211,7 @@ function Quiz() {
         type: "FETCH_QUESTIONS_SUCCESS",
         payload: shuffledSelectedQuestions,
       });
+      return { accessGranted: true };
     } catch (error) {
       console.error("An error occurred:", error);
       dispatch({ type: "FETCH_QUESTIONS_ERROR", payload: error });
