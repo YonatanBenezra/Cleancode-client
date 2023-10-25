@@ -41,13 +41,13 @@ const App = () => {
       }
     })();
   }, [setUser, token]);
-  const [show, setShow] = useState(false);
+  /*   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   useEffect(() => {
     handleShow();
-  }, []);
+  }, []); */
 
   return (
     <div className={`app ${isCollapsed} d-flex`}>
