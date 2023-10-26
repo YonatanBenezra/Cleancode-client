@@ -1,37 +1,27 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
-function AdsPage() {
+const AdsPage = () => {
+  const banner = useRef(HTMLDivElement);
+
   useEffect(() => {
-    const script = document.createElement("script");
-    script.type = "text/javascript";
+    if (!banner.current.firstChild) {
+      const script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src = `//www.highcpmcreativeformat.com/c721be1582bda356d78a40848af09f44/invoke.js`;
 
-    // Set the Adsterra options
-    window.atOptions = {
-      key: "c721be1582bda356d78a40848af09f44",
-      format: "iframe",
-      height: 250,
-      width: 300,
-      params: {},
-    };
-
-    script.src =
-      "//www.highcpmcreativeformat.com/c721be1582bda356d78a40848af09f44/invoke.js";
-
-    document.body.appendChild(script);
-
-    // Cleanup on component unmount
-    return () => {
-      document.body.removeChild(script);
-    };
+      if (banner.current) {
+        banner.current.append(script);
+      }
+    }
   }, []);
 
   return (
     <>
-      <h2>New</h2>
-      <div id="adsterra-ad-container"></div>
-      <div id="container-f1a05f63016536eb9941bcfe94f17bae"></div>
+      <h2>Hello</h2>
+      <div ref={banner}></div>
+      <div id={`c721be1582bda356d78a40848af09f44`}></div>
     </>
   );
-}
+};
 
 export default AdsPage;
